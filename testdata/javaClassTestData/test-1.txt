@@ -1,0 +1,6 @@
+public;Main;
+  int x = 5;
+===
+public class Main {
+  int x = 5;
+}
