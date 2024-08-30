@@ -26,3 +26,11 @@ class OpenAIMessage:
             "role": self.role.value,
             "content": self.content,
         }
+
+    def get_readable(self):
+        """
+        Get the readable representation of the message.
+
+        :return: The readable representation of the message.
+        """
+        return f'[{self.role.value}]: {self.content}'
