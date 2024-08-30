@@ -25,3 +25,8 @@ class InconsistencyTestCase:
         :return: The comment of the method
         """
         return self.method_info.comment
+
+    def __eq__(self, other):
+        return (self.java_code == other.java_code
+                and self.method_info == other.method_info
+                and self.expected_result == other.expected_result)
