@@ -9,3 +9,6 @@ class JmlTransformationExample:
 
     def __eq__(self, other):
         return self.java_doc == other.java_doc and self.jml == other.jml
+
+    def to_example(self) -> str:
+        return f'JavaDoc:\n{self.java_doc}\nBecomes JML:\n{self.jml}'
