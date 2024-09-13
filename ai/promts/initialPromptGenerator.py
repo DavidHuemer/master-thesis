@@ -22,8 +22,9 @@ class InitialPromptGenerator:
                 f'The parameters for the method the comment describes are: {test_case.method_info.parameters}\n\n'
                 f'Here are some examples of JavaDoc to JML transformations:\n\n'
                 f'{self.get_examples()}\n\n'
-                f'Only include the JML, nothing else, no code, no comments, no method name, nothing.'
-                f'The JML should be surrounded by /** and */')
+                f'Only include the JML, nothing else, no code, no comments, no method name, nothing.\n'
+                f'Do not include the name of the programming language.'
+                f'Every line should start with the Java Comment symbol "//"')
 
     def get_examples(self) -> str:
         examples = self.example_generator.get_examples(config.JML_TRANSFORMATIONS_EXAMPLES_COUNT)
