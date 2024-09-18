@@ -13,3 +13,6 @@ class ClassExtractionInfo:
         self.class_protection = class_protection
         self.class_name = class_name
         self.code = code
+
+    def __str__(self):
+        return f'{self.class_name}'
