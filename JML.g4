@@ -11,7 +11,11 @@ condition: (requires_condition | ensures_condition);
 requires_condition: '@' 'requires' expression;
 ensures_condition: '@' 'ensures' expression;
 
-expression: inequivalence_expression;
+expression: question_mark_expression | inequivalence_expression;
+
+question_mark_expression:
+	expr = inequivalence_expression QUESTION_MARK true_val = inequivalence_expression COLON
+		false_val = inequivalence_expression;
 
 inequivalence_expression:
 	<assoc = left> inequivalence_expression INEQUIVALENCE inequivalence_expression
@@ -157,6 +161,9 @@ PLUS: '+';
 MINUS: '-';
 MULTIPLY: '*';
 DIVIDE: '/';
+
+QUESTION_MARK: '?';
+COLON: ':';
 
 // comparison
 LESS: '<';
