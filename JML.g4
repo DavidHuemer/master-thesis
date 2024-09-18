@@ -94,6 +94,7 @@ atomic_expression:
 	| IDENTIFIER
 	| array_length_expression
 	| array_index_expression
+	| numeric_quantifier_expression
 	| '(' numeric_value ')';
 
 array_length_expression: IDENTIFIER '.' LENGTH;
@@ -141,6 +142,33 @@ start_range_comparison:
 end_range_comparison:
 	ident = IDENTIFIER op = ('<=' | '<') expr = numeric_value;
 
+numeric_quantifier_expression:
+	max_quantifier_expression
+	| min_quantifier_expression
+	| sum_quantifier_expression
+	| product_quantifier_expression;
+
+max_quantifier_expression:
+	MAX numeric_quantifier_core_expression;
+
+min_quantifier_expression:
+	MIN numeric_quantifier_core_expression;
+
+sum_quantifier_expression:
+	SUM numeric_quantifier_core_expression;
+
+product_quantifier_expression:
+	PRODUCT numeric_quantifier_core_expression;
+
+numeric_quantifier_core_expression:
+	numeric_quantifier_identifier_expression
+	| numeric_quantifier_range_core_expression;
+
+numeric_quantifier_identifier_expression: '(' IDENTIFIER ')';
+
+numeric_quantifier_range_core_expression:
+	type_declaration ';' range_expression ';' expression;
+
 // jml rules
 LINE_START: '//';
 
@@ -177,6 +205,11 @@ LENGTH: 'length';
 RESULT: '\\result';
 FORALL: '\\forall';
 EXISTS: '\\exists';
+
+MAX: '\\max';
+MIN: '\\min';
+SUM: '\\sum';
+PRODUCT: '\\product';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 
