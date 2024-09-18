@@ -5,7 +5,7 @@ from definitions.javaMethod import JavaMethod
 
 class InconsistencyTestCase:
     """
-    A test case that checks for inconsistencies in the code documentation.
+    A test case that represents a check for inconsistencies in the code documentation.
     """
 
     def __init__(self, java_code: JavaCode, method_info: JavaMethod, expected_result: ExpectedResult | None):
@@ -30,3 +30,13 @@ class InconsistencyTestCase:
         return (self.java_code == other.java_code
                 and self.method_info == other.method_info
                 and self.expected_result == other.expected_result)
+
+    def __str__(self):
+        return (f'{self.get_name()} - '
+                f'{self.get_expected_result_str()}')
+
+    def get_name(self):
+        return f'{self.java_code.class_info.class_name}.{self.method_info.name}'
+
+    def get_expected_result_str(self):
+        return self.expected_result.expected_result if self.expected_result is not None else 'No expected result'

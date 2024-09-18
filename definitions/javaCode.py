@@ -1,5 +1,8 @@
+from definitions.code.classExtractionInfo import ClassExtractionInfo
+
+
 class JavaCode:
-    def __init__(self, file_path, class_info, methods):
+    def __init__(self, file_path, class_info: ClassExtractionInfo, methods):
         self.file_path = file_path
         self.class_info = class_info
         self.methods = methods
