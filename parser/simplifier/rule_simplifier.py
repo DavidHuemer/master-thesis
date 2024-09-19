@@ -7,15 +7,19 @@ from definitions.parser.parserResult import ParserResult
 from parser.simplifier.arraySimplifier import ArraySimplifier
 from parser.simplifier.infixSimplifier import InfixSimplifier
 from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
+from parser.simplifier.numericQuantifierSimplifier import NumericQuantifierSimplifier
 from parser.tree.ruleMetaDataHelper import RuleMetaDataHelper
 
 
 class RuleSimplifier:
     def __init__(self, rule_meta_data_helper=RuleMetaDataHelper(),
-                 bool_quantifier_simplifier=BoolQuantifierSimplifier(), array_simplifier=ArraySimplifier(),
+                 bool_quantifier_simplifier=BoolQuantifierSimplifier(),
+                 numeric_quantifier_simplifier=NumericQuantifierSimplifier(),
+                 array_simplifier=ArraySimplifier(),
                  infix_simplifier=InfixSimplifier()):
         self.rule_meta_data_helper = rule_meta_data_helper
         self.bool_quantifier_simplifier = bool_quantifier_simplifier
+        self.numeric_quantifier_simplifier = numeric_quantifier_simplifier
         self.array_simplifier = array_simplifier
         self.infix_simplifier = infix_simplifier
 
@@ -40,6 +44,9 @@ class RuleSimplifier:
 
         if self.is_bool_quantifier(rule):
             return self.bool_quantifier_simplifier.simplify(rule, parser_result, self)
+
+        if self.is_numeric_quantifier(rule):
+            return self.numeric_quantifier_simplifier.simplify(rule, parser_result, self)
 
         # Check if rule is in infix notation a + b. It must have 3 children (left, operator, right)
 
@@ -79,3 +86,7 @@ class RuleSimplifier:
     @staticmethod
     def is_bool_quantifier(rule):
         return isinstance(rule, JMLParser.JMLParser.Bool_quantifier_expressionContext)
+
+    @staticmethod
+    def is_numeric_quantifier(rule):
+        return isinstance(rule, JMLParser.JMLParser.Numeric_quantifier_expressionContext)
