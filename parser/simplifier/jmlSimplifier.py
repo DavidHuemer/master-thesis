@@ -1,4 +1,6 @@
 import parser.generated.JMLParser as JMLParser
+from definitions.ast.exceptionExpression import ExceptionExpression
+from definitions.ast.expressionNode import ExpressionNode
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
 from parser.simplifier.rule_simplifier import RuleSimplifier
@@ -30,7 +32,10 @@ class JmlSimplifier:
                 expr = self.rule_simplifier.simplify_rule(condition.children[2], parser_result)
                 jml_node.add_pre_condition(expr)
 
-            # TODO: Add support for signals condition (exception handling)
+            if isinstance(condition, JMLParser.JMLParser.Signals_conditionContext):
+                expr: ExpressionNode = self.rule_simplifier.simplify_rule(condition.children[2], parser_result)
+                if isinstance(expr, ExceptionExpression):
+                    jml_node.add_signals_condition(expr)
 
             # Check if condition is a post-condition (ensures_conditionContext)
             if isinstance(condition, JMLParser.JMLParser.Ensures_conditionContext):
