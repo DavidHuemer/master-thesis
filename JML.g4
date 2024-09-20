@@ -6,10 +6,15 @@ grammar JML;
 
 jml: condition+ EOF;
 
-condition: (requires_condition | ensures_condition);
+condition: (
+		requires_condition
+		| ensures_condition
+		| signals_condition
+	);
 
 requires_condition: '@' 'requires' expression;
 ensures_condition: '@' 'ensures' expression;
+signals_condition: '@' 'signals' exception_expression;
 
 expression: question_mark_expression | inequivalence_expression;
 
@@ -91,6 +96,7 @@ multiplicative_expression:
 atomic_expression:
 	INTEGER
 	| RESULT
+	| NULL
 	| IDENTIFIER
 	| array_length_expression
 	| array_index_expression
@@ -112,6 +118,7 @@ primary_expression:
 	| bool_quantifier_expression
 	| '(' expression ')'
 	| BOOL_LITERAL
+	| NULL
 	| IDENTIFIER
 	| '(' IDENTIFIER ')';
 
@@ -161,13 +168,22 @@ product_quantifier_expression:
 	PRODUCT numeric_quantifier_core_expression;
 
 numeric_quantifier_core_expression:
-	numeric_quantifier_identifier_expression
+	numeric_quantifier_value_expression
 	| numeric_quantifier_range_core_expression;
 
-numeric_quantifier_identifier_expression: '(' IDENTIFIER ')';
+numeric_quantifier_value_expression:
+	'(' value = numeric_quantifier_value ')';
+
+numeric_quantifier_value: IDENTIFIER;
 
 numeric_quantifier_range_core_expression:
-	type_declaration ';' range_expression ';' expression;
+	type_declarations ';' range_expression ';' expression;
+
+exception_expression:
+	declaration = exception_declaration expr = expression;
+
+exception_declaration:
+	'(' exception = IDENTIFIER name = IDENTIFIER ')';
 
 // jml rules
 LINE_START: '//';
@@ -210,6 +226,8 @@ MAX: '\\max';
 MIN: '\\min';
 SUM: '\\sum';
 PRODUCT: '\\product';
+
+NULL: 'null';
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 
