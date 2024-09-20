@@ -1,1 +1,6 @@
-data/code/arithmetic/Multiply.java;multiply;true
+data/code/arithmetic/MultiplyCorrect.java;multiply;true
+data/code/arithmetic/MultiplyInCorrect.java;multiply;false
+data/code/max/Biggest.java;biggest;true
+data/code/max/BiggestIncorrect.java;biggest;false
+data/code/max/BiggestFirstIncorrect.java;biggest;false
+data/code/exceptionTest/ExceptionTest.java;test;true

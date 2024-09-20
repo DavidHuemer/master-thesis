@@ -1,0 +1,13 @@
+/**
+* Add two integers
+*/
+-----------------------------------
+//@requires true
+//@ensures \result == a + b
+===================================
+/**
+* Multiplies by factor of 2
+*/
+-----------------------------------
+//@requires true
+//@ensures \result == 2 * a
