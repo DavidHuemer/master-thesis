@@ -53,6 +53,16 @@ class ArrayTestConstraintsGenerator:
         and_distinct = And(*distinct_constraint)
         yield And(and_distinct, length_param.value == length, ForAll(index, param.value[index] > 10))
 
+        # Alternating < and >
+        index = Int('index')
+        alternating_constraint = [
+            param.value[i] < param.value[i + 1] if i % 2 == 0 else param.value[i] > param.value[i + 1] for i in
+            range(length - 1)]
+
+        and_alternating = And(*alternating_constraint)
+
+        yield And(and_alternating, length_param.value == length, ForAll(index, param.value[index] > 0))
+
     @staticmethod
     def is_numeric(parameter: CSPParameter):
         # parameter type is e.g. int[]. So we need to remove the []

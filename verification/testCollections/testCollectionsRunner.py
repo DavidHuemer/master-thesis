@@ -28,4 +28,14 @@ class TestCollectionsRunner:
         # 2. Run exception tests
         # TODO: Run exception tests
 
+        for signal_collection in test_collections.signal_collections:
+            LoggingHelper.log_info(f"Running signal collection for {signal_collection.exception_type}")
+            for test_case in signal_collection.test_cases:
+                result = self.test_case_runner.run(test_class, test_case,
+                                                   inconsistency_test_case=inconsistency_test_case,
+                                                   ast=ast, expected_exception=signal_collection.exception_type)
+
+                if not result:
+                    return VerificationResultFactory.inconsistent_result(inconsistency_test_case)
+
         return VerificationResultFactory.consistent_result(inconsistency_test_case)

@@ -16,11 +16,9 @@ class TestConstraintsGenerator:
         self.array_test_constraints_generator = array_test_constraints_generator
 
     def get_test_constraints(self, jml_problem: JMLProblem, parameter: CSPParameter):
-        # TODO: Check if parameter is numeric
         if self.numeric_test_constraint_generator.is_numeric(parameter):
             return self.numeric_test_constraint_generator.get_test_constraints(parameter)
 
-        # TODO: Check if parameter is array
         if parameter.is_array():
             return self.array_test_constraints_generator.get_test_constraints(jml_problem, parameter)
 
