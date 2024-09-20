@@ -10,4 +10,4 @@ def get_method_extraction_info_example(name="exampleMethod") -> MethodExtraction
 
 
 def get_method_example(name="exampleMethod") -> JavaMethod:
-    return JavaMethod(get_method_extraction_info_example(name=name))
+    return JavaMethod(get_method_extraction_info_example(name=name), [])
