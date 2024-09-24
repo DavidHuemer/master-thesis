@@ -84,6 +84,6 @@ class ExpressionConstraintBuilder:
         elif terminal.name == "BOOL_LITERAL":
             return terminal.value == "true"
         elif terminal.name == "NULL":
-            return Bool("is_null")
+            return jml_problem.parameters["is_null"].value
         else:
             return None

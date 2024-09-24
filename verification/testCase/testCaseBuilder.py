@@ -21,8 +21,10 @@ class TestCaseBuilder:
             if parameter_key in solution_param_keys:
                 jml_problem_param = jml_problem.parameters[parameter_key]
                 solution_param = solution[jml_problem_param.value]
-
-                if hasattr(solution_param, "as_long"):
+                null_value_key = f"{parameter_key}_is_null"
+                if null_value_key in solution_param_keys and solution[jml_problem.parameters[null_value_key].value]:
+                    parameters_dict[parameter_key] = None
+                elif hasattr(solution_param, "as_long"):
                     parameters_dict[parameter_key] = solution_param.as_long()
                 elif isinstance(solution_param, ArrayRef) or isinstance(solution_param, QuantifierRef):
                     array_values = self.get_array_values(jml_problem, jml_problem_param, parameter_key, solution)

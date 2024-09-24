@@ -37,6 +37,9 @@ class TestCaseRunner:
         if expected_exception is not None:
             return expected_exception in execution_result.exception
 
+        if execution_result.exception is not None:
+            return False
+
         # 4. Get the current parameters list of the class instance after the execution
         # TODO: Get the current parameters list of the class instance after the execution
 

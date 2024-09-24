@@ -13,6 +13,9 @@ class CSPParameterBuilder:
     def build_parameters(self, method_info: JavaMethod) -> dict[str, CSPParameter]:
         csp_params: dict[str, CSPParameter] = dict()
 
+        # Add is_null parameter
+        csp_params["is_null"] = CSPParameter("is_null", Bool("is_null"), "boolean", helper=True)
+
         for param in method_info.parameters_list:
             csp_params[param.name] = self.get_csp_param_for_param(param)
 
