@@ -32,7 +32,7 @@ class TestCaseBuilder:
                 else:
                     raise Exception(f"Unsupported parameter type: {type(solution_param)}")
             else:
-                parameters_dict[parameter_key] = None  # TODO: Generate random value
+                parameters_dict[parameter_key] = None
 
         return TestCase(parameters_dict)
 

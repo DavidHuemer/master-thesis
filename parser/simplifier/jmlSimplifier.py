@@ -30,8 +30,6 @@ class JmlSimplifier:
 
         jml_items = [jml_item for jml_item in jml.jml_item()]
 
-        # TODO: Implement behavior nodes
-
         self.behavior_nodes = []
         self.current_behavior = BehaviorNode()
         self.behavior_nodes.append(self.current_behavior)

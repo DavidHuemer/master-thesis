@@ -22,7 +22,6 @@ class TestSuiteBuilder:
         # 1. Get the AST of the JML
         ast = self.ast_generator.get_ast(jml_code)
 
-        # TODO: Get test collections for each behavior
         behavior_tests = self.get_behavior_tests(ast, method_info)
 
         # 2. Get Test Collections

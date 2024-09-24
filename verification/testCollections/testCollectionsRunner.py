@@ -27,8 +27,6 @@ class TestCollectionsRunner:
                                                                      parameters=str(test_case.parameters))
 
         # 2. Run exception tests
-        # TODO: Run exception tests
-
         for signal_collection in test_collections.signal_collections:
             LoggingHelper.log_info(f"Running signal collection for {signal_collection.exception_type}")
             for test_case in signal_collection.test_cases:
