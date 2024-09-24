@@ -41,3 +41,9 @@ class ChatBot:
         :return: The chat.
         """
         return [message.get_readable() for message in self.messages]
+
+    def reset(self):
+        """
+        Reset the chat.
+        """
+        self.messages = []

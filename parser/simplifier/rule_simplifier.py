@@ -9,6 +9,7 @@ from parser.simplifier.exceptionSimplifier import ExceptionSimplifier
 from parser.simplifier.infixSimplifier import InfixSimplifier
 from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
 from parser.simplifier.numericQuantifierSimplifier import NumericQuantifierSimplifier
+from parser.simplifier.questionMarkExpressionSimplifier import QuestionMarkExpressionSimplifier
 from parser.tree.ruleMetaDataHelper import RuleMetaDataHelper
 
 
@@ -18,13 +19,15 @@ class RuleSimplifier:
                  numeric_quantifier_simplifier=NumericQuantifierSimplifier(),
                  array_simplifier=ArraySimplifier(),
                  infix_simplifier=InfixSimplifier(),
-                 exception_simplifier=ExceptionSimplifier()):
+                 exception_simplifier=ExceptionSimplifier(),
+                 question_mark_expression_simplifier=QuestionMarkExpressionSimplifier()):
         self.rule_meta_data_helper = rule_meta_data_helper
         self.bool_quantifier_simplifier = bool_quantifier_simplifier
         self.numeric_quantifier_simplifier = numeric_quantifier_simplifier
         self.array_simplifier = array_simplifier
         self.infix_simplifier = infix_simplifier
         self.exception_simplifier = exception_simplifier
+        self.question_mark_expression_simplifier = question_mark_expression_simplifier
 
     def simplify_rule(self, rule, parser_result: ParserResult):
         """
@@ -50,6 +53,9 @@ class RuleSimplifier:
 
         if self.is_numeric_quantifier(rule):
             return self.numeric_quantifier_simplifier.simplify(rule, parser_result, self)
+
+        if self.question_mark_expression_simplifier.is_question_mark_expression(rule):
+            return self.question_mark_expression_simplifier.simplify(rule, parser_result, self)
 
         if self.is_exception_node(rule):
             return self.exception_simplifier.simplify(rule, parser_result, self)

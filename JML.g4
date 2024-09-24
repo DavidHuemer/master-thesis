@@ -4,17 +4,25 @@
 
 grammar JML;
 
-jml: condition+ EOF;
+jml: jml_item+ EOF;
+
+jml_item: behavior_expr | condition;
+
+behavior_expr: '@' 'public' special_behavior;
+
+special_behavior: NORMAL_BEHAVIOR | EXCEPTIONAL_BEHAVIOR;
 
 condition: (
 		requires_condition
 		| ensures_condition
 		| signals_condition
-	);
+		| also_condition
+	) ';'?;
 
 requires_condition: '@' 'requires' expression;
 ensures_condition: '@' 'ensures' expression;
 signals_condition: '@' 'signals' exception_expression;
+also_condition: '@' 'also' behavior = special_behavior?;
 
 expression: question_mark_expression | inequivalence_expression;
 
@@ -23,15 +31,16 @@ question_mark_expression:
 		false_val = inequivalence_expression;
 
 inequivalence_expression:
-	<assoc = left> inequivalence_expression INEQUIVALENCE inequivalence_expression
+	<assoc = left> left = inequivalence_expression op = INEQUIVALENCE right =
+		inequivalence_expression
 	| equivalence_expression;
 
 equivalence_expression:
-	<assoc = left> equivalence_expression EQUIVALENCE equivalence_expression
+	<assoc = left> left = equivalence_expression op = EQUIVALENCE right = equivalence_expression
 	| implication_expression;
 
 implication_expression:
-	<assoc = right> implication_expression IMPLICATION implication_expression
+	<assoc = right> left = implication_expression op = IMPLICATION right = implication_expression
 	| or_expression;
 
 // or is neither left nor right associative
@@ -45,8 +54,8 @@ and_expression:
 	| equality_expression;
 
 equality_expression:
-	<assoc = left> equality_expression op = EQUALITY equality_expression
-	| <assoc = left> equality_expression op = INEQUALITY equality_expression
+	<assoc = left> left = equality_expression op = EQUALITY right = equality_expression
+	| <assoc = left> left = equality_expression op = INEQUALITY right = equality_expression
 	| relational_expression;
 
 relational_expression: numeric_predicate | boolean_expression;
@@ -98,10 +107,13 @@ atomic_expression:
 	| RESULT
 	| NULL
 	| IDENTIFIER
+	| negative_number
 	| array_length_expression
 	| array_index_expression
 	| numeric_quantifier_expression
 	| '(' numeric_value ')';
+
+negative_number: '-' atomic_expression;
 
 array_length_expression: IDENTIFIER '.' LENGTH;
 
@@ -144,7 +156,8 @@ single_range_expression:
 	left = start_range_comparison op = '&&' right = end_range_comparison;
 
 start_range_comparison:
-	expr = numeric_value op = ('<=' | '<') ident = IDENTIFIER;
+	(expr = numeric_value op = ('<=' | '<') ident = IDENTIFIER)
+	| ident = IDENTIFIER op = ('>=' | '>') expr = numeric_value;
 
 end_range_comparison:
 	ident = IDENTIFIER op = ('<=' | '<') expr = numeric_value;
@@ -226,6 +239,10 @@ MAX: '\\max';
 MIN: '\\min';
 SUM: '\\sum';
 PRODUCT: '\\product';
+
+// Behaviors
+NORMAL_BEHAVIOR: 'normal_behavior';
+EXCEPTIONAL_BEHAVIOR: 'exceptional_behavior';
 
 NULL: 'null';
 

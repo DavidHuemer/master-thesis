@@ -2,9 +2,9 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from examples.expectedResultExamples import get_expected_result_example
-from examples.inconsistencyTestCaseExamples import get_inconsistency_test_case_example
+from examples.inconsistencyTestCaseExamples import get_consistency_test_case_example
 from examples.javaClassExamples import get_java_code_example
-from testCases.inconsistencyTestCaseLoader import InconsistencyTestCaseLoader
+from testCases.inconsistencyTestCaseLoader import ConsistencyTestCaseLoader
 
 
 class TestInconsistencyTestCaseLoader(TestCase):
@@ -12,8 +12,8 @@ class TestInconsistencyTestCaseLoader(TestCase):
         self.expected_results_loader = Mock()
         self.java_code_loader = Mock()
         self.builder = Mock()
-        self.inconsistency_test_case_loader = InconsistencyTestCaseLoader(self.expected_results_loader,
-                                                                          self.java_code_loader, self.builder)
+        self.inconsistency_test_case_loader = ConsistencyTestCaseLoader(self.expected_results_loader,
+                                                                        self.java_code_loader, self.builder)
 
     def test_get_test_cases(self):
         expected_results = [get_expected_result_example()]
@@ -22,7 +22,7 @@ class TestInconsistencyTestCaseLoader(TestCase):
         java_code_list = [get_java_code_example()]
         self.java_code_loader.get_java_code_from_directory.return_value = java_code_list
 
-        test_cases = [get_inconsistency_test_case_example]
+        test_cases = [get_consistency_test_case_example]
         self.builder.build_test_cases.return_value = test_cases
 
         result = self.inconsistency_test_case_loader.get_test_cases()

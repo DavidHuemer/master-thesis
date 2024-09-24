@@ -16,6 +16,10 @@ class CSPParameterBuilder:
         for param in method_info.parameters_list:
             csp_params[param.name] = self.get_csp_param_for_param(param)
 
+            # Add is_null parameter for each parameter
+            is_null_name = f"{param.name}_is_null"
+            csp_params[is_null_name] = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
+
             # For array parameters add the length of the array
             # Check if param includes []
             if "[]" in param.parameter_type:

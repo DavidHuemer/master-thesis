@@ -1,3 +1,4 @@
+from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.expressionNode import ExpressionNode
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.javaMethod import JavaMethod
@@ -14,7 +15,7 @@ class JMLProblemBuilder:
         self.csp_param_builder = csp_param_builder
         self.constraints_builder = constraints_builder
 
-    def build(self, method_info: JavaMethod, expressions: list[ExpressionNode]) -> JMLProblem:
+    def build(self, method_info: JavaMethod, expressions: list[AstTreeNode]) -> JMLProblem:
         """
         Builds a JML problem from the given method information and expressions.
         :param method_info: The java method that should be tested

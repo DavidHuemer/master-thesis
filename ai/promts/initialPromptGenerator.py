@@ -1,6 +1,6 @@
 from ai.promts.jmlTransformationExampleGenerator import JmlTransformationExampleGenerator
 from definitions import config
-from definitions.inconsistencyTestCase import InconsistencyTestCase
+from definitions.consistencyTestCase import ConsistencyTestCase
 
 
 class InitialPromptGenerator:
@@ -11,7 +11,7 @@ class InitialPromptGenerator:
     def __init__(self, example_generator=JmlTransformationExampleGenerator()):
         self.example_generator = example_generator
 
-    def get_initial_prompt(self, test_case: InconsistencyTestCase) -> str:
+    def get_initial_prompt(self, test_case: ConsistencyTestCase) -> str:
         """
         Generates the initial prompt for the JML generation.
         :param test_case: The test case that is used to generate the prompt.
@@ -24,7 +24,12 @@ class InitialPromptGenerator:
                 f'{self.get_examples()}\n\n'
                 f'Only include the JML, nothing else, no code, no comments, no method name, nothing.\n'
                 f'Do not include the name of the programming language.'
-                f'Every line should start with the Java Comment symbol "//"')
+                f'Every line should start with the Java Comment symbol "//"\n'
+                f'Do not use any external classes or methods.\n'
+                f'Do not use any other classes, no static ones, nothing.\n'
+                f'That means classes like Math, Arrays, etc. are not allowed.\n'
+                f'Do not include any code that must be imported.\n'
+                f'So for example, Math.abs is not allowed.\n')
 
     def get_examples(self) -> str:
         examples = self.example_generator.get_examples(config.JML_TRANSFORMATIONS_EXAMPLES_COUNT)

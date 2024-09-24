@@ -2,7 +2,7 @@ from ai.chatBot import ChatBot
 from ai.openAIClient import OpenAIClient
 from ai.promts.initialPromptGenerator import InitialPromptGenerator
 from definitions import config
-from definitions.inconsistencyTestCase import InconsistencyTestCase
+from definitions.consistencyTestCase import ConsistencyTestCase
 
 
 class JmlBot:
@@ -11,7 +11,30 @@ class JmlBot:
         self.chat_bot = ChatBot(client, config.JML_CONTEXT) if chat_bot is None else chat_bot
         self.initial_prompt_generator = initial_prompt_generator
 
-    def get_jml(self, test_case: InconsistencyTestCase) -> str:
+    def get_jml(self, test_case: ConsistencyTestCase) -> str:
         initial_prompt = self.initial_prompt_generator.get_initial_prompt(test_case)
         response = self.chat_bot.chat(initial_prompt)
         return response
+
+    def get_from_failing_verification(self, parameters):
+        prompt = (f"The method did not succeed with the following parameters:\n{parameters}\n"
+                  f"Please provide a new JML for the method.\n"
+                  f"Again, only generate the JML and nothing else, as the result is being parsed.")
+
+        response = self.chat_bot.chat(prompt)
+        return response
+
+    def get_from_parser_exception(self, node):
+        if node is None:
+            prompt = ("There was an error parsing the code. Please provide a new JML for the method.\n"
+                      "Again, only generate the JML and nothing else, as the result is being parsed.")
+        else:
+            prompt = (f"There was an error parsing the code at the following node:\n{node}\n"
+                      f"Please provide a new JML for the method.\n"
+                      f"Again, only generate the JML and nothing else, as the result is being parsed.")
+
+        response = self.chat_bot.chat(prompt)
+        return response
+
+    def reset(self):
+        self.chat_bot.reset()

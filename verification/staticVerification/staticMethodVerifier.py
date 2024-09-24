@@ -22,7 +22,7 @@ class StaticMethodVerifier:
         """
 
         for method in java_class.get_methods():
-            if self.is_method_correct(method, test_suite.inconsistency_test_case.method_info):
+            if self.is_method_correct(method, test_suite.consistency_test_case.method_info):
                 return True
 
         return False

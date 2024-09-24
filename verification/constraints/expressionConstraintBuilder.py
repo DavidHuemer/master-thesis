@@ -1,4 +1,4 @@
-from z3 import And, Or, Bool
+from z3 import And, Or, Bool, ArrayRef, BoolRef
 
 from definitions.ast.arrayIndexNode import ArrayIndexNode
 from definitions.ast.arrayLengthNode import ArrayLengthNode
@@ -32,6 +32,17 @@ class ExpressionConstraintBuilder:
     def build_infix_expression(self, jml_problem: JMLProblem, expression: InfixExpression):
         left = self.build_expression_constraint(jml_problem, expression.left)
         right = self.build_expression_constraint(jml_problem, expression.right)
+
+        # TODO: Check if either one is is_null
+        if isinstance(left, ArrayRef) and isinstance(right, BoolRef):
+            # Left must be the boolean value
+            is_null_name = f"{str(left)}_is_null"
+            left = jml_problem.parameters[is_null_name].value
+
+        if isinstance(right, ArrayRef) and isinstance(left, BoolRef):
+            # Right must be the boolean value
+            is_null_name = f"{str(right)}_is_null"
+            right = jml_problem.parameters[is_null_name].value
 
         # TODO: Add additional infix operators
         if expression.name == "+":

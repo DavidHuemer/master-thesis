@@ -1,11 +1,13 @@
-from definitions.inconsistencyTestCase import InconsistencyTestCase
+from definitions.consistencyTestCase import ConsistencyTestCase
 
 
 class VerificationResult:
-    def __init__(self, inconsistency_test_case: InconsistencyTestCase, inconsistency: bool | None, message: str | None,
+    def __init__(self, consistency_test_case: ConsistencyTestCase, consistent: bool | None, parameters: str | None,
+                 message: str | None,
                  exception: Exception | None):
-        self.inconsistency_test_case = inconsistency_test_case
-        self.inconsistency = inconsistency
+        self.consistency_test_case = consistency_test_case
+        self.consistent = consistent
+        self.parameters = parameters
         self.message = message
         self.exception = exception
 
@@ -25,4 +27,4 @@ class VerificationResult:
         return self.message if self.message is not None else 'No further message'
 
     def __str__(self):
-        return f'Inconsistency: {self.inconsistency}, Message: {self.get_message()}, Error: {self.get_error_message()}'
+        return f'Inconsistency: {self.consistent}, Message: {self.get_message()}, Error: {self.get_error_message()}'

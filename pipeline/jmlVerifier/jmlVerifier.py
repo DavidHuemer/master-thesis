@@ -1,13 +1,26 @@
+from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.verification.verificationResult import VerificationResult
+from verification.testSuite.testSuiteBuilder import TestSuiteBuilder
+from verification.testSuite.testSuiteVerifier import TestSuiteVerifier
+
+
 class JmlVerifier:
     """
     Class to verify JML annotations in Java source code.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, test_suite_builder=TestSuiteBuilder(), test_suite_verifier=TestSuiteVerifier()):
+        self.test_suite_builder = test_suite_builder
+        self.test_suite_verifier = test_suite_verifier
 
-    def verify(self, jml_code: str):
+    def verify(self, test_case: ConsistencyTestCase, jml_code: str) -> VerificationResult:
         """
         Verify JML annotations in Java source code.
         """
-        return False
+
+        # Steps:
+        # 1. Get the test cases (different parameters for the testing method)
+        test_suite = self.test_suite_builder.get_test_suite(test_case, test_case.method_info, jml_code)
+
+        # 2. Run the test cases (Run the method with the different parameters)
+        return self.test_suite_verifier.run(test_suite)

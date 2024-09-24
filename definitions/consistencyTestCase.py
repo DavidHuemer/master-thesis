@@ -3,7 +3,7 @@ from definitions.javaCode import JavaCode
 from definitions.javaMethod import JavaMethod
 
 
-class InconsistencyTestCase:
+class ConsistencyTestCase:
     """
     A test case that represents a check for inconsistencies in the code documentation.
     """

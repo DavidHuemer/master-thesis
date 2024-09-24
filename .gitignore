@@ -1,2 +1,9 @@
 /secrets/
 /.idea/
+/antlr/
+/.vscode/
+/.antlr/
+__pycache__/
+.venv/*
+dist/
+parser/generated

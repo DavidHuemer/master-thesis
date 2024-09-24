@@ -1,6 +1,7 @@
 from codeExecution.runtime.javaRuntimeClassLoader import JavaRuntimeClassLoader
 from definitions.evaluations.tests.testSuite import TestSuite
 from definitions.verification.verificatonException import VerificationException
+from verification.behaviors.behaviorsRunner import BehaviorsRunner
 from verification.staticVerification.staticMethodVerifier import StaticMethodVerifier
 from verification.testCollections.testCollectionsRunner import TestCollectionsRunner
 
@@ -12,10 +13,11 @@ class TestSuiteVerificationRunner:
     """
 
     def __init__(self, runtime_class_loader=JavaRuntimeClassLoader, static_method_verifier=StaticMethodVerifier(),
-                 test_collections_runner=TestCollectionsRunner()):
+                 test_collections_runner=TestCollectionsRunner(), behaviors_runner=BehaviorsRunner()):
         self.runtime_class_loader = runtime_class_loader
         self.static_method_verifier = static_method_verifier
         self.test_collections_runner = test_collections_runner
+        self.behaviors_runner = behaviors_runner
 
     def run(self, test_suite: TestSuite):
         # Steps to run the test suite:
@@ -27,8 +29,8 @@ class TestSuiteVerificationRunner:
         if not method_exists:
             raise VerificationException("Method does not exist")
 
+        # TODO: Check if there are no test cases -> raise Exception
+
         # 3. Run the test cases
-        return self.test_collections_runner.run(test_class=test_class,
-                                                test_collections=test_suite.test_collections,
-                                                inconsistency_test_case=test_suite.inconsistency_test_case,
-                                                ast=test_suite.ast)
+        return self.behaviors_runner.run(test_class=test_class, behaviors=test_suite.behavior_tests,
+                                         consistency_test_case=test_suite.consistency_test_case)

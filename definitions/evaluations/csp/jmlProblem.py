@@ -1,4 +1,4 @@
-from z3 import Or, ArithRef, Select, And, sat, ModelRef
+from z3 import Or, ArithRef, Select, And, sat, ModelRef, ArrayRef, BoolRef
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from verification.csp.jmlSolver import JmlSolver
@@ -37,9 +37,9 @@ class JMLProblem:
         return solution
 
     def get_distinct_constraint(self, solution, param):
-        if isinstance(param, ArithRef):
+        if isinstance(param, ArithRef) or isinstance(param, BoolRef):
             return param != solution[param]
-        else:
+        elif isinstance(param, ArrayRef):
             # Get length parameter
             length_name = f"{str(param)}_length"
             length_param = self.parameters[length_name].value
@@ -74,7 +74,7 @@ class JMLProblem:
         if solution is None:
             return
 
-        solution_params = [self.parameters[str(var)].value for var in solution]
+        solution_params = [self.parameters[str(var)].value for var in solution if str(var) in self.parameters]
 
         distinct_constraints = [self.get_distinct_constraint(solution, param) for param in solution_params]
         valid_constraints = [constraint for constraint in distinct_constraints if constraint is not None]

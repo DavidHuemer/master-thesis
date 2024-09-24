@@ -1,14 +1,11 @@
-import copy
-
-from definitions.ast import RangeTreeNode
 from definitions.ast.arrayIndexNode import ArrayIndexNode
 from definitions.ast.arrayLengthNode import ArrayLengthNode
 from definitions.ast.astTreeNode import AstTreeNode
-from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
-from definitions.ast.expressionNode import ExpressionNode
+from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.infixExpression import InfixExpression
-from definitions.ast.jmlTreeNode import JmlTreeNode
+from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
+from definitions.ast.questionMarkNode import QuestionMarkNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from helper.logs.loggingHelper import LoggingHelper
@@ -22,11 +19,11 @@ class ResultVerifier:
         self.bool_quantifier_execution = bool_quantifier_execution
         self.num_quantifier_execution = num_quantifier_execution
 
-    def verify(self, result: ExecutionResult, ast: JmlTreeNode):
+    def verify(self, result: ExecutionResult, behavior_node: BehaviorNode):
         LoggingHelper.log_info("Verifying result")
 
         # Run through all post conditions and check if they are satisfied
-        for post_condition in ast.post_conditions:
+        for post_condition in behavior_node.post_conditions:
             if not self.evaluate(result, post_condition):
                 return False
 
@@ -34,6 +31,13 @@ class ResultVerifier:
 
     def evaluate(self, result: ExecutionResult, expression: AstTreeNode):
         # Evaluate expression
+
+        if isinstance(expression, QuestionMarkNode):
+            expr_result = self.evaluate(result, expression.expr)
+            if expr_result:
+                return self.evaluate(result, expression.true_expr)
+            else:
+                return self.evaluate(result, expression.false_expr)
 
         if isinstance(expression, InfixExpression):
             return self.evaluate_infix(result, expression)
@@ -64,6 +68,9 @@ class ResultVerifier:
                 return len(array)
             else:
                 raise Exception(f"Array {array_name} not found in parameters")
+
+        if expression.name == 'negative_number':
+            return -self.evaluate(result, expression.children[0])
 
         for child in expression.children:
             return self.evaluate(result, child)

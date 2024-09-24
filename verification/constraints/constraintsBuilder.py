@@ -19,7 +19,6 @@ class ConstraintsBuilder:
 
         # Add constraints for each expression
         self.add_expression_constraints(jml_problem, expressions)
-        pass
 
     def add_type_constraints(self, jml_problem: JMLProblem):
         for param_key in jml_problem.parameters:
