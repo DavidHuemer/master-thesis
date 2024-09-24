@@ -90,6 +90,8 @@ class ResultVerifier:
             return left or right
         elif expression.name == "==":
             return left == right
+        elif expression.name == "<==>":
+            return left == right
         elif expression.name == "!=":
             return left != right
         elif expression.name == "==>":

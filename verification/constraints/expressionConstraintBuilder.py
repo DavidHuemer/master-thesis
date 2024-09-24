@@ -63,6 +63,8 @@ class ExpressionConstraintBuilder:
             return left >= right
         elif expression.name == "==":
             return left == right
+        elif expression.name == "<==>":
+            return left == right
         elif expression.name == "!=":
             return left != right
         elif expression.name == "&&":
