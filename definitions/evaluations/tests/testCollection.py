@@ -11,3 +11,6 @@ class TestCollection:
 
     def __str__(self):
         return f"TestCollection Nr of test cases: {len(self.test_cases)}"
+
+    def get_test_cases_count(self):
+        return len(self.test_cases)

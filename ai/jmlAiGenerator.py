@@ -40,3 +40,6 @@ class JmlAiGenerator:
 
     def get_from_parser_exception(self, node):
         return self.jmlBot.get_from_parser_exception(node)
+
+    def get_from_no_test_cases(self):
+        return self.jmlBot.get_from_no_test_cases()

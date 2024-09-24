@@ -26,3 +26,6 @@ class JmlGenerator:
 
     def get_from_failing_verification(self, result: VerificationResult):
         return self.jml_ai_generator.get_from_failing_verification(result.parameters)
+
+    def get_from_no_test_cases(self):
+        return self.jml_ai_generator.get_from_no_test_cases()

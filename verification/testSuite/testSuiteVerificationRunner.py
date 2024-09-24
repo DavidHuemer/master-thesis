@@ -29,8 +29,6 @@ class TestSuiteVerificationRunner:
         if not method_exists:
             raise VerificationException("Method does not exist")
 
-        # TODO: Check if there are no test cases -> raise Exception
-
         # 3. Run the test cases
         return self.behaviors_runner.run(test_class=test_class, behaviors=test_suite.behavior_tests,
                                          consistency_test_case=test_suite.consistency_test_case)

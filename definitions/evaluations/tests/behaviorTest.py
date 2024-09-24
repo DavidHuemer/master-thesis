@@ -7,3 +7,6 @@ class BehaviorTest:
         self.test_collections = test_collections
         self.behavior_type = behavior_node.behavior_type
         self.behavior_node = behavior_node
+
+    def get_test_cases_count(self):
+        return self.test_collections.get_test_cases_count()

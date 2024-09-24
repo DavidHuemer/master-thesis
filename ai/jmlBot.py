@@ -36,5 +36,13 @@ class JmlBot:
         response = self.chat_bot.chat(prompt)
         return response
 
+    def get_from_no_test_cases(self):
+        prompt = (f"There were no test cases found for the method. "
+                  f"Please provide a new JML for the method.\n"
+                  f"Again, only generate the JML and nothing else, as the result is being parsed.")
+
+        response = self.chat_bot.chat(prompt)
+        return response
+
     def reset(self):
         self.chat_bot.reset()

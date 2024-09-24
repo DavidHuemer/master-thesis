@@ -15,8 +15,7 @@ class TestSuiteBuilder:
         self.ast_generator = ast_generator
         self.test_collections_builder = test_collections_builder
 
-    def get_test_suite(self, test_case: ConsistencyTestCase, method_info: JavaMethod, jml_code: str) -> (
-            TestSuite, JmlTreeNode):
+    def get_test_suite(self, test_case: ConsistencyTestCase, method_info: JavaMethod, jml_code: str) -> TestSuite:
         # Steps to build the test suite:
         LoggingHelper.log_info("Building Test Suite")
 

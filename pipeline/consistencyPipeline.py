@@ -1,6 +1,7 @@
 from codeExecution.vm.VMHelper import VMHelper
 from definitions import config
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.evaluations.tests.exceptions.noTestCasesException import NoTestCasesException
 from definitions.parser.parserException import ParserException
 from definitions.verification.verificationResult import VerificationResult
 from helper.logs.loggingHelper import LoggingHelper
@@ -63,6 +64,8 @@ class ConsistencyPipeline:
 
         except ParserException as parser_exception:
             return self.parser_exception_occurred(parser_exception, consistency_test)
+        except NoTestCasesException as e:
+            return self.no_test_cases_exception_occurred(e, consistency_test)
 
     def parser_exception_occurred(self, parser_exception: ParserException, consistency_test: ConsistencyTestCase):
         LoggingHelper.log_warning(f"Parser exception occurred")
@@ -70,6 +73,15 @@ class ConsistencyPipeline:
             return VerificationResultFactory.by_exception(consistency_test, parser_exception)
 
         new_jml = self.jml_generator.get_from_parser_exception(consistency_test, parser_exception)
+        self.retries += 1
+        return self.get_result_by_jml(consistency_test, new_jml)
+
+    def no_test_cases_exception_occurred(self, exception, consistency_test: ConsistencyTestCase):
+        LoggingHelper.log_warning(f"No test cases exception occurred")
+        if self.retries >= config.MAX_PIPELINE_TRIES:
+            return VerificationResultFactory.by_exception(consistency_test, exception)
+
+        new_jml = self.jml_generator.get_from_no_test_cases()
         self.retries += 1
         return self.get_result_by_jml(consistency_test, new_jml)
 
