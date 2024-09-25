@@ -43,3 +43,6 @@ class JmlAiGenerator:
 
     def get_from_no_test_cases(self):
         return self.jmlBot.get_from_no_test_cases()
+
+    def get_from_text(self, text: str):
+        return self.jmlBot.get_from_text(text)

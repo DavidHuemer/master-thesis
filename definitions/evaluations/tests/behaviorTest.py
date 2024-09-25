@@ -12,5 +12,4 @@ class BehaviorTest:
         return self.test_collections.get_test_cases_count()
 
     def __str__(self):
-        # TODO: Better string representation
         return f'"{self.behavior_type.value}" tests: {self.test_collections.get_test_cases_count()}'

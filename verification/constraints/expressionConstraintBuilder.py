@@ -1,4 +1,4 @@
-from z3 import And, Or, Bool, ArrayRef, BoolRef
+from z3 import And, Or, Bool, ArrayRef, BoolRef, Not
 
 from definitions.ast.arrayIndexNode import ArrayIndexNode
 from definitions.ast.arrayLengthNode import ArrayLengthNode
@@ -6,6 +6,7 @@ from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.infixExpression import InfixExpression
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.csp.jmlProblem import JMLProblem
+from definitions.evaluations.exceptions.preConditionException import PreConditionException
 
 
 class ExpressionConstraintBuilder:
@@ -65,6 +66,8 @@ class ExpressionConstraintBuilder:
             return left == right
         elif expression.name == "<==>":
             return left == right
+        elif expression.name == "==>":
+            return Or(Not(left), right)
         elif expression.name == "!=":
             return left != right
         elif expression.name == "&&":
@@ -87,5 +90,7 @@ class ExpressionConstraintBuilder:
             return terminal.value == "true"
         elif terminal.name == "NULL":
             return jml_problem.parameters["is_null"].value
+        elif terminal.name == "RESULT":
+            raise PreConditionException("\\result not supported in pre conditions")
         else:
             return None

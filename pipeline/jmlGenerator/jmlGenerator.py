@@ -29,3 +29,6 @@ class JmlGenerator:
 
     def get_from_no_test_cases(self):
         return self.jml_ai_generator.get_from_no_test_cases()
+
+    def get_from_text(self, text: str):
+        return self.jml_ai_generator.get_from_text(text)

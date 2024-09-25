@@ -44,5 +44,14 @@ class JmlBot:
         response = self.chat_bot.chat(prompt)
         return response
 
+    def get_from_text(self, text: str):
+        prompt = ("The following exception occured:\n"
+                  f"{text}\n"
+                  "Please provide a new JML for the method.\n"
+                  "Again, only generate the JML and nothing else, as the result is being parsed.")
+
+        response = self.chat_bot.chat(prompt)
+        return
+
     def reset(self):
         self.chat_bot.reset()
