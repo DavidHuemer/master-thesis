@@ -35,7 +35,7 @@ class ExecutionVerifier:
         if behavior_type == BehaviorType.NORMAL_BEHAVIOR:
             return False
 
-        if expected_exception in exception:
+        if (expected_exception is not None) and expected_exception in exception:
             return True
 
         # TODO: Check if other exception matches
