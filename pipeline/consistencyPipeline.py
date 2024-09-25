@@ -21,6 +21,7 @@ class ConsistencyPipeline:
         self.jml_verifier = jml_verifier
         self.vm_helper = vm_helper
         self.retries = 0
+        self.verification_results: list[VerificationResult] = []
 
     def get_results(self, consistency_tests: list[ConsistencyTestCase]) -> list[VerificationResult]:
         try:
@@ -39,6 +40,7 @@ class ConsistencyPipeline:
 
             # Reset the JML generator
             self.jml_generator.reset()
+            self.verification_results = []
 
             # First, get initial JML
             jml_code = self.jml_generator.get_from_test_case(consistency_test)
@@ -55,6 +57,8 @@ class ConsistencyPipeline:
             result = self.jml_verifier.verify(consistency_test, jml_code)
             if result.consistent is True:
                 return result
+
+            self.verification_results.append(result)
 
             if self.retries >= config.MAX_PIPELINE_TRIES:
                 return result
@@ -74,7 +78,7 @@ class ConsistencyPipeline:
         LoggingHelper.log_warning(f"Parser exception occurred")
         if self.retries >= config.MAX_PIPELINE_TRIES:
             LoggingHelper.log_warning(f"Max retries reached")
-            return VerificationResultFactory.by_exception(consistency_test, parser_exception)
+            return self.get_best_result(VerificationResultFactory.by_exception(consistency_test, parser_exception))
 
         LoggingHelper.log_info("Generating new JML")
         new_jml = self.jml_generator.get_from_parser_exception(consistency_test, parser_exception)
@@ -84,7 +88,7 @@ class ConsistencyPipeline:
     def no_test_cases_exception_occurred(self, exception, consistency_test: ConsistencyTestCase):
         LoggingHelper.log_warning(f"No test cases exception occurred")
         if self.retries >= config.MAX_PIPELINE_TRIES:
-            return VerificationResultFactory.by_exception(consistency_test, exception)
+            return self.get_best_result(VerificationResultFactory.by_exception(consistency_test, exception))
 
         new_jml = self.jml_generator.get_from_no_test_cases()
         self.retries += 1
@@ -98,8 +102,14 @@ class ConsistencyPipeline:
         LoggingHelper.log_warning(f"Condition exception occurred: {e.message}")
 
         if self.retries >= config.MAX_PIPELINE_TRIES:
-            return VerificationResultFactory.by_exception(consistency_test, e)
+            return self.get_best_result(VerificationResultFactory.by_exception(consistency_test, e))
 
         new_jml = self.jml_generator.get_from_text(e.message)
         self.retries += 1
         return self.get_result_by_jml(consistency_test, new_jml)
+
+    def get_best_result(self, verification_result: VerificationResult):
+        if len(self.verification_results) == 0:
+            return verification_result
+
+        return self.verification_results[-1]
