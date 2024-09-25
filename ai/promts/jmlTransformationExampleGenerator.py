@@ -31,6 +31,11 @@ class JmlTransformationExampleGenerator(object):
         :param examples_count: The number of examples to get.
         :return: A list of JML transformation examples.
         """
+        # TODO: Get examples for basic arithmetic (2x), forall (2x), behavior (2x), ...
+        random_examples = self.get_random_examples(examples_count)
+        return random_examples
+
+    def get_random_examples(self, examples_count: int):
         if self.examples is None:
             self.examples = self.examples_loader.load()
 
@@ -38,5 +43,4 @@ class JmlTransformationExampleGenerator(object):
         if examples_count >= len(self.examples):
             return self.examples
 
-        # Select examples_count examples from the list randomly
         return random.sample(self.examples, examples_count)

@@ -11,3 +11,10 @@
 -----------------------------------
 //@requires true
 //@ensures \result == 2 * a
+===================================
+/**
+* Returns an array with all elements greater than 0
+*/
+-----------------------------------
+//@ requires arr != null;
+//@ ensures (\forall int i; 0 <= i && i < arr.length; arr[i] > 0);
