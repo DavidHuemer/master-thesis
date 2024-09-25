@@ -70,8 +70,10 @@ class ConsistencyPipeline:
     def parser_exception_occurred(self, parser_exception: ParserException, consistency_test: ConsistencyTestCase):
         LoggingHelper.log_warning(f"Parser exception occurred")
         if self.retries >= config.MAX_PIPELINE_TRIES:
+            LoggingHelper.log_warning(f"Max retries reached")
             return VerificationResultFactory.by_exception(consistency_test, parser_exception)
 
+        LoggingHelper.log_info("Generating new JML")
         new_jml = self.jml_generator.get_from_parser_exception(consistency_test, parser_exception)
         self.retries += 1
         return self.get_result_by_jml(consistency_test, new_jml)

@@ -61,7 +61,7 @@ class AstGenerator:
             sys.stderr = sys.__stderr__
 
     def has_error_node_implementation(self, tree):
-        if hasattr(tree, 'children'):
+        if hasattr(tree, 'children') and tree.children is not None:
             for child in tree.children:
                 error_node = self.has_error_node_implementation(child)
                 if error_node is not None:

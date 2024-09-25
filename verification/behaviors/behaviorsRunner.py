@@ -16,7 +16,6 @@ class BehaviorsRunner:
         LoggingHelper.log_info("Running test behaviors")
 
         for behavior in behaviors:
-            LoggingHelper.log_info(f"Running behavior: {behavior}")
             behavior_result = self.run_behavior(behavior, test_class, consistency_test_case)
             if not behavior_result.consistent:
                 return VerificationResultFactory.inconsistent_result(consistency_test_case)
@@ -25,6 +24,7 @@ class BehaviorsRunner:
 
     def run_behavior(self, behavior: BehaviorTest, test_class: JavaRuntimeClass,
                      consistency_test_case: ConsistencyTestCase) -> VerificationResult:
+        LoggingHelper.log_info(f"Running behavior: {str(behavior)}")
         return self.test_collections_runner.run(test_class=test_class,
                                                 test_collections=behavior.test_collections,
                                                 consistency_test_case=consistency_test_case,

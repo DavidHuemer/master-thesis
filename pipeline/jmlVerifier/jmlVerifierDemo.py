@@ -4,10 +4,10 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@requires a != null\n"
-            "//@ensures (\\forall int i; 0 <= i && i < a.length; \\result >= a[i])\n"
-            "//@ensures (\\exists int j; 0 <= j && j < a.length; \\result == a[j])"
-            "//@ensures a.length == 0 ==> \\result == -1")
+jml_code = ("//@requires a <= 10\n"
+            "//@ensures \\result == a\n"
+            "//@signals_only IllegalArgumentException\n"
+            "//@signals (IllegalArgumentException e) a > 10")
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\max\\Biggest.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\exceptionTest\\ExceptionTest.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

@@ -27,4 +27,4 @@ class VerificationResult:
         return self.message if self.message is not None else 'No further message'
 
     def __str__(self):
-        return f'Inconsistency: {self.consistent}, Message: {self.get_message()}, Error: {self.get_error_message()}'
+        return f'Consistency: {self.consistent}, Message: {self.get_message()}, Error: {self.get_error_message()}'

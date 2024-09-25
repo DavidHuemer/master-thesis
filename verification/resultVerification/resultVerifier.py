@@ -20,8 +20,6 @@ class ResultVerifier:
         self.num_quantifier_execution = num_quantifier_execution
 
     def verify(self, result: ExecutionResult, behavior_node: BehaviorNode):
-        LoggingHelper.log_info("Verifying result")
-
         # Run through all post conditions and check if they are satisfied
         for post_condition in behavior_node.post_conditions:
             if not self.evaluate(result, post_condition):

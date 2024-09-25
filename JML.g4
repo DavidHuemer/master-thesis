@@ -16,12 +16,14 @@ condition: (
 		requires_condition
 		| ensures_condition
 		| signals_condition
+		| signals_only_condition
 		| also_condition
 	) ';'?;
 
 requires_condition: '@' 'requires' expression;
 ensures_condition: '@' 'ensures' expression;
 signals_condition: '@' 'signals' exception_expression;
+signals_only_condition: '@' 'signals_only' IDENTIFIER;
 also_condition: '@' 'also' behavior = special_behavior?;
 
 expression: question_mark_expression | inequivalence_expression;
