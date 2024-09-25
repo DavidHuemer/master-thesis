@@ -59,15 +59,15 @@ class JmlSimplifier:
 
     def handle_condition_expression(self, condition, parser_result: ParserResult):
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):
-            expr = self.rule_simplifier.simplify_rule(condition.children[2], parser_result)
+            expr = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
             self.current_behavior.add_pre_condition(expr)
 
         if isinstance(condition, JMLParser.JMLParser.Ensures_conditionContext):
-            expr = self.rule_simplifier.simplify_rule(condition.children[2], parser_result)
+            expr = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
             self.current_behavior.add_post_condition(expr)
 
         if isinstance(condition, JMLParser.JMLParser.Signals_conditionContext):
-            expr: ExpressionNode = self.rule_simplifier.simplify_rule(condition.children[2], parser_result)
+            expr: ExpressionNode = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
             if isinstance(expr, ExceptionExpression):
                 self.current_behavior.add_signals_condition(expr)
 
@@ -76,8 +76,8 @@ class JmlSimplifier:
         if self.current_behavior.defined:
             raise Exception("Behavior already defined")
 
-        if isinstance(behavior_expr.children[2], JMLParser.JMLParser.Special_behaviorContext):
-            special_behavior = behavior_expr.children[2]
+        if isinstance(behavior_expr.children[1], JMLParser.JMLParser.Special_behaviorContext):
+            special_behavior = behavior_expr.children[1]
             special_behavior_text = special_behavior.children[0].text
 
             if special_behavior_text == "normal_behavior":

@@ -8,7 +8,7 @@ jml: jml_item+ EOF;
 
 jml_item: behavior_expr | condition;
 
-behavior_expr: '@' 'public' special_behavior;
+behavior_expr: 'public' special_behavior;
 
 special_behavior: NORMAL_BEHAVIOR | EXCEPTIONAL_BEHAVIOR;
 
@@ -20,11 +20,11 @@ condition: (
 		| also_condition
 	) ';'?;
 
-requires_condition: '@' 'requires' expression;
-ensures_condition: '@' 'ensures' expression;
-signals_condition: '@' 'signals' exception_expression;
-signals_only_condition: '@' 'signals_only' IDENTIFIER;
-also_condition: '@' 'also' behavior = special_behavior?;
+requires_condition: 'requires' expression;
+ensures_condition: 'ensures' expression;
+signals_condition: 'signals' exception_expression;
+signals_only_condition: 'signals_only' IDENTIFIER;
+also_condition: 'also' behavior = special_behavior?;
 
 expression: question_mark_expression | inequivalence_expression;
 
@@ -201,8 +201,6 @@ exception_declaration:
 	'(' exception = IDENTIFIER name = IDENTIFIER ')';
 
 // jml rules
-LINE_START: '//';
-
 BOOL_LITERAL: 'true' | 'false';
 
 AND: '&&';
@@ -247,8 +245,10 @@ NORMAL_BEHAVIOR: 'normal_behavior';
 EXCEPTIONAL_BEHAVIOR: 'exceptional_behavior';
 
 NULL: 'null';
+AT: '@' -> skip;
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 
 INTEGER: '-'? [0-9]+;
 WS: [\t\r\n ]+ -> skip;
+COMMENT: '//' -> skip;
