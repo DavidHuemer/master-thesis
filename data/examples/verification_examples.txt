@@ -1,0 +1,52 @@
+data/code/abs/Abs.java;abs
+//@requires true
+//@ensures \result >= 0
+result:true
+-----------------------------------
+//@requires true
+//@ensures \result == a || \result == -a
+result:true
+-----------------------------------
+//@requires true
+//@ensures \result == a
+result:false
+-----------------------------------
+//@requires true
+//@ensures (a >= 0 ==> \result == a) && (a < 0 ==> \result == -a)
+result:true
+-----------------------------------
+// @requires true
+// @ensures \result == (a < 0 ? -a : a)
+result:true
+==================================
+data/code/arithmetic/SubtractInvalidOrder.java;subtract
+//@requires true
+//@ensures \result == a - b
+result:false
+==================================
+data/code/exceptionTest/ExceptionTest.java;test
+// @requires true
+// @ensures (\result == a) && (a <= 10)
+// @signals_only IllegalArgumentException
+// @signals (IllegalArgumentException e) (a > 10)
+result:true
+==================================
+data/code/find/IndexOf.java;find
+// @requires arr != null;
+// @ensures (\result == -1) <==> (\forall int i; 0 <= i && i < arr.length; arr[i] != target);
+// @ensures (\result != -1) ==> (0 <= \result && \result < arr.length && arr[\result] == target);
+// @signals (NullPointerException) arr == null;
+result:true
+==================================
+data/code/find/IndexOfIncorrect.java;find
+// @requires arr != null;
+// @requires (\forall int i; 0 <= i && i < arr.length; true);
+// @ensures \result == -1 <==> (\forall int i; 0 <= i && i < arr.length; arr[i] != target);
+// @ensures \result >= 0 <==> (0 <= \result && \result < arr.length && arr[\result] == target);
+// @ensures \result >= 0 ==> (\forall int i; 0 <= i && i < \result; arr[i] != target);
+result:false
+-----------------------------------
+// @requires arr != null && arr.length > 0;
+// @requires \exists int i; 0 <= i && i < arr.length; arr[i] == target;
+// @ensures \result != -1;
+result:true
