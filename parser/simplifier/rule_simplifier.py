@@ -1,9 +1,13 @@
+from typing import Callable, Any
+
 from antlr4.tree.Tree import TerminalNodeImpl
 
 import parser.generated.JMLParser as JMLParser
+from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.expressionNode import ExpressionNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.parser.parserResult import ParserResult
+from definitions.parser.ruleMetaData import RuleMetaData
 from parser.simplifier.arraySimplifier import ArraySimplifier
 from parser.simplifier.exceptionSimplifier import ExceptionSimplifier
 from parser.simplifier.infixSimplifier import InfixSimplifier
@@ -27,7 +31,29 @@ class RuleSimplifier:
         self.array_simplifier = array_simplifier
         self.infix_simplifier = infix_simplifier
         self.exception_simplifier = exception_simplifier
-        self.question_mark_expression_simplifier = question_mark_expression_simplifier
+        self.question_mark_expr_simplifier = question_mark_expression_simplifier
+
+        # list of methods
+        self.simplify_options: list[(str, Callable[[Any, RuleMetaData, ParserResult], AstTreeNode | None])] = [
+            ("terminal node",
+             lambda rule, meta, parser_result: self.can_simplify_terminal_node(rule, parser_result)),
+            ("basic simplify",
+             lambda rule, meta, parser_result: self.can_simplify(rule, meta, parser_result)),
+            ('infix',
+             lambda rule, meta, parser_result: self.infix_simplifier.simplify_infix(rule, parser_result, self)),
+            ('question_mark',
+             lambda rule, meta, parser_result: self.question_mark_expr_simplifier.simplify(rule, parser_result, self)),
+            ('exception',
+             lambda rule, meta, parser_result: self.exception_simplifier.simplify(rule, parser_result, self)),
+            ('quantifier',
+             lambda rule, meta, parser_result: self.is_quantifier(rule, parser_result)),
+            ('array',
+             lambda rule, meta, parser_result: self.array_simplifier.simplify_array(rule, parser_result, self)),
+            ('fallback',
+             lambda rule, meta, parser_result: self.fallback_simplify(rule, meta, parser_result))
+        ]
+
+        print("Hello")
 
     def simplify_rule(self, rule, parser_result: ParserResult):
         """
@@ -37,64 +63,40 @@ class RuleSimplifier:
         :return: The simplified rule
         """
 
-        # TODO: Simplify (shorten) this method
+        meta_data = self.rule_meta_data_helper.get_meta_data_for_rule(rule, parser_result.jml_parser)
 
+        for option in self.simplify_options:
+            expr = option[1](rule, meta_data, parser_result)
+            if expr is not None:
+                return expr
+
+        raise Exception("No simplification option found for rule: " + str(rule))
+
+    @staticmethod
+    def can_simplify_terminal_node(rule, parser_result) -> TerminalNode | None:
         if isinstance(rule, TerminalNodeImpl):
             return TerminalNode(parser_result.jml_parser.symbolicNames[rule.getSymbol().type], rule.getText())
 
-        meta_data = self.rule_meta_data_helper.get_meta_data_for_rule(rule, parser_result.jml_parser)
+        return None
 
-        simplified = self.can_simplify(rule, meta_data)
-        if simplified is not None:
-            return self.simplify_rule(simplified, parser_result)
+    def can_simplify(self, rule, meta_data, parser_result) -> AstTreeNode | None:
+        if rule.getChildCount() == 1 and meta_data.can_simplify():
+            return self.simplify_rule(rule.children[0], parser_result)
 
+        if isinstance(rule, JMLParser.JMLParser.Primary_expressionContext) and rule.getChildCount() == 3:
+            return self.simplify_rule(rule.children[1], parser_result)
+
+        if isinstance(rule, JMLParser.JMLParser.Atomic_expressionContext) and rule.getChildCount() == 3:
+            return self.simplify_rule(rule.children[1], parser_result)
+
+        return None
+
+    def is_quantifier(self, rule, parser_result):
         if self.is_bool_quantifier(rule):
             return self.bool_quantifier_simplifier.simplify(rule, parser_result, self)
 
         if self.is_numeric_quantifier(rule):
             return self.numeric_quantifier_simplifier.simplify(rule, parser_result, self)
-
-        if self.question_mark_expression_simplifier.is_question_mark_expression(rule):
-            return self.question_mark_expression_simplifier.simplify(rule, parser_result, self)
-
-        if self.is_exception_node(rule):
-            return self.exception_simplifier.simplify(rule, parser_result, self)
-
-        # Check if rule is in infix notation a + b. It must have 3 children (left, operator, right)
-
-        arr_val = self.array_simplifier.simplify_array(rule, parser_result, self)
-        if arr_val is not None:
-            return arr_val
-
-        # check if rule is a terminal node
-        if rule.getChildCount() == 0:
-            return TerminalNode("Test", rule.getText())
-
-        infix_value = self.infix_simplifier.simplify_infix(rule, parser_result, self)
-        if infix_value is not None:
-            return infix_value
-
-        node = ExpressionNode(meta_data.name)
-        for child in rule.children:
-            if isinstance(child, TerminalNodeImpl):
-                if meta_data.include_terminal_children():
-                    node.add_child(
-                        TerminalNode(parser_result.jml_parser.symbolicNames[child.getSymbol().type], child.getText()))
-            else:
-                node.add_child(self.simplify_rule(child, parser_result))
-
-        return node
-
-    @staticmethod
-    def can_simplify(rule, meta_data):
-        if rule.getChildCount() == 1 and meta_data.can_simplify():
-            return rule.children[0]
-
-        if isinstance(rule, JMLParser.JMLParser.Primary_expressionContext) and rule.getChildCount() == 3:
-            return rule.children[1]
-
-        if isinstance(rule, JMLParser.JMLParser.Atomic_expressionContext) and rule.getChildCount() == 3:
-            return rule.children[1]
 
         return None
 
@@ -109,3 +111,17 @@ class RuleSimplifier:
     @staticmethod
     def is_exception_node(rule):
         return isinstance(rule, JMLParser.JMLParser.Exception_expressionContext)
+
+    def can_simplify_infix(self, rule, meta, parser_result):
+        pass
+
+    def fallback_simplify(self, rule, meta, parser_result):
+        node = ExpressionNode(meta.name)
+        for child in rule.children:
+            if isinstance(child, TerminalNodeImpl):
+                if meta.include_terminal_children():
+                    node.add_child(
+                        TerminalNode(parser_result.jml_parser.symbolicNames[child.getSymbol().type], child.getText()))
+            else:
+                node.add_child(self.simplify_rule(child, parser_result))
+        return node

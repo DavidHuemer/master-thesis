@@ -41,13 +41,13 @@ class JmlSimplifier:
 
         return jml_node
 
-    def handle_jml_item(self, jml_item, parser_result: ParserResult):
+    def handle_jml_item(self, jml_item: JMLParser.JMLParser.Jml_itemContext, parser_result: ParserResult):
         if self.is_behavior_node(jml_item):
             self.handle_behavior_node(jml_item)
         else:
             self.handle_condition(jml_item, parser_result)
 
-    def handle_condition(self, jml_item, parser_result: ParserResult):
+    def handle_condition(self, jml_item: JMLParser.JMLParser.Jml_itemContext, parser_result: ParserResult):
         condition = jml_item.children[0].children[0]
 
         # Check if condition is @also -> create new behavior node
@@ -58,20 +58,19 @@ class JmlSimplifier:
             self.handle_condition_expression(condition, parser_result)
 
     def handle_condition_expression(self, condition, parser_result: ParserResult):
+        expr = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
+
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):
-            expr = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
             self.current_behavior.add_pre_condition(expr)
 
         if isinstance(condition, JMLParser.JMLParser.Ensures_conditionContext):
-            expr = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
             self.current_behavior.add_post_condition(expr)
 
         if isinstance(condition, JMLParser.JMLParser.Signals_conditionContext):
-            expr: ExpressionNode = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
             if isinstance(expr, ExceptionExpression):
                 self.current_behavior.add_signals_condition(expr)
 
-    def handle_behavior_node(self, jml_item):
+    def handle_behavior_node(self, jml_item: JMLParser.JMLParser.Jml_itemContext):
         behavior_expr: JMLParser.JMLParser.Behavior_exprContext = jml_item.children[0]
         if self.current_behavior.defined:
             raise Exception("Behavior already defined")
@@ -85,5 +84,6 @@ class JmlSimplifier:
             elif special_behavior_text == "exceptional_behavior":
                 self.current_behavior.behavior_type = BehaviorType.EXCEPTIONAL_BEHAVIOR
 
-    def is_behavior_node(self, jml_item):
+    @staticmethod
+    def is_behavior_node(jml_item):
         return isinstance(jml_item.children[0], JMLParser.JMLParser.Behavior_exprContext)

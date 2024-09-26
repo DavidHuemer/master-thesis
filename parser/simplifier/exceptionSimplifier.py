@@ -4,6 +4,9 @@ from definitions.ast.exceptionExpression import ExceptionExpression
 
 class ExceptionSimplifier:
     def simplify(self, rule, parser_result, rule_simplifier):
+        if not isinstance(rule, JMLParser.JMLParser.Exception_expressionContext):
+            return None
+
         # Check declaration and expr
         exception_type, exception_name = self.get_declaration(rule)
 

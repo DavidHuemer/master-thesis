@@ -9,6 +9,9 @@ class QuestionMarkExpressionSimplifier:
 
     @staticmethod
     def simplify(rule, parser_result, simplifier):
+        if not isinstance(rule, JMLParser.JMLParser.Question_mark_expressionContext):
+            return None
+
         expr = simplifier.simplify_rule(rule.expr, parser_result)
         true_expr = simplifier.simplify_rule(rule.true_val, parser_result)
         false_expr = simplifier.simplify_rule(rule.false_val, parser_result)
