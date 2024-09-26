@@ -3,6 +3,7 @@ from helper.logs.loggingHelper import LoggingHelper
 
 from statistics.confusionMatrixWriter import ConfusionMatrixWriter
 from statistics.consistencyNumbersWriter import ConsistencyNumbersWriter
+from statistics.successWriter import SuccessWriter
 from statistics.testCasesTableWriter import TestCasesTableWriter
 
 
@@ -13,10 +14,12 @@ class StatisticsWriter:
 
     def __init__(self, consistency_numbers_writer=ConsistencyNumbersWriter(),
                  confusion_matrix_writer=ConfusionMatrixWriter(),
-                 test_cases_table_writer=TestCasesTableWriter()):
+                 test_cases_table_writer=TestCasesTableWriter(),
+                 success_writer=SuccessWriter()):
         self.consistency_numbers_writer = consistency_numbers_writer
         self.confusion_matrix_writer = confusion_matrix_writer
         self.test_cases_table_writer = test_cases_table_writer
+        self.success_writer = success_writer
 
     def write(self, test_results: list[VerificationResult]):
         LoggingHelper.log_info('Statistics:', show_level=False)
@@ -30,7 +33,7 @@ class StatisticsWriter:
         self.print_spacing()
         self.test_cases_table_writer.write_test_cases_table(test_results)
         self.print_spacing()
-        self.print_results(test_results)
+        self.success_writer.write_success(test_results)
 
         # Print confusion matrix
         pass
