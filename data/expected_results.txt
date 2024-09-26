@@ -10,3 +10,5 @@ data/code/max/BiggestFirstIncorrect.java;biggest;false
 data/code/max/BiggestIndex.java;biggest;true
 data/code/exceptionTest/ExceptionTest.java;test;true
 data/code/abs/Abs.java;abs;true
+data/code/find/IndexOf.java;find;true
+data/code/find/IndexOfIncorrect.java;find;false

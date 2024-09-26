@@ -16,19 +16,22 @@ class ExecutionVerifier:
         self.result_verifier = result_verifier
 
     def verify(self, execution_result: ExecutionResult, consistency_test_case: ConsistencyTestCase,
-               behavior: BehaviorNode, expected_exception, test_case: TestCase):
-        # if execution_result.
-        if execution_result.exception is not None:
-            result = execution_result.exception
-            verification_result = self.verify_exception(exception=execution_result.exception,
-                                                        behavior_type=behavior.behavior_type,
-                                                        expected_exception=expected_exception)
-        else:
-            result = execution_result.result
-            verification_result = self.verify_result(execution_result=execution_result, behavior=behavior)
+    behavior: BehaviorNode, expected_exception, test_case: TestCase):
+        try:
+            if execution_result.exception is not None:
+                result = execution_result.exception
+                verification_result = self.verify_exception(exception=execution_result.exception,
+                                                            behavior_type=behavior.behavior_type,
+                                                            expected_exception=expected_exception)
+            else:
+                result = execution_result.result
+                verification_result = self.verify_result(execution_result=execution_result, behavior=behavior)
 
-        self.log_result(consistency_test_case, test_case, result, verification_result)
-        return verification_result
+            self.log_result(consistency_test_case, test_case, result, verification_result)
+            return verification_result
+        except Exception as e:
+            self.log_result(consistency_test_case, test_case, execution_result.result, False)
+            raise e
 
     @staticmethod
     def verify_exception(exception, behavior_type: BehaviorType, expected_exception):

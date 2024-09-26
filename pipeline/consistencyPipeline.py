@@ -55,17 +55,18 @@ class ConsistencyPipeline:
         try:
             LoggingHelper.log_debug("JMl code: \n" + jml_code.strip())
             result = self.jml_verifier.verify(consistency_test, jml_code)
-            if result.consistent is True:
-                return result
-
-            self.verification_results.append(result)
-
-            if self.retries >= config.MAX_PIPELINE_TRIES:
-                return result
-
-            new_jml = self.jml_generator.get_from_failing_verification(result)
-            self.retries += 1
-            return self.get_result_by_jml(consistency_test, new_jml)
+            return result
+            # if result.consistent is True:
+            #     return result
+            #
+            # self.verification_results.append(result)
+            #
+            # if self.retries >= config.MAX_PIPELINE_TRIES:
+            #     return result
+            #
+            # new_jml = self.jml_generator.get_from_failing_verification(result)
+            # self.retries += 1
+            # return self.get_result_by_jml(consistency_test, new_jml)
 
         except ParserException as parser_exception:
             return self.parser_exception_occurred(parser_exception, consistency_test)

@@ -32,3 +32,5 @@ class BoolQuantifierExecution:
             evaluation_result = result_verifier.evaluate(range_result, expression.expression)
             if evaluation_result:
                 return True
+
+        return False

@@ -18,3 +18,10 @@
 -----------------------------------
 //@ requires arr != null;
 //@ ensures (\forall int i; 0 <= i && i < arr.length; arr[i] > 0);
+===================================
+/**
+* Returns the sum of all elements in the array
+*/
+-----------------------------------
+//@ requires arr != null;
+//@ ensures \result == (\sum int i; 0 <= i && i < arr.length; arr[i]);

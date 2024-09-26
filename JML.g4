@@ -171,20 +171,20 @@ numeric_quantifier_expression:
 	| product_quantifier_expression;
 
 max_quantifier_expression:
-	MAX numeric_quantifier_core_expression;
+	MAX numeric_quantifier_core_expression ';'?;
 
 min_quantifier_expression:
-	MIN numeric_quantifier_core_expression;
+	MIN numeric_quantifier_core_expression ';'?;
 
 sum_quantifier_expression:
-	SUM numeric_quantifier_core_expression;
+	SUM numeric_quantifier_core_expression ';'?;
 
 product_quantifier_expression:
-	PRODUCT numeric_quantifier_core_expression;
+	PRODUCT numeric_quantifier_core_expression ';'?;
 
 numeric_quantifier_core_expression:
 	numeric_quantifier_value_expression
-	| numeric_quantifier_range_core_expression;
+	| numeric_quantifier_range_core_expression ';'?;
 
 numeric_quantifier_value_expression:
 	'(' value = numeric_quantifier_value ')';
@@ -198,7 +198,7 @@ exception_expression:
 	declaration = exception_declaration expr = expression;
 
 exception_declaration:
-	'(' exception = IDENTIFIER name = IDENTIFIER ')';
+	'(' exception = IDENTIFIER (name = IDENTIFIER)? ')';
 
 // jml rules
 BOOL_LITERAL: 'true' | 'false';

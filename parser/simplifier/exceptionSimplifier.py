@@ -22,16 +22,13 @@ class ExceptionSimplifier:
         declaration_expr = rule.declaration
 
         # Check that declaration expr must have 4 children
-        if declaration_expr.getChildCount() != 4:
-            raise Exception("Exception declaration must have 4 children")
-
         if not hasattr(declaration_expr, "exception"):
             raise Exception("Exception declaration must have a exception")
 
-        if not hasattr(declaration_expr, "exception"):
-            raise Exception("Exception declaration must have a name")
+        if not hasattr(declaration_expr, "name") or declaration_expr.name is None:
+            name = "e"
+        else:
+            name = declaration_expr.name.text
 
         exception_expr = declaration_expr.exception
-        name_expr = declaration_expr.name
-
-        return exception_expr.text, name_expr.text
+        return exception_expr.text, name

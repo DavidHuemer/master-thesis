@@ -20,12 +20,16 @@ class ResultVerifier:
         self.num_quantifier_execution = num_quantifier_execution
 
     def verify(self, result: ExecutionResult, behavior_node: BehaviorNode):
-        # Run through all post conditions and check if they are satisfied
-        for post_condition in behavior_node.post_conditions:
-            if not self.evaluate(result, post_condition):
-                return False
+        try:
+            # Run through all post conditions and check if they are satisfied
+            for post_condition in behavior_node.post_conditions:
+                if not self.evaluate(result, post_condition):
+                    return False
 
-        return True
+            return True
+        except Exception as e:
+            LoggingHelper.log_error(f"Error while verifying result: {e}")
+            raise e
 
     def evaluate(self, result: ExecutionResult, expression: AstTreeNode):
         # Evaluate expression
@@ -77,6 +81,13 @@ class ResultVerifier:
 
     def evaluate_infix(self, result: ExecutionResult, expression: InfixExpression):
         left = self.evaluate(result, expression.left)
+
+        if expression.name == "==>" and not left:
+            return True
+
+        if expression.name == "&&" and not left:
+            return False
+
         right = self.evaluate(result, expression.right)
 
         # TODO: Handle all infix operators
@@ -93,7 +104,7 @@ class ResultVerifier:
         elif expression.name == "!=":
             return left != right
         elif expression.name == "==>":
-            return not left or right
+            return (not left) or right
         elif expression.name == "<":
             return left < right
         elif expression.name == "<=":
