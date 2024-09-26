@@ -19,4 +19,7 @@ class RuleMetaDataHelper:
         return RuleMetaData(name, [])
 
     def get_name_of_rule(self, rule, parser: JMLParser):
-        return parser.ruleNames[rule.getRuleIndex()]
+        if hasattr(rule, "getRuleIndex"):
+            return parser.ruleNames[rule.getRuleIndex()]
+
+        return None

@@ -8,6 +8,7 @@ from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNo
 from definitions.ast.questionMarkNode import QuestionMarkNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
+from helper.infixHelper import InfixHelper
 from helper.logs.loggingHelper import LoggingHelper
 from verification.resultVerification.boolQuantifierExecution import BoolQuantifierExecution
 from verification.resultVerification.numQuantifierExecution import NumQuantifierExecution
@@ -15,9 +16,10 @@ from verification.resultVerification.numQuantifierExecution import NumQuantifier
 
 class ResultVerifier:
     def __init__(self, bool_quantifier_execution=BoolQuantifierExecution(),
-                 num_quantifier_execution=NumQuantifierExecution()):
+                 num_quantifier_execution=NumQuantifierExecution(), infix_helper=InfixHelper()):
         self.bool_quantifier_execution = bool_quantifier_execution
         self.num_quantifier_execution = num_quantifier_execution
+        self.infix_helper = infix_helper
 
     def verify(self, result: ExecutionResult, behavior_node: BehaviorNode):
         try:
@@ -41,8 +43,11 @@ class ResultVerifier:
             else:
                 return self.evaluate(result, expression.false_expr)
 
-        if isinstance(expression, InfixExpression):
-            return self.evaluate_infix(result, expression)
+        if isinstance(expression, InfixExpression) and hasattr(expression, "left") and hasattr(expression, "right"):
+            return self.infix_helper.evaluate_infix(infix_operator=expression.name,
+                                                    left=lambda: self.evaluate(result, expression.left),
+                                                    right=lambda: self.evaluate(result, expression.right),
+                                                    is_smt=False)
 
         if isinstance(expression, TerminalNode):
             return self.evaluate_terminal_node(result, expression)
@@ -81,50 +86,6 @@ class ResultVerifier:
             return self.evaluate(result, child)
 
         return True
-
-    def evaluate_infix(self, result: ExecutionResult, expression: InfixExpression):
-        left = self.evaluate(result, expression.left)
-
-        if expression.name == "==>" and not left:
-            return True
-
-        if expression.name == "&&" and not left:
-            return False
-
-        right = self.evaluate(result, expression.right)
-
-        # TODO: Handle all infix operators
-        # TODO: Move infix handling to separate class
-
-        if expression.name == "&&":
-            return left and right
-        elif expression.name == "||":
-            return left or right
-        elif expression.name == "==":
-            return left == right
-        elif expression.name == "<==>":
-            return left == right
-        elif expression.name == "!=":
-            return left != right
-        elif expression.name == "==>":
-            return (not left) or right
-        elif expression.name == "<":
-            return left < right
-        elif expression.name == "<=":
-            return left <= right
-        elif expression.name == ">":
-            return left > right
-        elif expression.name == ">=":
-            return left >= right
-        elif expression.name == "+":
-            return left + right
-        elif expression.name == "-":
-            return left - right
-        elif expression.name == "*":
-            return left * right
-        else:
-            LoggingHelper.log_error(f"Unknown operator {expression.name}")
-            return False
 
     def evaluate_terminal_node(self, result: ExecutionResult, terminal: TerminalNode):
         if terminal.name == "RESULT":

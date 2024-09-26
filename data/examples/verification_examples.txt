@@ -18,6 +18,10 @@ result:true
 // @requires true
 // @ensures \result == (a < 0 ? -a : a)
 result:true
+// public exceptional_behavior
+// @requires true
+// @ensures \result >= 0
+result:false
 ==================================
 data/code/arithmetic/SubtractInvalidOrder.java;subtract
 //@requires true

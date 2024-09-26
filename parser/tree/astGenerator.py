@@ -1,10 +1,8 @@
-from antlr4 import *
-from antlr4 import CommonTokenStream
-from antlr4.error.Errors import InputMismatchException
-
-import sys
 import io
+import sys
+
 from antlr4 import *
+from antlr4.error.Errors import InputMismatchException
 from antlr4.tree.Tree import ErrorNodeImpl
 
 import parser.generated.JMLLexer as JMLLexer

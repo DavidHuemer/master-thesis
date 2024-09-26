@@ -1,5 +1,3 @@
-from z3 import And, Or, ArrayRef, BoolRef, Not
-
 from definitions.ast.arrayIndexNode import ArrayIndexNode
 from definitions.ast.arrayLengthNode import ArrayLengthNode
 from definitions.ast.astTreeNode import AstTreeNode
@@ -8,16 +6,25 @@ from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTree
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.exceptions.preConditionException import PreConditionException
+from helper.infixHelper import InfixHelper
 from verification.constraints.boolQuantifierConstraintBuilder import BoolQuantifierConstraintBuilder
 
 
 class ExpressionConstraintBuilder:
-    def __init__(self, bool_quantifier_constraint_builder=BoolQuantifierConstraintBuilder()):
+    def __init__(self, bool_quantifier_constraint_builder=BoolQuantifierConstraintBuilder(),
+                 infix_helper=InfixHelper()):
         self.bool_quantifier_constraint_builder = bool_quantifier_constraint_builder
+        self.infix_helper = infix_helper
 
     def build_expression_constraint(self, parameters: dict[str, CSPParameter], expression: AstTreeNode):
-        if isinstance(expression, InfixExpression):
-            return self.build_infix_expression(parameters, expression)
+        if isinstance(expression, InfixExpression) and hasattr(expression, "left") and hasattr(expression, "right"):
+            return self.infix_helper.evaluate_infix(infix_operator=expression.name,
+                                                    left=lambda: self.build_expression_constraint(parameters,
+                                                                                                  expression.left),
+                                                    right=lambda: self.build_expression_constraint(parameters,
+                                                                                                   expression.right),
+                                                    is_smt=True,
+                                                    get_param=lambda name: parameters[name])
 
         # TODO: Include all supported expression types
         if isinstance(expression, ArrayIndexNode):
@@ -37,53 +44,6 @@ class ExpressionConstraintBuilder:
             return self.bool_quantifier_constraint_builder.evaluate(parameters, expression, self)
 
         raise Exception("ExpressionConstraintBuilder: Expression type not supported")
-
-    def build_infix_expression(self, parameters: dict[str, CSPParameter], expression: InfixExpression):
-        left = self.build_expression_constraint(parameters, expression.left)
-        right = self.build_expression_constraint(parameters, expression.right)
-
-        # TODO: Check if either one is is_null
-        if isinstance(left, ArrayRef) and isinstance(right, BoolRef):
-            # Left must be the boolean value
-            is_null_name = f"{str(left)}_is_null"
-            left = parameters[is_null_name].value
-
-        if isinstance(right, ArrayRef) and isinstance(left, BoolRef):
-            # Right must be the boolean value
-            is_null_name = f"{str(right)}_is_null"
-            right = parameters[is_null_name].value
-
-        # TODO: Add additional infix operators
-        if expression.name == "+":
-            return left + right
-        elif expression.name == "-":
-            return left - right
-        elif expression.name == "*":
-            return left * right
-        elif expression.name == "/":
-            return left / right
-        elif expression.name == "<":
-            return left < right
-        elif expression.name == "<=":
-            return left <= right
-        elif expression.name == ">":
-            return left > right
-        elif expression.name == ">=":
-            return left >= right
-        elif expression.name == "==":
-            return left == right
-        elif expression.name == "<==>":
-            return left == right
-        elif expression.name == "==>":
-            return Or(Not(left), right)
-        elif expression.name == "!=":
-            return left != right
-        elif expression.name == "&&":
-            return And(left, right)
-        elif expression.name == "||":
-            return Or(left, right)
-
-        raise Exception("ExpressionConstraintBuilder: Infix expression not supported")
 
     def evaluate_terminal_node(self, parameters: dict[str, CSPParameter], terminal: TerminalNode):
         if terminal.name == "INTEGER":

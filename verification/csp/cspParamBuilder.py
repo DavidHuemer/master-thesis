@@ -10,13 +10,13 @@ class CSPParameterBuilder:
     Class that is used for building parameters that are needed for the solver
     """
 
-    def build_parameters(self, method_info: JavaMethod) -> dict[str, CSPParameter]:
+    def build_parameters(self, parameters: list[ParameterExtractionInfo]) -> dict[str, CSPParameter]:
         csp_params: dict[str, CSPParameter] = dict()
 
         # Add is_null parameter
         csp_params["is_null"] = CSPParameter("is_null", Bool("is_null"), "boolean", helper=True)
 
-        for param in method_info.parameters_list:
+        for param in parameters:
             csp_params[param.name] = self.get_csp_param_for_param(param)
 
             # Add is_null parameter for each parameter

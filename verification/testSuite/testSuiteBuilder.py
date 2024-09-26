@@ -1,5 +1,6 @@
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.jmlTreeNode import JmlTreeNode
+from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.tests.behaviorTest import BehaviorTest
 from definitions.evaluations.tests.testSuite import TestSuite
@@ -22,14 +23,14 @@ class TestSuiteBuilder:
         # 1. Get the AST of the JML
         ast = self.ast_generator.get_ast(jml_code)
 
-        behavior_tests = self.get_behavior_tests(ast, method_info)
+        behavior_tests = self.get_behavior_tests(ast, method_info.parameters_list)
 
         # 2. Get Test Collections
         return TestSuite(test_case, behavior_tests, ast)
 
-    def get_behavior_tests(self, ast: JmlTreeNode, method_info: JavaMethod) -> list[BehaviorTest]:
-        return [self.get_behavior_test(behavior_node, method_info) for behavior_node in ast.behavior_nodes]
+    def get_behavior_tests(self, ast: JmlTreeNode, parameters: list[ParameterExtractionInfo]) -> list[BehaviorTest]:
+        return [self.get_behavior_test(behavior_node, parameters) for behavior_node in ast.behavior_nodes]
 
-    def get_behavior_test(self, behavior_node: BehaviorNode, method_info: JavaMethod) -> BehaviorTest:
-        test_collections = self.test_collections_builder.build(method_info, behavior_node)
+    def get_behavior_test(self, behavior_node: BehaviorNode, parameters: list[ParameterExtractionInfo]) -> BehaviorTest:
+        test_collections = self.test_collections_builder.build(parameters, behavior_node)
         return BehaviorTest(test_collections, behavior_node)

@@ -1,4 +1,5 @@
 from definitions.ast.exceptionExpression import ExceptionExpression
+from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.tests.signalTestCollection import SignalTestCollection
 from definitions.javaMethod import JavaMethod
 from verification.jmlProblem.jmlProblemBuilder import JMLProblemBuilder
@@ -10,12 +11,12 @@ class SignalTestCollectionBuilder:
         self.jml_problem_builder = jml_problem_builder
         self.test_cases_generator = test_cases_generator
 
-    def build(self, java_method: JavaMethod, signals_conditions: list[ExceptionExpression]) \
+    def build(self, parameters: list[ParameterExtractionInfo], signals_conditions: list[ExceptionExpression]) \
             -> list[SignalTestCollection]:
         test_collections = []
 
         for signal in signals_conditions:
-            jml_problem = self.jml_problem_builder.build(java_method, [signal.expression])
+            jml_problem = self.jml_problem_builder.build(parameters, [signal.expression])
             test_cases = self.test_cases_generator.generate(jml_problem)
             test_collections.append(SignalTestCollection(test_cases, signal.exception_type))
 

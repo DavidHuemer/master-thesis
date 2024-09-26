@@ -73,7 +73,7 @@ def run_jml(jml_with_result: str, test_case):
 
 
 def run_verification(test_case: ConsistencyTestCase, jml: str, expected_result: bool):
-    result = JmlVerifier().verify(test_case, jml)
+    result = jml_verifier.verify(test_case, jml)
     if result.consistent is None:
         LoggingHelper.log_error(result)
     else:
@@ -96,4 +96,5 @@ def split(content, symbol):
 
 
 if __name__ == '__main__':
+    jml_verifier = JmlVerifier()
     main()
