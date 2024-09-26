@@ -1,6 +1,7 @@
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.tests.exceptions.noTestCasesException import NoTestCasesException
 from definitions.verification.verificationResult import VerificationResult
+from helper.logs.loggingHelper import LoggingHelper
 from verification.testSuite.testSuiteBuilder import TestSuiteBuilder
 from verification.testSuite.testSuiteVerifier import TestSuiteVerifier
 
@@ -18,10 +19,12 @@ class JmlVerifier:
         """
         Verify JML annotations in Java source code.
         """
+        LoggingHelper.log_info("Starting JML Verification")
 
         # Steps:
         # 1. Get the test cases (different parameters for the testing method)
         test_suite = self.test_suite_builder.get_test_suite(test_case, test_case.method_info, jml_code)
+        LoggingHelper.log_info("Test Suite created")
 
         if test_suite.get_test_cases_count() <= 0:
             raise NoTestCasesException()

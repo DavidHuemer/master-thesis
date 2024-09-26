@@ -93,6 +93,9 @@ class RuleSimplifier:
         if isinstance(rule, JMLParser.JMLParser.Primary_expressionContext) and rule.getChildCount() == 3:
             return rule.children[1]
 
+        if isinstance(rule, JMLParser.JMLParser.Atomic_expressionContext) and rule.getChildCount() == 3:
+            return rule.children[1]
+
         return None
 
     @staticmethod

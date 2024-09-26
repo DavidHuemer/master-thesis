@@ -1,4 +1,5 @@
 from definitions.ast.RangeTreeNode import RangeTreeNode
+from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.parser.parserResult import ParserResult
 from parser.generated import JMLParser
 
@@ -18,13 +19,32 @@ class QuantifierSimplifier:
 
         return variable_names
 
+    def get_full_range(self, range_expression: JMLParser.JMLParser.Full_range_expressionContext,
+                       parser_result: ParserResult,
+                       jml_simplifier) -> FullRangeTreeNode:
+
+        if not isinstance(range_expression.ranges, JMLParser.JMLParser.Range_expressionContext):
+            raise Exception("BoolQuantifierSimplifier: Range expression does not have range expression")
+
+        ranges = self.get_ranges(range_expression.ranges, parser_result, jml_simplifier)
+
+        # The expressions are not terminal nodes of the range_expression.children (+1)
+
+        if range_expression.expr is not None:
+            expr = jml_simplifier.simplify_rule(range_expression.expr, parser_result)
+        else:
+            expr = None
+
+        return FullRangeTreeNode(ranges, expr)
+
     @staticmethod
-    def get_ranges(range_expression: JMLParser.JMLParser.Range_expressionContext, parser_result: ParserResult,
-                   jml_simplifier):
+    def get_ranges(range_expression: JMLParser.JMLParser.Range_expressionContext,
+                   parser_result: ParserResult,
+                   jml_simplifier) -> list[RangeTreeNode]:
+        ranges: list[RangeTreeNode] = []
+
         single_ranges = list(filter(lambda x: isinstance(x, JMLParser.JMLParser.Single_range_expressionContext),
                                     range_expression.children))
-
-        ranges: list[RangeTreeNode] = []
 
         for single_range in single_ranges:
             if hasattr(single_range, "left") and hasattr(single_range, "right"):

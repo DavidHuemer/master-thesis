@@ -1,11 +1,13 @@
 import copy
 
 from definitions.ast.RangeTreeNode import RangeTreeNode
+from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
 
 
 class RangeExecution:
-    def execute_range(self, ranges: list[RangeTreeNode], result: ExecutionResult, result_verifier):
+    def execute_range(self, range_: FullRangeTreeNode, ranges: list[RangeTreeNode], result: ExecutionResult,
+                      result_verifier):
         range_expr: RangeTreeNode = ranges[0]
         start = result_verifier.evaluate(result, range_expr.start)
         if range_expr.start_operator == "<":
@@ -20,7 +22,11 @@ class RangeExecution:
             result_copy.parameters[range_expr.name] = i
 
             if len(ranges) == 1:
-                yield result_copy
+                if range_.expr is not None:
+                    if result_verifier.evaluate(result_copy, range_.expr):
+                        yield result_copy
+                else:
+                    yield result_copy
             else:
-                for r in self.execute_range(ranges[1:], result_copy, result_verifier):
+                for r in self.execute_range(range_, ranges[1:], result_copy, result_verifier):
                     yield r

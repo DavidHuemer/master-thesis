@@ -1,5 +1,6 @@
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
+from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.verification.testCase import TestCase
@@ -16,13 +17,15 @@ class ExecutionVerifier:
         self.result_verifier = result_verifier
 
     def verify(self, execution_result: ExecutionResult, consistency_test_case: ConsistencyTestCase,
-    behavior: BehaviorNode, expected_exception, test_case: TestCase):
+               behavior: BehaviorNode, expected_exception, test_case: TestCase):
         try:
             if execution_result.exception is not None:
                 result = execution_result.exception
                 verification_result = self.verify_exception(exception=execution_result.exception,
+                                                            execution_result=execution_result,
                                                             behavior_type=behavior.behavior_type,
-                                                            expected_exception=expected_exception)
+                                                            expected_exception=expected_exception,
+                                                            signal_conditions=behavior.signals_conditions)
             else:
                 result = execution_result.result
                 verification_result = self.verify_result(execution_result=execution_result, behavior=behavior)
@@ -33,8 +36,9 @@ class ExecutionVerifier:
             self.log_result(consistency_test_case, test_case, execution_result.result, False)
             raise e
 
-    @staticmethod
-    def verify_exception(exception, behavior_type: BehaviorType, expected_exception):
+    def verify_exception(self, exception, execution_result: ExecutionResult,
+                         behavior_type: BehaviorType, expected_exception,
+                         signal_conditions: list[ExceptionExpression]):
         if behavior_type == BehaviorType.NORMAL_BEHAVIOR:
             return False
 
@@ -42,6 +46,11 @@ class ExecutionVerifier:
             return True
 
         # TODO: Check if other exception matches
+        for signal_condition in signal_conditions:
+            if (signal_condition.name in exception
+                    and self.result_verifier.evaluate(execution_result, signal_condition.expression)):
+                return True
+
         return False
 
     def verify_result(self, execution_result: ExecutionResult, behavior: BehaviorNode):

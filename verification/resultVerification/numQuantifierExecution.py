@@ -49,7 +49,8 @@ class NumQuantifierExecution:
         return self.evaluate_list(expression, values)
 
     def get_values_by_range(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
-        for range_result in self.range_execution.execute_range(expression.ranges, result, result_verifier):
+        for range_result in self.range_execution.execute_range(expression.range_, expression.range_.ranges, result,
+                                                               result_verifier):
             yield result_verifier.evaluate(range_result, expression.expression)
 
     @staticmethod

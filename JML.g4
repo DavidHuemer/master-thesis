@@ -145,11 +145,20 @@ forall_expression: FORALL bool_quantifier_core_expression;
 exists_expression: EXISTS bool_quantifier_core_expression;
 
 bool_quantifier_core_expression:
-	type_declarations ';' range_expression ';' expression;
+	types = type_declarations ';' range = full_range_expression (
+		';'
+		| '&&'
+		| '==>'
+	) expr = expression;
 
 type_declarations: type_declaration (',' type_declaration)*;
 
 type_declaration: 'int' IDENTIFIER (',' IDENTIFIER)*;
+
+full_range_expression:
+	ranges = range_expression expr = range_expression_predicate?;
+
+range_expression_predicate: '&&' expression;
 
 range_expression:
 	single_range_expression ('&&' single_range_expression)*;
@@ -192,7 +201,11 @@ numeric_quantifier_value_expression:
 numeric_quantifier_value: IDENTIFIER;
 
 numeric_quantifier_range_core_expression:
-	type_declarations ';' range_expression ';' expression;
+	types = type_declarations ';' range = full_range_expression (
+		';'
+		| '&&'
+		| '==>'
+	) expression;
 
 exception_expression:
 	declaration = exception_declaration expr = expression;

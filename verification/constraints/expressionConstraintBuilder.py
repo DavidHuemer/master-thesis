@@ -28,7 +28,7 @@ class ExpressionConstraintBuilder:
         if isinstance(expression, TerminalNode):
             return self.evaluate_terminal_node(jml_problem, expression)
 
-        return None
+        raise Exception("ExpressionConstraintBuilder: Expression type not supported")
 
     def build_infix_expression(self, jml_problem: JMLProblem, expression: InfixExpression):
         left = self.build_expression_constraint(jml_problem, expression.left)

@@ -45,13 +45,13 @@ class JmlBot:
         return response
 
     def get_from_text(self, text: str):
-        prompt = ("The following exception occured:\n"
+        prompt = ("The following exception occurred:\n"
                   f"{text}\n"
                   "Please provide a new JML for the method.\n"
                   "Again, only generate the JML and nothing else, as the result is being parsed.")
 
         response = self.chat_bot.chat(prompt)
-        return
+        return response
 
     def reset(self):
         self.chat_bot.reset()

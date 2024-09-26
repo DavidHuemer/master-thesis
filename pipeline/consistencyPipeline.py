@@ -44,8 +44,11 @@ class ConsistencyPipeline:
 
             # First, get initial JML
             jml_code = self.jml_generator.get_from_test_case(consistency_test)
-            return self.get_result_by_jml(consistency_test, jml_code)
+            result = self.get_result_by_jml(consistency_test, jml_code)
+            LoggingHelper.log_info(f"Result: {result}")
+            return result
         except Exception as e:
+            LoggingHelper.log_error(f"Exception occurred: {e}")
             return VerificationResultFactory.by_exception(consistency_test, e)
         finally:
             self.retries = 0
