@@ -60,8 +60,13 @@ class ArrayTestConstraintsGenerator:
             range(length - 1)]
 
         and_alternating = And(*alternating_constraint)
-
         yield And(and_alternating, length_param.value == length, ForAll(index, param.value[index] > 0))
+
+        # From smallest to largest
+        index = Int('index')
+        increasing_constraint = [param.value[i] < param.value[i + 1] for i in range(length - 1)]
+        and_increasing = And(*increasing_constraint)
+        yield And(and_increasing, length_param.value == length, ForAll(index, param.value[index] > 0))
 
     @staticmethod
     def is_numeric(parameter: CSPParameter):

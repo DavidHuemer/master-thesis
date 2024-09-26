@@ -74,6 +74,9 @@ class ResultVerifier:
         if expression.name == 'negative_number':
             return -self.evaluate(result, expression.children[0])
 
+        if expression.name == 'not_expression':
+            return not self.evaluate(result, expression.children[0])
+
         for child in expression.children:
             return self.evaluate(result, child)
 
