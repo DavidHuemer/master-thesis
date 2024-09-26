@@ -87,7 +87,7 @@ class ConsistencyPipeline:
             return self.get_best_result(VerificationResultFactory.by_exception(consistency_test, parser_exception))
 
         LoggingHelper.log_info("Generating new JML")
-        new_jml = self.jml_generator.get_from_parser_exception(consistency_test, parser_exception)
+        new_jml = self.jml_generator.get_from_parser_exception(parser_exception)
         self.retries += 1
         return self.get_result_by_jml(consistency_test, new_jml)
 

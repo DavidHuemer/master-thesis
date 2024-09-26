@@ -9,7 +9,7 @@ from statistics.testCasesTableWriter import TestCasesTableWriter
 
 class StatisticsWriter:
     """
-    Write statistics about the inconsistency tests
+    Write statistics about the consistency tests
     """
 
     def __init__(self, consistency_numbers_writer=ConsistencyNumbersWriter(),

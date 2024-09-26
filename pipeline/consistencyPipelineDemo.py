@@ -5,7 +5,7 @@ from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 
 def main():
-    LoggingHelper.log_info("Starting inconsistency pipeline")
+    LoggingHelper.log_info("Starting consistency pipeline")
 
     pipeline = ConsistencyPipeline()
     pipeline.setup()

@@ -10,7 +10,7 @@ class ConsistencyTestCase:
 
     def __init__(self, java_code: JavaCode, method_info: JavaMethod, expected_result: ExpectedResult | None):
         """
-        Constructor for the InconsistencyTestCase class.
+        Constructor for the ConsistencyTestCase class.
         :param java_code: The java code
         :param method_info: The method information
         :param expected_result: The expected result
