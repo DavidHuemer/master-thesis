@@ -73,6 +73,7 @@ def run_jml(jml_with_result: str, test_case):
 
 
 def run_verification(test_case: ConsistencyTestCase, jml: str, expected_result: bool):
+    LoggingHelper.log_debug(f"Running verification with JML:\n {jml}", show_level=False)
     result = jml_verifier.verify(test_case, jml)
     if result.consistent is None:
         LoggingHelper.log_error(result)

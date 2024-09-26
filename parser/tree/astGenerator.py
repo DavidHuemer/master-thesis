@@ -34,6 +34,13 @@ class AstGenerator:
     def parse(self, jml: str) -> JMLParserResult:
         try:
             jml = jml.replace("//", "")
+            # Replace surrounding ```java with nothing if it exists
+            if jml.startswith("```"):
+                # jml is the whole jml without the first and last line
+                # So we need to remove the first and last line
+                jml = jml.split("\n")[1:-1]
+                jml = "\n".join(jml)
+
             sys.stderr = io.StringIO()
 
             lexer = JMLLexer.JMLLexer(InputStream(jml))

@@ -10,8 +10,8 @@ class LoggingHelper:
         LoggingHelper.get_logger(show_level=show_level).info(message)
 
     @staticmethod
-    def log_debug(message):
-        LoggingHelper.get_logger().debug(message)
+    def log_debug(message, show_level: bool = True):
+        LoggingHelper.get_logger(show_level=show_level).debug(message)
 
     @staticmethod
     def log_warning(message):

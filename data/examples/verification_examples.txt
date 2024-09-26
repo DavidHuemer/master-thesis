@@ -54,3 +54,18 @@ result:false
 // @requires \exists int i; 0 <= i && i < arr.length; arr[i] == target;
 // @ensures \result != -1;
 result:true
+==================================
+data/code/max/Biggest.java;biggest
+```java
+//@ requires a != null;
+//@ ensures (\forall int i; 0 <= i && i < a.length; a[i] <= \result) || a.length == 0 && \result == -1;
+//@ ensures \result == -1 <==> a.length == 0;
+```
+result:true
+-----------------------------------
+```
+//@ requires a != null;
+//@ ensures (\forall int i; 0 <= i && i < a.length; a[i] <= \result) || a.length == 0 && \result == -1;
+//@ ensures \result == -1 <==> a.length == 0;
+```
+result:true
