@@ -69,3 +69,11 @@ result:true
 //@ ensures \result == -1 <==> a.length == 0;
 ```
 result:true
+==================================
+data/code/comparison/CompareArray.java;compare
+```
+//@requires a != null && b != null
+//@ensures \result == (a.length == b.length &&
+//                     (\forall int i; 0 <= i && i < a.length; a[i] == b[i]))
+```
+result:true

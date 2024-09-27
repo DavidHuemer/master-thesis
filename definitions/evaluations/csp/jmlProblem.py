@@ -1,4 +1,4 @@
-from z3 import Or, ArithRef, Select, And, sat, ModelRef, ArrayRef, BoolRef
+from z3 import Or, ArithRef, Select, And, sat, ModelRef, ArrayRef, BoolRef, Implies
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from verification.csp.jmlSolver import JmlSolver
@@ -48,10 +48,9 @@ class JMLProblem:
             if length == 0:
                 return None
 
-            return And(
-                length_param == length,
-                Or(*[param[i] != solution.eval(Select(solution[param], i)).as_long() for i in range(length)])
-            )
+            or_expressions = [param[i] != solution.evaluate(param[i]).as_long() for i in range(length)]
+
+            return Or(*or_expressions)
 
     def is_satisfiable(self):
         """

@@ -1,7 +1,10 @@
+import time
+
 from z3 import And
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.verification.testCase import TestCase
+from helper.logs.loggingHelper import LoggingHelper
 from verification.testCase.testCaseBuilder import TestCaseBuilder
 from verification.testConstraints.testConstraintsGenerator import TestConstraintsGenerator
 
@@ -21,7 +24,13 @@ class TestCasesGenerator:
         # All real parameters (that are not helper)
         real_parameters = [jml_problem.parameters[param] for param in jml_problem.parameters if
                            not jml_problem.parameters[param].is_helper]
+        LoggingHelper.log_info("Generating for parameters")
+
+        start_time = time.time()
         test_cases = self.generate_for_parameters(jml_problem, real_parameters, [])
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        LoggingHelper.log_info(f"Generated {len(test_cases)} test cases in {elapsed_time} seconds")
         return test_cases
 
     def generate_for_parameters(self, jml_problem: JMLProblem, parameters, actions) -> list[TestCase]:
@@ -45,6 +54,7 @@ class TestCasesGenerator:
         singular_constraint = And(*constraints)
         jml_problem.push()
         jml_problem.add_constraint(singular_constraint)
+
         solution = jml_problem.get_solver_solution()
         jml_problem.pop_constraint()
 

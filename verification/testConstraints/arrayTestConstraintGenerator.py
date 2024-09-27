@@ -1,4 +1,6 @@
-from z3 import Int, ForAll, And
+from typing import Callable, Any
+
+from z3 import Int, ForAll, And, Implies
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.jmlProblem import JMLProblem
@@ -22,7 +24,7 @@ class ArrayTestConstraintsGenerator:
 
         yield length_parameter.value == 0
 
-        testing_lengths = [1, 2, 3, 5, 10]
+        testing_lengths = [1, 2, 5, 10]
         for length in testing_lengths:
             constraints = self.get_constraints_for_length(parameter, length_parameter, length)
             for constraint in constraints:
@@ -39,34 +41,34 @@ class ArrayTestConstraintsGenerator:
         else:
             return []
 
-    @staticmethod
-    def get_constraints_for_numeric_array(param: CSPParameter, length_param: CSPParameter, length: int):
+    def get_constraints_for_numeric_array(self, param: CSPParameter, length_param: CSPParameter, length: int):
         index = Int('index')
-        # # Every parameter is 0
-        yield And(ForAll(index, param.value[index] == 0), length_param.value == length)
-        # Every parameter is 1
-        index = Int('index')
-        yield And(ForAll(index, param.value[index] == 1), length_param.value == length)
+        for i in [0, 1]:
+            yield self.get_for_all(index, length_param, length, param.value[index] == i)
 
-        index = Int('index')
+        # distinct constraint:
         distinct_constraint = [param.value[i] != param.value[i + 1] for i in range(length - 1)]
         and_distinct = And(*distinct_constraint)
-        yield And(and_distinct, length_param.value == length, ForAll(index, param.value[index] > 10))
+        yield And(and_distinct, length_param.value == length)
 
         # Alternating < and >
-        index = Int('index')
-        alternating_constraint = [
-            param.value[i] < param.value[i + 1] if i % 2 == 0 else param.value[i] > param.value[i + 1] for i in
-            range(length - 1)]
-
-        and_alternating = And(*alternating_constraint)
-        yield And(and_alternating, length_param.value == length, ForAll(index, param.value[index] > 0))
+        yield self.get_by_indexes_and(
+            lambda i: param.value[i] < param.value[i + 1] if i % 2 == 0 else param.value[i] > param.value[i + 1],
+            length_param, length
+        )
 
         # From smallest to largest
-        index = Int('index')
-        increasing_constraint = [param.value[i] < param.value[i + 1] for i in range(length - 1)]
-        and_increasing = And(*increasing_constraint)
-        yield And(and_increasing, length_param.value == length, ForAll(index, param.value[index] > 0))
+        yield self.get_by_indexes_and(lambda i: param.value[i] < param.value[i + 1], length_param, length)
+
+    @staticmethod
+    def get_for_all(index: Int, length_param: CSPParameter, length: int, constraint):
+        return And(ForAll(index, Implies(And(index >= 0, index < length), constraint)),
+                   length_param.value == length)
+
+    @staticmethod
+    def get_by_indexes_and(get_constraint: Callable[[int], Any], length_param: CSPParameter, length: int):
+        constraints = [get_constraint(i) for i in range(length)]
+        return And(And(*constraints), length_param.value == length)
 
     @staticmethod
     def is_numeric(parameter: CSPParameter):
