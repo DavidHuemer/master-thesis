@@ -33,10 +33,13 @@ class ExpressionConstraintBuilder:
             return array[expr]
 
         if isinstance(expression, ArrayLengthNode):
-            arr_name = expression.arr_expr.value
-            array_length_param_key = arr_name + "_length"
-            array_length_param = parameters[array_length_param_key]
-            return array_length_param.value
+            arr_name = expression.arr_expr
+            if hasattr(arr_name, 'value'):
+                array_length_param_key = arr_name.value + "_length"
+                array_length_param = parameters[array_length_param_key]
+                return array_length_param.value
+            else:
+                raise Exception("Array length expression not supported")
 
         if isinstance(expression, TerminalNode):
             return self.evaluate_terminal_node(parameters, expression)

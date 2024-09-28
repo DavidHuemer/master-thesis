@@ -3,6 +3,7 @@ from definitions.ast.arrayLengthNode import ArrayLengthNode
 from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.infixExpression import InfixExpression
+from definitions.ast.prefixNode import PrefixNode
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.questionMarkNode import QuestionMarkNode
@@ -68,11 +69,19 @@ class ResultVerifier:
             arr = self.evaluate(result, expression.arr_expr)
             return len(arr)
 
-        if expression.name == 'negative_number':
-            return -self.evaluate(result, expression.children[0])
-
-        if expression.name == 'not_expression':
-            return not self.evaluate(result, expression.children[0])
+        if isinstance(expression, PrefixNode):
+            if expression.prefix == '++':
+                return self.evaluate(result, expression.expr) + 1
+            if expression.prefix == '--':
+                return self.evaluate(result, expression.expr) - 1
+            if expression.prefix == '!':
+                return not self.evaluate(result, expression.expr)
+            if expression.prefix == '-':
+                return -self.evaluate(result, expression.expr)
+            if expression.prefix == '+':
+                return self.evaluate(result, expression.expr)
+            if expression.prefix == '~':
+                return ~self.evaluate(result, expression.expr)
 
         for child in expression.children:
             return self.evaluate(result, child)

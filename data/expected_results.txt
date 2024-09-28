@@ -16,3 +16,6 @@ data/code/comparison/CompareArray.java;compare;true
 data/code/comparison/IsAscending.java;isAscending;true
 data/code/compute/ComputeArea.java;computeArea;true
 data/code/find/BubbleSort.java;bubbleSort;true
+data/code/find/BubbleSortDesc.java;bubbleSort;true
+data/code/find/BubbleSortIncorrect.java;bubbleSort;false
+data/code/arithmetic/IntSquare.java;squareOf;true

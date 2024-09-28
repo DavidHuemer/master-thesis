@@ -1,10 +1,12 @@
 from typing import Callable, Any
 
+from antlr4.Token import CommonToken
 from antlr4.tree.Tree import TerminalNodeImpl
 
 import parser.generated.JMLParser as JMLParser
 from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.expressionNode import ExpressionNode
+from definitions.ast.prefixNode import PrefixNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.parser.parserResult import ParserResult
 from definitions.parser.ruleMetaData import RuleMetaData
@@ -50,6 +52,8 @@ class RuleSimplifier:
              lambda rule, meta, parser_result: self.is_quantifier(rule, parser_result)),
             ('array',
              lambda rule, meta, parser_result: self.array_simplifier.simplify_array(rule, parser_result, self)),
+            ('prefix',
+             lambda rule, meta, parser_result: self.can_simplify_prefix(rule, meta, parser_result)),
             ('fallback',
              lambda rule, meta, parser_result: self.fallback_simplify(rule, meta, parser_result))
         ]
@@ -143,3 +147,11 @@ class RuleSimplifier:
             else:
                 node.add_child(self.simplify_rule(child, parser_result))
         return node
+
+    def can_simplify_prefix(self, rule, meta, parser_result):
+        if hasattr(rule, "prefix") and rule.prefix is not None and isinstance(rule.prefix, CommonToken):
+            prefix = rule.prefix.text
+            expr = self.simplify_rule(rule.expr, parser_result)
+            return PrefixNode(prefix, expr)
+
+        return None

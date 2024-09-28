@@ -32,7 +32,7 @@ expression:
 	| quantifier_expression
 	| expr = expression LEFT_SQUARE_BRACKET index_expr = expression RIGHT_SQUARE_BRACKET
 	| expression '.' LENGTH
-	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expression
+	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expr = expression
 	| <assoc = left> left = expression op = (MULTIPLY | DIVIDE) right = expression
 	| <assoc = left> left = expression op = (PLUS | MINUS) right = expression
 	| <assoc = left> left = expression op = (
