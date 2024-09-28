@@ -1,8 +1,7 @@
-from z3 import Int, Array, IntSort, Real, Bool, RealSort, BoolSort
+from z3 import Int, Array, IntSort, Real, Bool, RealSort, BoolSort, String, StringSort
 
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.cspParameter import CSPParameter
-from definitions.javaMethod import JavaMethod
 
 
 class CSPParameterBuilder:
@@ -35,38 +34,46 @@ class CSPParameterBuilder:
         if '[]' in param.parameter_type:
             return self.get_array_csp_param_for_param(param)
 
-        if param.parameter_type == "int":
+        if param.parameter_type == "byte":
             return CSPParameter(param.name, Int(param.name), param.parameter_type)
-
-        if param.parameter_type == "long":
+        elif param.parameter_type == "short":
             return CSPParameter(param.name, Int(param.name), param.parameter_type)
-
-        if param.parameter_type == "float":
+        elif param.parameter_type == "int":
+            return CSPParameter(param.name, Int(param.name), param.parameter_type)
+        elif param.parameter_type == "long":
+            return CSPParameter(param.name, Int(param.name), param.parameter_type)
+        elif param.parameter_type == "float":
             return CSPParameter(param.name, Real(param.name), param.parameter_type)
-
-        if param.parameter_type == "double":
+        elif param.parameter_type == "double":
             return CSPParameter(param.name, Real(param.name), param.parameter_type)
-
-        if param.parameter_type == "boolean":
+        elif param.parameter_type == "boolean":
             return CSPParameter(param.name, Bool(param.name), param.parameter_type)
+        elif param.parameter_type == "char":
+            return CSPParameter(param.name, String(param.name), param.parameter_type)
+        elif param.parameter_type == "String":
+            return CSPParameter(param.name, String(param.name), param.parameter_type)
 
         raise Exception(f"Parameter type {param.parameter_type} is not supported")
 
     @staticmethod
     def get_array_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
-        if param.parameter_type == "int[]":
+        if param.parameter_type == "byte[]":
             return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
-
-        if param.parameter_type == "long[]":
+        elif param.parameter_type == "short[]":
             return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
-
-        if param.parameter_type == "float[]":
+        elif param.parameter_type == "int[]":
+            return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
+        elif param.parameter_type == "long[]":
+            return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
+        elif param.parameter_type == "float[]":
             return CSPParameter(param.name, Array(param.name, IntSort(), RealSort()), param.parameter_type)
-
-        if param.parameter_type == "double[]":
+        elif param.parameter_type == "double[]":
             return CSPParameter(param.name, Array(param.name, IntSort(), RealSort()), param.parameter_type)
-
-        if param.parameter_type == "boolean[]":
+        elif param.parameter_type == "boolean[]":
             return CSPParameter(param.name, Array(param.name, IntSort(), BoolSort()), param.parameter_type)
+        elif param.parameter_type == "char[]":
+            return CSPParameter(param.name, Array(param.name, IntSort(), StringSort()), param.parameter_type)
+        elif param.parameter_type == "String[]":
+            return CSPParameter(param.name, Array(param.name, IntSort(), StringSort()), param.parameter_type)
 
         raise Exception(f"Parameter type {param.parameter_type} is not supported")

@@ -1,5 +1,8 @@
+from z3 import ExprRef
+
+
 class CSPParameter:
-    def __init__(self, name, value, param_type: str, helper: bool = False):
+    def __init__(self, name: str, value: ExprRef, param_type: str, helper: bool = False):
         self.name = name
         self.value = value
         self.param_type = param_type
