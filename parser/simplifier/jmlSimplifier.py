@@ -2,11 +2,10 @@ import parser.generated.JMLParser as JMLParser
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
-from definitions.ast.expressionNode import ExpressionNode
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
-from parser.simplifier.rule_simplifier import RuleSimplifier
 from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
+from parser.simplifier.rule_simplifier import RuleSimplifier
 from parser.tree.ruleMetaDataHelper import RuleMetaDataHelper
 
 

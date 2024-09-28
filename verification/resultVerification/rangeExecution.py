@@ -1,4 +1,5 @@
 import copy
+from typing import Generator
 
 from definitions.ast.RangeTreeNode import RangeTreeNode
 from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode

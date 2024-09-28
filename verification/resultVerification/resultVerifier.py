@@ -97,5 +97,7 @@ class ResultVerifier:
                 return result.parameters[terminal.value]
             else:
                 return None
+        elif terminal.name == "BOOL_LITERAL":
+            return terminal.value == "true"
         else:
             return None

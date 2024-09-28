@@ -2,6 +2,7 @@ from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNo
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
+from helper.logs.loggingHelper import LoggingHelper
 from verification.resultVerification.rangeExecution import RangeExecution
 
 
@@ -18,13 +19,13 @@ class NumQuantifierExecution:
         raise Exception("NumQuantifierExecution: Invalid quantifier expression type")
 
     def evaluate_with_value(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
-        value = result_verifier.evaluate(result, expression.expression)
+        values = [result_verifier.evaluate(result, expr) for expr in expression.expressions]
 
         # check if value is a list
-        if not isinstance(value, list):
+        if not isinstance(values, list):
             raise Exception("NumQuantifierExecution: Value is not a list")
 
-        return self.evaluate_list(expression, value)
+        return self.evaluate_list(expression, values)
 
     def evaluate_list(self, expression: NumQuantifierTreeNode, values: list):
         if len(values) == 0:
@@ -49,9 +50,11 @@ class NumQuantifierExecution:
         return self.evaluate_list(expression, values)
 
     def get_values_by_range(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
-        for range_result in self.range_execution.execute_range(expression.range_, expression.range_.ranges, result,
-                                                               result_verifier):
-            yield result_verifier.evaluate(range_result, expression.expression)
+        r = self.range_execution.execute_range(expression.range_, expression.range_.ranges, result,
+                                               result_verifier)
+
+        for range_result in r:
+            yield result_verifier.evaluate(range_result, expression.expressions)
 
     @staticmethod
     def get_product(value):

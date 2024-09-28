@@ -37,10 +37,10 @@ class ArraySimplifier:
         :param rule_simplifier: The rule simplifier
         :return: The simplified array index expression or None (if the rule is not an array index expression)
         """
-        if isinstance(rule, JMLParser.JMLParser.Array_index_expressionContext):
+        if rule.getChildCount() == 4 and rule.children[1].getText() == '[' and rule.children[3].getText() == ']':
             return ArrayIndexNode(rule.children[0].getText(),
-                                  rule_simplifier.simplify_rule(rule.children[2], parser_result)
-                                  )
+                                  rule_simplifier.simplify_rule(rule.children[2], parser_result))
+
         return None
 
     @staticmethod
@@ -50,7 +50,8 @@ class ArraySimplifier:
         :param rule: The rule to simplify
         :return: The simplified array length expression or None (if the rule is not an array length expression)
         """
-        if isinstance(rule, JMLParser.JMLParser.Array_length_expressionContext):
+
+        if rule.getChildCount() == 3 and rule.children[1].getText() == '.' and rule.children[2].getText() == 'length':
             return ArrayLengthNode(rule.children[0].getText())
 
         return None

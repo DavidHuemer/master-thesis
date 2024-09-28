@@ -5,15 +5,17 @@ from definitions.ast.questionMarkNode import QuestionMarkNode
 class QuestionMarkExpressionSimplifier:
     @staticmethod
     def is_question_mark_expression(rule):
-        return isinstance(rule, JMLParser.JMLParser.Question_mark_expressionContext)
+        return ((hasattr(rule, 'question_mark') and rule.question_mark is not None) and
+                (hasattr(rule, 'expr') and rule.expr is not None) and
+                (hasattr(rule, 'true_expr') and rule.true_expr is not None) and
+                (hasattr(rule, 'false_expr') and rule.false_expr is not None))
 
-    @staticmethod
-    def simplify(rule, parser_result, simplifier):
-        if not isinstance(rule, JMLParser.JMLParser.Question_mark_expressionContext):
+    def simplify(self, rule, parser_result, simplifier):
+        if not self.is_question_mark_expression(rule):
             return None
 
         expr = simplifier.simplify_rule(rule.expr, parser_result)
-        true_expr = simplifier.simplify_rule(rule.true_val, parser_result)
-        false_expr = simplifier.simplify_rule(rule.false_val, parser_result)
+        true_expr = simplifier.simplify_rule(rule.true_expr, parser_result)
+        false_expr = simplifier.simplify_rule(rule.false_expr, parser_result)
 
         return QuestionMarkNode(expr, true_expr, false_expr)

@@ -43,7 +43,7 @@ class NumericQuantifierSimplifier:
                  expr: JMLParser.JMLParser.Numeric_quantifier_core_expressionContext, parser_result,
                  jml_simplifier):
         # Check if it is a IDENTIFIER or range expression
-        if isinstance(expr.children[0], JMLParser.JMLParser.Numeric_quantifier_value_expressionContext):
+        if isinstance(expr.children[0], JMLParser.JMLParser.Numeric_quantifier_values_expressionContext):
             # It is an identifier
             return self.generate_with_value(name, quantifier_type, expr.children[0], parser_result, jml_simplifier)
         elif isinstance(expr.children[0], JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext):
@@ -54,13 +54,18 @@ class NumericQuantifierSimplifier:
 
     @staticmethod
     def generate_with_value(name: str, quantifier_type: NumericQuantifierType,
-                            expr: JMLParser.JMLParser.Numeric_quantifier_value_expressionContext,
+                            expr: JMLParser.JMLParser.Numeric_quantifier_values_expressionContext,
                             parser_result, jml_simplifier) \
             -> NumQuantifierTreeNode:
-        if hasattr(expr, 'value'):
-            value = jml_simplifier.simplify_rule(expr.value, parser_result)
 
-            return NumQuantifierTreeNode(name, quantifier_type, NumericQuantifierExpressionType.VALUE, value)
+        # Filter child values that are instances of Numeric_quantifier_valueContext
+        filtered_values = list(filter(lambda x: isinstance(x, JMLParser.JMLParser.ExpressionContext),
+                                      expr.children))
+
+        # Get the expressions of the values
+        expression_values = [jml_simplifier.simplify_rule(value, parser_result) for value in filtered_values]
+
+        return NumQuantifierTreeNode(name, quantifier_type, NumericQuantifierExpressionType.VALUE, expression_values)
 
     def generate_with_range(self, name: str, quantifier_type: NumericQuantifierType,
                             expr: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,

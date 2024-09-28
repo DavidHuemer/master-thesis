@@ -26,115 +26,48 @@ signals_condition: 'signals' exception_expression;
 signals_only_condition: 'signals_only' IDENTIFIER;
 also_condition: 'also' behavior = special_behavior?;
 
-expression: question_mark_expression | inequivalence_expression;
-
-question_mark_expression:
-	expr = inequivalence_expression QUESTION_MARK true_val = inequivalence_expression COLON
-		false_val = inequivalence_expression;
-
-inequivalence_expression:
-	<assoc = left> left = inequivalence_expression op = INEQUIVALENCE right =
-		inequivalence_expression
-	| equivalence_expression;
-
-equivalence_expression:
-	<assoc = left> left = equivalence_expression op = EQUIVALENCE right = equivalence_expression
-	| implication_expression;
-
-implication_expression:
-	<assoc = right> left = implication_expression op = IMPLICATION right = implication_expression
-	| or_expression;
-
-// or is neither left nor right associative
-or_expression:
-	<assoc = left> left = or_expression op = OR right = or_expression
-	| and_expression;
-
-// and is also neither left nor right associative
-and_expression:
-	<assoc = left> left = and_expression op = AND right = and_expression
-	| equality_expression;
-
-equality_expression:
-	<assoc = left> left = equality_expression op = EQUALITY right = equality_expression
-	| <assoc = left> left = equality_expression op = INEQUALITY right = equality_expression
-	| relational_expression;
-
-relational_expression: numeric_predicate | boolean_expression;
-
-// All numeric expression are numeric operations that return a boolean value
-numeric_predicate:
-	less_num_expression
-	| greater_num_expression
-	| num_equality_expression;
-
-less_num_expression:
-	<assoc = left>left = numeric_value op = (LESS | LESS_EQUAL) right =
-		less_numm_expression_extension;
-
-less_numm_expression_extension:
-	less_num_expression
-	| numeric_value;
-
-greater_num_expression:
-	<assoc = left> left = numeric_value op = (
-		GREATER
+expression:
+	primary
+	| quantifier_expression
+	| expression '[' expression ']'
+	| expression '.' LENGTH
+	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expression
+	| <assoc = left> left = expression op = (MULTIPLY | DIVIDE) right = expression
+	| <assoc = left> left = expression op = (PLUS | MINUS) right = expression
+	| <assoc = left> left = expression op = (
+		LESS
+		| LESS_EQUAL
+		| GREATER
 		| GREATER_EQUAL
-	) right = greater_num_expression_extension;
-
-greater_num_expression_extension:
-	greater_num_expression
-	| numeric_value;
-
-num_equality_expression:
-	<assoc = left>left = num_equality_expression op = (
+	) right = expression
+	| <assoc = left> left = expression op = (
 		EQUALITY
 		| INEQUALITY
-	) right = num_equality_expression
-	| numeric_value;
+	) right = expression
+	| <assoc = left> left = expression op = AND right = expression
+	| <assoc = left> left = expression op = OR right = expression
+	| <assoc = right> expr = expression question_mark = '?' true_expr = expression colon = ':'
+		false_expr = expression
+	| <assoc = right> left = expression op = IMPLICATION right = expression
+	| <assoc = left> left = expression op = EQUIVALENCE right = expression
+	| <assoc = left> left = expression op = INEQUIVALENCE right = expression
+	| atomic_value;
 
-numeric_value: additive_expression;
+primary: '(' expression ')';
 
-additive_expression:
-	<assoc = left>left = additive_expression op = PLUS right = additive_expression
-	| <assoc = right>left = additive_expression op = MINUS right = additive_expression
-	| multiplicative_expression;
+// question_mark_expression: expr = inequivalence_expression QUESTION_MARK true_val =
+// inequivalence_expression COLON false_val = inequivalence_expression;
 
-multiplicative_expression:
-	left = multiplicative_expression op = (MULTIPLY | DIVIDE) right = multiplicative_expression
-	| atomic_expression;
-
-atomic_expression:
+atomic_value:
 	INTEGER
+	| BOOL_LITERAL
 	| RESULT
 	| NULL
-	| IDENTIFIER
-	| negative_number
-	| array_length_expression
-	| array_index_expression
-	| numeric_quantifier_expression
-	| '(' numeric_value ')';
+	| IDENTIFIER;
 
-negative_number: '-' atomic_expression;
-
-array_length_expression: IDENTIFIER '.' LENGTH;
-
-array_index_expression: IDENTIFIER '[' numeric_value ']';
-
-boolean_expression:
-	boolean_expression EQUALITY boolean_expression
-	| boolean_expression INEQUALITY boolean_expression
-	| not_expression;
-
-not_expression: (NOT not_expression) | primary_expression;
-
-primary_expression:
-	| bool_quantifier_expression
-	| '(' expression ')'
-	| BOOL_LITERAL
-	| NULL
-	| IDENTIFIER
-	| '(' IDENTIFIER ')';
+quantifier_expression:
+	bool_quantifier_expression
+	| numeric_quantifier_expression;
 
 bool_quantifier_expression:
 	forall_expression
@@ -145,11 +78,9 @@ forall_expression: FORALL bool_quantifier_core_expression;
 exists_expression: EXISTS bool_quantifier_core_expression;
 
 bool_quantifier_core_expression:
-	types = type_declarations ';' range = full_range_expression (
-		';'
-		| '&&'
-		| '==>'
-	) expr = expression;
+	types = type_declarations ';' ranges = full_range_expression ';' expr = expression;
+
+// bool_quantifier_core_expression: types = type_declarations ';' range = full_range_expression;
 
 type_declarations: type_declaration (',' type_declaration)*;
 
@@ -158,20 +89,49 @@ type_declaration: 'int' IDENTIFIER (',' IDENTIFIER)*;
 full_range_expression:
 	ranges = range_expression expr = range_expression_predicate?;
 
-range_expression_predicate: '&&' expression;
+range_expression_predicate: AND expr = expression;
 
 range_expression:
-	single_range_expression ('&&' single_range_expression)*;
+	single_range_expression (AND single_range_expression)*;
 
 single_range_expression:
-	left = start_range_comparison op = '&&' right = end_range_comparison;
+	left = start_range_comparison op = AND right = end_range_comparison;
+
+// start_range_comparison: (expr = numeric_value op = ('<=' | '<') ident = IDENTIFIER) | ident =
+// IDENTIFIER op = ('>=' | '>') expr = numeric_value;
 
 start_range_comparison:
-	(expr = numeric_value op = ('<=' | '<') ident = IDENTIFIER)
-	| ident = IDENTIFIER op = ('>=' | '>') expr = numeric_value;
+	(
+		expr = range_expression_value op = (LESS_EQUAL | LESS) ident = IDENTIFIER
+	)
+	| (
+		ident = IDENTIFIER op = (GREATER_EQUAL | GREATER) expr = range_expression_value
+	);
 
 end_range_comparison:
-	ident = IDENTIFIER op = ('<=' | '<') expr = numeric_value;
+	(
+		expr = range_expression_value op = (
+			GREATER_EQUAL
+			| GREATER
+		) ident = IDENTIFIER
+	)
+	| (
+		ident = IDENTIFIER op = (LESS_EQUAL | LESS) expr = range_expression_value
+	);
+
+range_expression_value:
+	range_expression_value '[' range_expression_value ']'
+	| range_expression_value '.' LENGTH
+	| prefix = (PLUS | MINUS | '++' | '--' | '~' | NOT) range_expression_value
+	| <assoc = left> left = range_expression_value op = (
+		MULTIPLY
+		| DIVIDE
+	) right = range_expression_value
+	| <assoc = left> left = range_expression_value op = (
+		PLUS
+		| MINUS
+	) right = range_expression_value
+	| atomic_value;
 
 numeric_quantifier_expression:
 	max_quantifier_expression
@@ -192,20 +152,22 @@ product_quantifier_expression:
 	PRODUCT numeric_quantifier_core_expression ';'?;
 
 numeric_quantifier_core_expression:
-	numeric_quantifier_value_expression
+	numeric_quantifier_values_expression
 	| numeric_quantifier_range_core_expression ';'?;
 
-numeric_quantifier_value_expression:
-	'(' value = numeric_quantifier_value ')';
+numeric_quantifier_values_expression:
+	'(' expression (',' expression)* ')';
 
-numeric_quantifier_value: IDENTIFIER;
+numeric_quantifier_value:
+	numeric_quantifier_expression
+	| atomic_value;
 
 numeric_quantifier_range_core_expression:
-	types = type_declarations ';' range = full_range_expression (
+	types = type_declarations ';' ranges = full_range_expression (
 		';'
 		| '&&'
 		| '==>'
-	) expression;
+	) expr = expression;
 
 exception_expression:
 	declaration = exception_declaration expr = expression;

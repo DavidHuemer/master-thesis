@@ -4,9 +4,10 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@requires a != null && b != null\n"
-            "//@ensures \\result == (a.length == b.length &&\n"
-            "//                     (\\forall int i; 0 <= i && i < a.length; a[i] == b[i]))")
+jml_code = ("// @requires arr != null;\n"
+            "// @ensures (\\exists int i; 0 <= i && i < arr.length; arr[i] == target) ==> \\result == (\\min int j; 0 <= j && j < arr.length && arr[j] == target; j);\n"
+            "// @ensures (\\forall int i; 0 <= i && i < arr.length; arr[i] != target) ==> \\result == -1;\n"
+            "// @signals (NullPointerException) arr == null;")
 
 
 def main():
@@ -14,7 +15,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\CompareArray.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\find\\IndexOf.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

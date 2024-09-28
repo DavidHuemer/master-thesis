@@ -13,3 +13,5 @@ data/code/abs/Abs.java;abs;true
 data/code/find/IndexOf.java;find;true
 data/code/find/IndexOfIncorrect.java;find;false
 data/code/comparison/CompareArray.java;compare;true
+data/code/comparison/IsAscending.java;isAscending;true
+data/code/compute/ComputeArea.java;computeArea;true

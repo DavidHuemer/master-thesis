@@ -31,11 +31,17 @@ class QuantifierSimplifier:
         # The expressions are not terminal nodes of the range_expression.children (+1)
 
         if range_expression.expr is not None:
-            expr = jml_simplifier.simplify_rule(range_expression.expr, parser_result)
+            expr = self.get_range_predicate(range_expression.expr, jml_simplifier, parser_result)
         else:
             expr = None
 
         return FullRangeTreeNode(ranges, expr)
+
+    def get_range_predicate(self, expr: JMLParser.JMLParser.range_expression_predicate, jml_simplifier, parser_result):
+        if hasattr(expr, 'expr'):
+            return jml_simplifier.simplify_rule(expr.expr, parser_result)
+        else:
+            return None
 
     @staticmethod
     def get_ranges(range_expression: JMLParser.JMLParser.Range_expressionContext,

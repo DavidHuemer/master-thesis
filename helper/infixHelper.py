@@ -27,6 +27,9 @@ class InfixHelper:
             if infix_operator == "&&" and not left_expr:
                 return False
 
+            if infix_operator == "||" and left_expr:
+                return True
+
             right_expr = right()
 
         if infix_operator == "+":

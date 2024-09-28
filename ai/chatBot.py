@@ -46,4 +46,4 @@ class ChatBot:
         """
         Reset the chat.
         """
-        self.messages = []
+        self.messages = [self.messages[0]]

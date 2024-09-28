@@ -34,7 +34,8 @@ class TypeConstraintBuilder:
         :return:
         """
         if parameter_type == javaTypes.INT_TYPE:
-            return -(2 ** 31 - 1), 2 ** 31 - 1
+            return -10000, 10000
+            #return -(2 ** 31 - 1), 2 ** 31 - 1
 
         if parameter_type == javaTypes.LONG_TYPE:
             return -(2 ** 63 - 1), 2 ** 63 - 1

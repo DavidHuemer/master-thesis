@@ -16,6 +16,9 @@ multiplicative_expression;simplify
 unary_expression;simplify
 less_numm_expression_extension;simplify
 atomic_expression;simplify;include_terminal_children
+atomic_value;simplify;include_terminal_children
 numeric_quantifier_value;simplify
 greater_num_expression_extension;simplify
 num_equality_expression;simplify
+quantifier_expression;simplify
+range_expression_value;simplify

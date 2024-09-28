@@ -6,11 +6,11 @@ from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierTy
 
 class NumQuantifierTreeNode(AstTreeNode):
     def __init__(self, name: str, quantifier_type: NumericQuantifierType,
-                 quantifier_expression_type: NumericQuantifierExpressionType, expression, variable_names=None,
+                 quantifier_expression_type: NumericQuantifierExpressionType, expressions, variable_names=None,
                  range_: FullRangeTreeNode | None = None):
         super().__init__(name)
         self.quantifier_type = quantifier_type
         self.quantifier_expression_type = quantifier_expression_type
-        self.expression = expression
+        self.expressions = expressions
         self.variable_names = variable_names
         self.range_ = range_

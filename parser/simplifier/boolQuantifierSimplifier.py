@@ -63,10 +63,10 @@ class BoolQuantifierSimplifier:
 
     def get_range(self, rule: JMLParser.JMLParser.Bool_quantifier_core_expressionContext, parser_result: ParserResult,
                   jml_simplifier):
-        if not isinstance(rule.range_, JMLParser.JMLParser.Full_range_expressionContext):
+        if not isinstance(rule.ranges, JMLParser.JMLParser.Full_range_expressionContext):
             raise Exception("BoolQuantifierSimplifier: Bool quantifier core expression does not have range expression")
 
-        return self.quantifier_simplifier.get_full_range(rule.range_, parser_result, jml_simplifier)
+        return self.quantifier_simplifier.get_full_range(rule.ranges, parser_result, jml_simplifier)
 
     @staticmethod
     def get_expression(rule: JMLParser.JMLParser.Bool_quantifier_core_expressionContext,
