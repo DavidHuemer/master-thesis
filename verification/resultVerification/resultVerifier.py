@@ -60,21 +60,13 @@ class ResultVerifier:
             return self.num_quantifier_execution.evaluate_num_quantifier(result, expression, self)
 
         if isinstance(expression, ArrayIndexNode):
-            index = self.evaluate(result, expression.expression)
-            array_name = expression.name
-            if array_name in result.parameters:
-                array = result.parameters[array_name]
-                return array[index]
-            else:
-                raise Exception(f"Array {array_name} not found in parameters")
+            arr = self.evaluate(result, expression.arr_expression)
+            index = self.evaluate(result, expression.index_expression)
+            return arr[index]
 
         if isinstance(expression, ArrayLengthNode):
-            array_name = expression.name
-            if array_name in result.parameters:
-                array = result.parameters[array_name]
-                return len(array)
-            else:
-                raise Exception(f"Array {array_name} not found in parameters")
+            arr = self.evaluate(result, expression.arr_expr)
+            return len(arr)
 
         if expression.name == 'negative_number':
             return -self.evaluate(result, expression.children[0])

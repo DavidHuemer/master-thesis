@@ -18,7 +18,7 @@ class JavaMethodReader:
 
         method_regex = (
             r"(?P<comment>/\*{2}(?:\n|.)+?\*/)*(?:\n|\s)*(?P<publicity>public|protected|private)(?:\s|\n)+("
-            r"?P<returnValue>[A-Z|a-z][A-Z|a-z|\d]+)(?:\s|\n)+(?P<methodName>[A-Z|a-z][A-Z|a-z|\d]+)("
+            r"?P<returnValue>[A-Z|a-z][A-Z|a-z|\d\[\]]+)(?:\s|\n)+(?P<methodName>[A-Z|a-z][A-Z|a-z|\d]+)("
             r"?P<parameterlist>\((?:.|\n)*?\))")
 
         methods = []

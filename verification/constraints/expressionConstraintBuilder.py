@@ -28,12 +28,13 @@ class ExpressionConstraintBuilder:
 
         # TODO: Include all supported expression types
         if isinstance(expression, ArrayIndexNode):
-            array_param = parameters[expression.name]
-            expr = self.build_expression_constraint(parameters, expression.expression)
-            return array_param.value[expr]
+            array = self.build_expression_constraint(parameters, expression.arr_expression)
+            expr = self.build_expression_constraint(parameters, expression.index_expression)
+            return array[expr]
 
         if isinstance(expression, ArrayLengthNode):
-            array_length_param_key = expression.name + "_length"
+            arr_name = expression.arr_expr.value
+            array_length_param_key = arr_name + "_length"
             array_length_param = parameters[array_length_param_key]
             return array_length_param.value
 

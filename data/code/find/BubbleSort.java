@@ -1,6 +1,6 @@
 public class BubbleSort {
 
-    private void swap(int x, int y,  int array[]) {
+    private void swap(int x, int y,  int[] array) {
         int temp;
         temp = array[x];
         array[x] = array[y];
@@ -8,9 +8,10 @@ public class BubbleSort {
     }
 
     /**
-     Sorts the array using the bubbleSort algorithm. The resulting array is sorted in ascending order.
+     Returns a sorted array using the bubbleSort algorithm. The resulting array is sorted in ascending order.
+     The initial array is not modified.
      */
-    public int[] bubbleSort(int arr[]) {
+    public int[] bubbleSort(int[] arr) {
         int n = arr.length;
 
         for (int i = 0; i < n-1; i++) {

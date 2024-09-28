@@ -17,5 +17,8 @@ class JavaRuntimeMethod:
         self.return_type = method.getReturnType().getName()
         self.parameters = [JavaRuntimeParameter(param) for param in method.getParameterTypes()]
 
+        if self.return_type == '[I':
+            self.return_type = 'int[]'
+
     def __str__(self):
         return f'{self.return_type} {self.method_name} ({", ".join([str(param) for param in self.parameters])})'

@@ -22,7 +22,7 @@ class ArraySimplifier:
         if arr_value is not None:
             return arr_value
 
-        arr_value = self.simplify_array_length(rule)
+        arr_value = self.simplify_array_length(rule, parser_result, rule_simplifier)
         if arr_value is not None:
             return arr_value
 
@@ -37,14 +37,17 @@ class ArraySimplifier:
         :param rule_simplifier: The rule simplifier
         :return: The simplified array index expression or None (if the rule is not an array index expression)
         """
-        if rule.getChildCount() == 4 and rule.children[1].getText() == '[' and rule.children[3].getText() == ']':
-            return ArrayIndexNode(rule.children[0].getText(),
-                                  rule_simplifier.simplify_rule(rule.children[2], parser_result))
+        if (rule.getChildCount() == 4 and rule.children[1].getText() == '[' and rule.children[3].getText() == ']'
+                and hasattr(rule, "expr") and rule.expr is not None
+                and hasattr(rule, "index_expr") and rule.index_expr is not None):
+            expr = rule_simplifier.simplify_rule(rule.expr, parser_result)
+            index_expr = rule_simplifier.simplify_rule(rule.index_expr, parser_result)
+            return ArrayIndexNode(expr, index_expr)
 
         return None
 
     @staticmethod
-    def simplify_array_length(rule):
+    def simplify_array_length(rule, parser_result: ParserResult, rule_simplifier):
         """
         Simplifies array length expressions
         :param rule: The rule to simplify
@@ -52,6 +55,7 @@ class ArraySimplifier:
         """
 
         if rule.getChildCount() == 3 and rule.children[1].getText() == '.' and rule.children[2].getText() == 'length':
-            return ArrayLengthNode(rule.children[0].getText())
+            arr_expr = rule_simplifier.simplify_rule(rule.children[0], parser_result)
+            return ArrayLengthNode(arr_expr)
 
         return None

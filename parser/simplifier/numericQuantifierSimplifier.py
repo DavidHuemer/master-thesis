@@ -85,11 +85,11 @@ class NumericQuantifierSimplifier:
 
     def get_range(self, rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,
                   parser_result: ParserResult, jml_simplifier) -> FullRangeTreeNode:
-        if not isinstance(rule.range_, JMLParser.JMLParser.Full_range_expressionContext):
+        if not isinstance(rule.ranges, JMLParser.JMLParser.Full_range_expressionContext):
             raise Exception(
                 "NumericQuantifierSimplifier: Numeric quantifier core expression does not have range expression")
 
-        return self.quantifier_simplifier.get_full_range(rule.range_, parser_result, jml_simplifier)
+        return self.quantifier_simplifier.get_full_range(rule.ranges, parser_result, jml_simplifier)
 
     @staticmethod
     def get_expression(rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,

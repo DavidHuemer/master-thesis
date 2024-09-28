@@ -19,8 +19,10 @@ class JavaMethodBuilder:
         """
 
         methods = []
+        public_methods: list[MethodExtractionInfo] = list(
+            filter(lambda x: x.method_protection.startswith("public"), method_infos))
 
-        for method_info in method_infos:
+        for method_info in public_methods:
             if method_info.comment is None:
                 LoggingHelper.log_warning(f"Method {method_info.method_name} has no comment")
             else:

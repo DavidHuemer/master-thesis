@@ -28,8 +28,9 @@ also_condition: 'also' behavior = special_behavior?;
 
 expression:
 	primary
+	| old_expression
 	| quantifier_expression
-	| expression '[' expression ']'
+	| expr = expression LEFT_SQUARE_BRACKET index_expr = expression RIGHT_SQUARE_BRACKET
 	| expression '.' LENGTH
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expression
 	| <assoc = left> left = expression op = (MULTIPLY | DIVIDE) right = expression
@@ -120,7 +121,9 @@ end_range_comparison:
 	);
 
 range_expression_value:
-	range_expression_value '[' range_expression_value ']'
+	primary
+	| old_expression
+	| range_expression_value '[' range_expression_value ']'
 	| range_expression_value '.' LENGTH
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | NOT) range_expression_value
 	| <assoc = left> left = range_expression_value op = (
@@ -175,6 +178,8 @@ exception_expression:
 exception_declaration:
 	'(' exception = IDENTIFIER (name = IDENTIFIER)? ')';
 
+old_expression: OLD '(' expression ')';
+
 // jml rules
 BOOL_LITERAL: 'true' | 'false';
 
@@ -197,6 +202,9 @@ DIVIDE: '/';
 QUESTION_MARK: '?';
 COLON: ':';
 
+LEFT_SQUARE_BRACKET: '[';
+RIGHT_SQUARE_BRACKET: ']';
+
 // comparison
 LESS: '<';
 LESS_EQUAL: '<=';
@@ -215,6 +223,8 @@ MIN: '\\min';
 SUM: '\\sum';
 PRODUCT: '\\product';
 
+OLD: '\\old';
+
 // Behaviors
 NORMAL_BEHAVIOR: 'normal_behavior';
 EXCEPTIONAL_BEHAVIOR: 'exceptional_behavior';
@@ -224,6 +234,6 @@ AT: '@' -> skip;
 
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 
-INTEGER: '-'? [0-9]+;
+INTEGER: [0-9]+;
 WS: [\t\r\n ]+ -> skip;
 COMMENT: '//' -> skip;

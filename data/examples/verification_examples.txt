@@ -66,14 +66,14 @@ data/code/max/Biggest.java;biggest
 //@ ensures (\forall int i; 0 <= i && i < a.length; a[i] <= \result) || a.length == 0 && \result == -1;
 //@ ensures \result == -1 <==> a.length == 0;
 ```
-result:true
+result:false
 -----------------------------------
 ```
 //@ requires a != null;
 //@ ensures (\forall int i; 0 <= i && i < a.length; a[i] <= \result) || a.length == 0 && \result == -1;
 //@ ensures \result == -1 <==> a.length == 0;
 ```
-result:true
+result:false
 ==================================
 data/code/comparison/CompareArray.java;compare
 ```
