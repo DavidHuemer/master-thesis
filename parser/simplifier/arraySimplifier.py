@@ -1,7 +1,7 @@
-import parser.generated.JMLParser as JMLParser
 from definitions.ast.arrayIndexNode import ArrayIndexNode
 from definitions.ast.arrayLengthNode import ArrayLengthNode
 from definitions.parser.parserResult import ParserResult
+from helper.objectHelper import ObjectHelper
 
 
 class ArraySimplifier:
@@ -37,9 +37,11 @@ class ArraySimplifier:
         :param rule_simplifier: The rule simplifier
         :return: The simplified array index expression or None (if the rule is not an array index expression)
         """
-        if (rule.getChildCount() == 4 and rule.children[1].getText() == '[' and rule.children[3].getText() == ']'
-                and hasattr(rule, "expr") and rule.expr is not None
-                and hasattr(rule, "index_expr") and rule.index_expr is not None):
+        if (rule.getChildCount() == 4
+                and ObjectHelper.check_child_text(rule, 1, '[')
+                and ObjectHelper.check_child_text(rule, 3, ']')
+                and ObjectHelper.check_has_child(rule, "expr")
+                and ObjectHelper.check_has_child(rule, "index_expr")):
             expr = rule_simplifier.simplify_rule(rule.expr, parser_result)
             index_expr = rule_simplifier.simplify_rule(rule.index_expr, parser_result)
             return ArrayIndexNode(expr, index_expr)
