@@ -1,4 +1,5 @@
 import parser.generated.JMLParser as JMLParser
+
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
@@ -6,14 +7,11 @@ from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
 from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
-from parser.tree.ruleMetaDataHelper import RuleMetaDataHelper
 
 
 class JmlSimplifier:
-    def __init__(self, rule_simplifier=RuleSimplifier(), meta_data_helper=RuleMetaDataHelper(),
-                 bool_quantifier_simplifier=BoolQuantifierSimplifier()):
+    def __init__(self, rule_simplifier=RuleSimplifier(), bool_quantifier_simplifier=BoolQuantifierSimplifier()):
         self.rule_simplifier = rule_simplifier
-        self.rule_meta_data_helper = meta_data_helper
         self.bool_quantifier_simplifier = bool_quantifier_simplifier
 
         self.behavior_nodes: list[BehaviorNode] = []

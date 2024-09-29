@@ -43,7 +43,7 @@ class ArrayTestConstraintsGenerator:
 
     def get_constraints_for_numeric_array(self, param: CSPParameter, length_param: CSPParameter, length: int):
         index = Int('index')
-        for i in [0, 1]:
+        for i in [-1, 0, 1]:
             yield self.get_for_all(index, length_param, length, param.value[index] == i)
 
         # distinct constraint:

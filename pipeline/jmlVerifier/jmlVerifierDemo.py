@@ -13,7 +13,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\Conjunction.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\max\\Biggest.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 
