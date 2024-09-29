@@ -1,7 +1,6 @@
-from z3 import Bool
+from z3 import And
 
 from definitions.ast.astTreeNode import AstTreeNode
-from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
 from verification.constraints.typeConstraintBuilder import TypeConstraintBuilder
@@ -24,13 +23,13 @@ class ConstraintsBuilder:
         # Add constraints for each expression
         self.add_expression_constraints(jml_problem, expressions)
 
-    def add_special_constraints(self, jml_problem: JMLProblem):
+    @staticmethod
+    def add_special_constraints(jml_problem: JMLProblem):
         is_null_param = jml_problem.parameters["is_null"]
-        jml_problem.add_constraint(is_null_param.value == True)
+        jml_problem.add_constraint(And(is_null_param.value, True))
 
     def add_type_constraints(self, jml_problem: JMLProblem):
-        for param_key in jml_problem.parameters:
-            param: CSPParameter = jml_problem.parameters[param_key]
+        for param in jml_problem.parameters.values():
             self.type_constraint_builder.build_type_constraint(jml_problem, param)
 
     def add_expression_constraints(self, jml_problem: JMLProblem, expressions: list[AstTreeNode]):
