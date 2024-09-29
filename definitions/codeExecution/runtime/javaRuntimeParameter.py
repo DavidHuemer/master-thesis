@@ -11,7 +11,7 @@ class JavaRuntimeParameter:
         self.param = param
 
         param_name = str(param.getName())
-        if param_name == '[I':
+        if param_name == '[I':  # TODO: Add support for other array types
             param_name = 'int[]'
 
         self.parameter_name = param_name

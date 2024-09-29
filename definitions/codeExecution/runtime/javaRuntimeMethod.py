@@ -17,7 +17,7 @@ class JavaRuntimeMethod:
         self.return_type = method.getReturnType().getName()
         self.parameters = [JavaRuntimeParameter(param) for param in method.getParameterTypes()]
 
-        if self.return_type == '[I':
+        if self.return_type == '[I':  # TODO: Add support for other array types
             self.return_type = 'int[]'
 
     def __str__(self):

@@ -178,7 +178,7 @@ exception_expression:
 exception_declaration:
 	'(' exception = IDENTIFIER (name = IDENTIFIER)? ')';
 
-old_expression: OLD '(' expression ')';
+old_expression: OLD '(' expr = expression ')';
 
 // jml rules
 BOOL_LITERAL: 'true' | 'false';

@@ -1,4 +1,4 @@
-from z3 import ModelRef, ArrayRef, Select, QuantifierRef
+from z3 import ModelRef, ArrayRef, Select, QuantifierRef, BoolRef
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.verification.testCase import TestCase
@@ -22,6 +22,7 @@ class TestCaseBuilder:
                 jml_problem_param = jml_problem.parameters[parameter_key]
                 solution_param = solution[jml_problem_param.value]
                 null_value_key = f"{parameter_key}_is_null"
+                # TODO: Add support for char, string
                 if null_value_key in solution_param_keys and solution[jml_problem.parameters[null_value_key].value]:
                     parameters_dict[parameter_key] = None
                 elif hasattr(solution_param, "as_long"):
@@ -29,6 +30,8 @@ class TestCaseBuilder:
                 elif isinstance(solution_param, ArrayRef) or isinstance(solution_param, QuantifierRef):
                     array_values = self.get_array_values(jml_problem, jml_problem_param, parameter_key, solution)
                     parameters_dict[parameter_key] = array_values
+                elif isinstance(solution_param, BoolRef):
+                    parameters_dict[parameter_key] = str(solution_param).lower() == 'true'
                 else:
                     raise Exception(f"Unsupported parameter type: {type(solution_param)}")
             else:

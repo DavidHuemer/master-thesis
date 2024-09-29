@@ -4,8 +4,8 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("// @requires a != null && b != null;\n"
-            "// @ensures \\result == (\\forall int i; 0 <= i && i < a.length; a.length == b.length && a[i] == b[i]);\n")
+jml_code = ("// @requires true\n"
+            "// @ensures \\result == (b1 && b2)")
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\CompareArray.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\Conjunction.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 
