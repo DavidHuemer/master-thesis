@@ -1,8 +1,7 @@
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
-from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
-from helper.logs.loggingHelper import LoggingHelper
+from definitions.codeExecution.result.executionResult import ExecutionResult
 from verification.resultVerification.rangeExecution import RangeExecution
 
 

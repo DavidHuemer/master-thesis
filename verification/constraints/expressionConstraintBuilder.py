@@ -3,20 +3,33 @@ from definitions.ast.arrayLengthNode import ArrayLengthNode
 from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.infixExpression import InfixExpression
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
+from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.exceptions.preConditionException import PreConditionException
 from helper.infixHelper import InfixHelper
 from verification.constraints.boolQuantifierConstraintBuilder import BoolQuantifierConstraintBuilder
+from verification.constraints.numQuantifierConstraintBuilder import NumQuantifierConstraintBuilder
 
 
 class ExpressionConstraintBuilder:
     def __init__(self, bool_quantifier_constraint_builder=BoolQuantifierConstraintBuilder(),
+                 num_quantifier_constraint_builder=NumQuantifierConstraintBuilder(),
                  infix_helper=InfixHelper()):
         self.bool_quantifier_constraint_builder = bool_quantifier_constraint_builder
         self.infix_helper = infix_helper
+        self.num_quantifier_constraint_builder = num_quantifier_constraint_builder
 
     def build_expression_constraint(self, parameters: dict[str, CSPParameter], expression: AstTreeNode):
+        if isinstance(expression, TerminalNode):
+            return self.evaluate_terminal_node(parameters, expression)
+
+        if isinstance(expression, BoolQuantifierTreeNode):
+            return self.bool_quantifier_constraint_builder.evaluate(parameters, expression, self)
+
+        if isinstance(expression, NumQuantifierTreeNode):
+            return self.num_quantifier_constraint_builder.evaluate(parameters, expression, self)
+
         if isinstance(expression, InfixExpression) and hasattr(expression, "left") and hasattr(expression, "right"):
             return self.infix_helper.evaluate_infix(infix_operator=expression.name,
                                                     left=lambda: self.build_expression_constraint(parameters,
@@ -25,6 +38,8 @@ class ExpressionConstraintBuilder:
                                                                                                    expression.right),
                                                     is_smt=True,
                                                     get_param=lambda name: parameters[name])
+
+        # TODO: Add question mark expression support
 
         # TODO: Include all supported expression types
         if isinstance(expression, ArrayIndexNode):
@@ -41,11 +56,7 @@ class ExpressionConstraintBuilder:
             else:
                 raise Exception("Array length expression not supported")
 
-        if isinstance(expression, TerminalNode):
-            return self.evaluate_terminal_node(parameters, expression)
-
-        if isinstance(expression, BoolQuantifierTreeNode):
-            return self.bool_quantifier_constraint_builder.evaluate(parameters, expression, self)
+        # TODO: Add prefix expression support
 
         raise Exception("ExpressionConstraintBuilder: Expression type not supported")
 

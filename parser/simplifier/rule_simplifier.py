@@ -50,6 +50,7 @@ class RuleSimplifier:
              lambda rule, parser_result: self.can_simplify_prefix(rule, parser_result)),
             ('fallback',
              lambda rule, parser_result: self.fallback_simplify(rule, parser_result))
+            # TODO: Add simplification options for \old, method calls, etc.
         ]
         # list of methods
 
