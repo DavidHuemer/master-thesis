@@ -1,3 +1,31 @@
+data/code/arithmetic/AddCorrect.java;add
+// @requires \sum(a,b) > 10;
+// @ensures \result == a + b;
+// @ensures \result > 10;
+result:true
+-----------------------------------
+// @requires \min(a,b) > 10;
+// @ensures \result == a + b;
+// @ensures \result > 10;
+result:true
+-----------------------------------
+// @requires \max(a,b) <= 5;
+// @ensures \result == a + b;
+// @ensures \result <= 10;
+result:true
+==================================
+data/code/find/BubbleSort.java;sort
+// @requires \min(arr) == 5;
+// @requires arr != null;
+// @ensures \result[0] == 5;
+result:true
+-----------------------------------
+// @requires \min(arr) == 5;
+// @requires arr.length == 0;
+// @requires arr != null;
+// @ensures \result[0] == 5;
+result:false
+==================================
 data/code/abs/Abs.java;abs
 //@requires true
 //@ensures \result >= 0

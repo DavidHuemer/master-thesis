@@ -1,1 +1,1 @@
-// @ensures (\exists int i, j; 0 <= i && i < 10 && j < i && j < 3000 && true; true)
+// @ensures (\result == -1) <==> (\forall int i; 0 <= i && i < arr.length; arr[i] != target);

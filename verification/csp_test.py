@@ -2,59 +2,52 @@ import time
 
 from z3 import *
 
-arr_1 = Array('a', IntSort(), IntSort())
-arr_2 = Array('b', IntSort(), IntSort())
 
-a_length = Int('a_length')
-b_length = Int('b_length')
+def get_if_arr(arr, index, length):
+    if index == 10:
+        return arr[0]
 
-a_index = Int("a_index")
-b_index = Int("b_index")
+    return If(get_and_arr(arr, index, length), arr[index], get_if_arr(arr, index + 1, length))
 
-a_is_null = Bool('a_is_null')
-b_is_null = Bool('b_is_null')
+
+def get_and_arr(arr, index, length):
+    constraints = []
+    for i in range(10):
+        and_constraint = Implies(i < length, arr[index] <= arr[i])
+        constraints.append(and_constraint)
+    return And(index < length, *constraints)
+
 
 s = Solver()
 
-is_null = Bool('is_null')
-s.add(is_null == True)
+length = Int('length')
+arr = Array('arr', IntSort(), IntSort())
 
-# s.add(a_length >= 0)
-# s.add(ForAll(a_index, arr_1[a_index] >= -2147483647))
-# s.add(ForAll(a_index, arr_1[a_index] <= 2147483647))
-# s.add(a_length >= -2147483647)
-# s.add(a_length <= 2147483647)
-# s.add(b_length >= 0)
-# s.add(ForAll(b_index, arr_2[b_index] >= -2147483647))
-# s.add(ForAll(b_index, arr_2[b_index] <= 2147483647))
-# s.add(b_length >= -2147483647)
-# s.add(b_length <= 2147483647)
-# s.add(And(a_is_null != is_null, b_is_null != is_null))
+i = If(length == 2, (arr[0], arr[1]), arr[3])
 
-s.push()
+#z3.is_lt()
 
-a_new_index = Int("a_index")
-b_new_index = Int("b_index")
 
-# and_expr = And(
-#     And(ForAll(a_new_index, arr_1[a_index] == 1), a_length == 1),
-#     And(ForAll(a_new_index, arr_2[a_new_index] == 1), b_length == 1)
-# )
-# s.add(and_expr)
+index = Int('index')
+min_arr = Int('min_arr')
+if_arr = get_if_arr(arr, 0, length)
 
-# s.add(And(ForAll(a_index, And(arr_1[a_index] == 1)), a_length == 1))
-#
+s.add(length == 5)
+s.add(min_arr == if_arr)
 
-s.add(ForAll(a_index, Implies(And(a_index >= 0, a_index < 100), arr_1[a_index] == 1)))
-s.add(ForAll(a_new_index, Implies(And(a_new_index >= 0, a_new_index < 100), arr_2[a_new_index] == 1)))
+# e = Exists([index], And([index < length, arr[index] == min_arr]))
+# s.add(e)
 
-start_time = time.time()
+s.add(min_arr == 2)
+s.add(arr[0] != 2)
+# s.add(arr[0] == 8)
+# s.add(arr[1] == 6)
+# s.add(arr[3] == 4)
 
-if s.check() == sat:
-    print(s.model())
-else:
-    print("Unsat")
 
-end_time = time.time()
-elapsed_time = end_time - start_time
-print(f"Elapsed time: {elapsed_time}")
+print(s.check())
+m = s.model()
+arr_str = ",".join([f"{m.evaluate(arr[i]).as_long()}" for i in range(5)])
+print(f"arr: {arr_str}")
+
+print(f"min_arr: {m.evaluate(min_arr).as_long()}")

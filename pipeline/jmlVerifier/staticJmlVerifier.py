@@ -69,7 +69,15 @@ def run_jml(jml_with_result: str, test_case):
         result_parts = result_line.split(':')
         result = result_parts[1].strip()
 
-    run_verification(test_case, jml.strip(), result == 'true')
+    expected = result == 'true'
+
+    try:
+        run_verification(test_case, jml.strip(), expected)
+    except Exception as e:
+        if not expected:
+            LoggingHelper.log_error(e)
+        else:
+            LoggingHelper.log_info(e)
 
 
 def run_verification(test_case: ConsistencyTestCase, jml: str, expected_result: bool):

@@ -15,3 +15,4 @@ PARSER_FILE = 'JML.g4'
 POSITIVE_JML_PARSER_FILE = 'data/examples/positive_jml_parser_examples.txt'
 
 CODE_DIST_FOLDER = 'dist'
+MAX_ARRAY_SIZE = 50

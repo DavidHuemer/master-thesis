@@ -1,12 +1,16 @@
-from z3 import And, If, Sum, Product
+from z3 import And, If, Sum, Product, ArrayRef
 
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
-from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
+from definitions.evaluations.csp.cspParameter import CSPParameter
+from verification.constraints.constraintArrayValueHelper import ConstraintArrayValueHelper
 
 
 class NumQuantifierConstraintBuilder:
+    def __init__(self, array_value_helper=ConstraintArrayValueHelper()):
+        self.array_value_helper = array_value_helper
+
     def evaluate(self, parameters: dict[str, CSPParameter], expression: NumQuantifierTreeNode,
                  expression_constraint_builder):
         if expression.quantifier_expression_type == NumericQuantifierExpressionType.VALUE:
@@ -18,8 +22,7 @@ class NumQuantifierConstraintBuilder:
 
     def evaluate_with_value(self, expression: NumQuantifierTreeNode, parameters: dict[str, CSPParameter],
                             expression_constraint_builder):
-        values = [expression_constraint_builder.build_expression_constraint(parameters, expr) for expr in
-                  expression.expressions]
+        values = self.get_values(expression, parameters, expression_constraint_builder)
         return self.evaluate_list(expression, values)
 
     def evaluate_with_range(self):
@@ -69,3 +72,20 @@ class NumQuantifierConstraintBuilder:
     def get_min_and(self, value, values: list):
         comparisons = [value <= val for val in values]
         return And(*comparisons)
+
+    def get_values(self, expression: NumQuantifierTreeNode, parameters: dict[str, CSPParameter],
+                   expression_constraint_builder):
+        expression_list = [expression_constraint_builder.build_expression_constraint(parameters, expr) for expr in
+                           expression.expressions]
+
+        values = []
+
+        for expr in expression_list:
+            if isinstance(expr, ArrayRef):
+                length_param = parameters[f"{str(expr)}_length"]
+                value = self.array_value_helper.get_value_from_array(expr, length_param, expression.quantifier_type)
+                values.append(value)
+            else:
+                values.append(expr)
+
+        return values
