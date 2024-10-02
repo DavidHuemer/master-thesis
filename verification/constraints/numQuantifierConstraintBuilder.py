@@ -4,6 +4,7 @@ from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNo
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.jmlProblem import JMLProblem
 from verification.constraints.constraintArrayValueHelper import ConstraintArrayValueHelper
 
 
@@ -12,17 +13,17 @@ class NumQuantifierConstraintBuilder:
         self.array_value_helper = array_value_helper
 
     def evaluate(self, parameters: dict[str, CSPParameter], expression: NumQuantifierTreeNode,
-                 expression_constraint_builder):
+                 expression_constraint_builder, jml_problem: JMLProblem):
         if expression.quantifier_expression_type == NumericQuantifierExpressionType.VALUE:
-            return self.evaluate_with_value(expression, parameters, expression_constraint_builder)
+            return self.evaluate_with_value(expression, parameters, expression_constraint_builder, jml_problem)
         elif expression.quantifier_expression_type == NumericQuantifierExpressionType.RANGE:
             return self.evaluate_with_range()
 
         raise Exception("NumQuantifierConstraintBuilder: Invalid quantifier expression type")
 
     def evaluate_with_value(self, expression: NumQuantifierTreeNode, parameters: dict[str, CSPParameter],
-                            expression_constraint_builder):
-        values = self.get_values(expression, parameters, expression_constraint_builder)
+                            expression_constraint_builder, jml_problem: JMLProblem):
+        values = self.get_values(expression, parameters, expression_constraint_builder, jml_problem)
         return self.evaluate_list(expression, values)
 
     def evaluate_with_range(self):
@@ -74,8 +75,9 @@ class NumQuantifierConstraintBuilder:
         return And(*comparisons)
 
     def get_values(self, expression: NumQuantifierTreeNode, parameters: dict[str, CSPParameter],
-                   expression_constraint_builder):
-        expression_list = [expression_constraint_builder.build_expression_constraint(parameters, expr) for expr in
+                   expression_constraint_builder, jml_problem: JMLProblem):
+        expression_list = [expression_constraint_builder.build_expression_constraint(parameters, expr, jml_problem) for
+                           expr in
                            expression.expressions]
 
         values = []
@@ -83,7 +85,8 @@ class NumQuantifierConstraintBuilder:
         for expr in expression_list:
             if isinstance(expr, ArrayRef):
                 length_param = parameters[f"{str(expr)}_length"]
-                value = self.array_value_helper.get_value_from_array(expr, length_param, expression.quantifier_type)
+                value = self.array_value_helper.get_value_from_array(expr, length_param, expression.quantifier_type,
+                                                                     jml_problem)
                 values.append(value)
             else:
                 values.append(expr)

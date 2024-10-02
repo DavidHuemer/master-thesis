@@ -5,6 +5,7 @@ from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
+from helper.objectHelper import ObjectHelper
 from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
 
@@ -22,7 +23,7 @@ class JmlSimplifier:
         Simplifies the jml tree
         :param parser_result:
         :param jml:
-        :return:
+        :return: The jml node containing all behavior nodes
         """
 
         jml_items = [jml_item for jml_item in jml.jml_item()]
@@ -45,7 +46,7 @@ class JmlSimplifier:
             self.handle_condition(jml_item, parser_result)
 
     def handle_condition(self, jml_item: JMLParser.JMLParser.Jml_itemContext, parser_result: ParserResult):
-        condition = jml_item.children[0].children[0]
+        condition = jml_item.cond.children[0]
 
         # Check if condition is @also -> create new behavior node
         if isinstance(condition, JMLParser.JMLParser.Also_conditionContext):
@@ -82,5 +83,5 @@ class JmlSimplifier:
                 self.current_behavior.behavior_type = BehaviorType.EXCEPTIONAL_BEHAVIOR
 
     @staticmethod
-    def is_behavior_node(jml_item):
-        return isinstance(jml_item.children[0], JMLParser.JMLParser.Behavior_exprContext)
+    def is_behavior_node(jml_item: JMLParser.JMLParser.Jml_itemContext):
+        return ObjectHelper.check_has_child(jml_item, 'behavior')

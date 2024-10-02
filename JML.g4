@@ -6,9 +6,9 @@ grammar JML;
 
 jml: jml_item+ EOF;
 
-jml_item: behavior_expr | condition;
+jml_item: behavior = behavior_expr | cond = condition;
 
-behavior_expr: 'public' special_behavior;
+behavior_expr: PUBLIC behavior = special_behavior;
 
 special_behavior: NORMAL_BEHAVIOR | EXCEPTIONAL_BEHAVIOR;
 
@@ -20,15 +20,16 @@ condition: (
 		| also_condition
 	) ';'?;
 
-requires_condition: 'requires' expression;
-ensures_condition: 'ensures' expression;
-signals_condition: 'signals' exception_expression;
-signals_only_condition: 'signals_only' IDENTIFIER;
-also_condition: 'also' behavior = special_behavior?;
+requires_condition: REQUIRES expr = expression;
+ensures_condition: ENSURES expr = expression;
+signals_condition: SIGNALS expr = exception_expression;
+signals_only_condition: SIGNALS_ONLY ident = IDENTIFIER;
+also_condition: ALSO behavior = special_behavior?;
 
 expression:
 	primary
 	| old_expression
+	| method_call
 	| quantifier_expression
 	| expr = expression LEFT_SQUARE_BRACKET index_expr = expression RIGHT_SQUARE_BRACKET
 	| expression '.' LENGTH
@@ -54,7 +55,13 @@ expression:
 	| <assoc = left> left = expression op = INEQUIVALENCE right = expression
 	| atomic_value;
 
+expressionList: expression (',' expression)*;
+
 primary: '(' expression ')';
+
+method_call: ident = IDENTIFIER arg = arguments;
+
+arguments: '(' expressions = expressionList? ')';
 
 // question_mark_expression: expr = inequivalence_expression QUESTION_MARK true_val =
 // inequivalence_expression COLON false_val = inequivalence_expression;
@@ -183,6 +190,8 @@ old_expression: OLD '(' expr = expression ')';
 // jml rules
 BOOL_LITERAL: 'true' | 'false';
 
+PUBLIC: 'public';
+
 AND: '&&';
 OR: '||';
 
@@ -214,6 +223,13 @@ GREATER_EQUAL: '>=';
 LENGTH: 'length';
 
 // JML keywords
+
+REQUIRES: 'requires';
+ENSURES: 'ensures';
+SIGNALS: 'signals';
+SIGNALS_ONLY: 'signals_only';
+ALSO: 'also';
+
 RESULT: '\\result';
 FORALL: '\\forall';
 EXISTS: '\\exists';

@@ -25,6 +25,12 @@ result:true
 // @requires arr != null;
 // @ensures \result[0] == 5;
 result:false
+-----------------------------------
+// @requires (\min int i; 0 <= i && i < arr.length; arr[i]) == 5;
+// @requires arr != null;
+// @requires arr.length > 0;
+// @ensures \result[0] == 5;
+result:true
 ==================================
 data/code/abs/Abs.java;abs
 //@requires true

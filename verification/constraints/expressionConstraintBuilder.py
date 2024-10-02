@@ -6,6 +6,7 @@ from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTree
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.exceptions.preConditionException import PreConditionException
 from helper.infixHelper import InfixHelper
 from verification.constraints.boolQuantifierConstraintBuilder import BoolQuantifierConstraintBuilder
@@ -20,7 +21,8 @@ class ExpressionConstraintBuilder:
         self.infix_helper = infix_helper
         self.num_quantifier_constraint_builder = num_quantifier_constraint_builder
 
-    def build_expression_constraint(self, parameters: dict[str, CSPParameter], expression: AstTreeNode):
+    def build_expression_constraint(self, parameters: dict[str, CSPParameter], expression: AstTreeNode,
+                                    jml_problem: JMLProblem):
         if isinstance(expression, TerminalNode):
             return self.evaluate_terminal_node(parameters, expression)
 
@@ -28,14 +30,16 @@ class ExpressionConstraintBuilder:
             return self.bool_quantifier_constraint_builder.evaluate(parameters, expression, self)
 
         if isinstance(expression, NumQuantifierTreeNode):
-            return self.num_quantifier_constraint_builder.evaluate(parameters, expression, self)
+            return self.num_quantifier_constraint_builder.evaluate(parameters, expression, self, jml_problem)
 
         if isinstance(expression, InfixExpression) and hasattr(expression, "left") and hasattr(expression, "right"):
             return self.infix_helper.evaluate_infix(infix_operator=expression.name,
                                                     left=lambda: self.build_expression_constraint(parameters,
-                                                                                                  expression.left),
+                                                                                                  expression.left,
+                                                                                                  jml_problem),
                                                     right=lambda: self.build_expression_constraint(parameters,
-                                                                                                   expression.right),
+                                                                                                   expression.right,
+                                                                                                   jml_problem),
                                                     is_smt=True,
                                                     get_param=lambda name: parameters[name])
 
@@ -43,8 +47,8 @@ class ExpressionConstraintBuilder:
 
         # TODO: Include all supported expression types
         if isinstance(expression, ArrayIndexNode):
-            array = self.build_expression_constraint(parameters, expression.arr_expression)
-            expr = self.build_expression_constraint(parameters, expression.index_expression)
+            array = self.build_expression_constraint(parameters, expression.arr_expression, jml_problem)
+            expr = self.build_expression_constraint(parameters, expression.index_expression, jml_problem)
             return array[expr]
 
         if isinstance(expression, ArrayLengthNode):

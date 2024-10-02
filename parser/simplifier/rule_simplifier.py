@@ -54,8 +54,6 @@ class RuleSimplifier:
         ]
         # list of methods
 
-        print("Hello")
-
     def simplify_rule(self, rule, parser_result: ParserResult):
         """
         Simplifies a rule

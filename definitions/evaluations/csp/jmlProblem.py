@@ -1,6 +1,7 @@
 from z3 import Or, ArithRef, Select, And, sat, ModelRef, ArrayRef, BoolRef, Implies
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.jmlParameters import JmlParameters
 from verification.csp.jmlSolver import JmlSolver
 
 
@@ -11,7 +12,7 @@ class JMLProblem:
 
     def __init__(self, parameters: dict[str, CSPParameter]):
         self.parameters = parameters
-
+        self.jml_parameters = JmlParameters()
         self.solver = JmlSolver()
 
     def add_constraint(self, constraint):

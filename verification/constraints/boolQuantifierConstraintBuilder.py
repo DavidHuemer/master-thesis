@@ -5,6 +5,7 @@ from z3 import Int, And, ForAll, Implies, Exists
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.jmlProblem import JMLProblem
 from verification.constraints.quantifierConstraintBuilder import QuantifierConstraintBuilder
 
 
@@ -12,7 +13,8 @@ class BoolQuantifierConstraintBuilder:
     def __init__(self, quantifier_constraint_builder=QuantifierConstraintBuilder):
         self.quantifier_constraint_builder = quantifier_constraint_builder()
 
-    def evaluate(self, parameters: dict[str, CSPParameter], expression: BoolQuantifierTreeNode, constraint_builder):
+    def evaluate(self, parameters: dict[str, CSPParameter], expression: BoolQuantifierTreeNode, constraint_builder,
+                 jml_problem: JMLProblem):
         # First get variables
         variables = self.get_variables(expression)
         copied_parameters = copy.deepcopy(parameters)
@@ -30,7 +32,8 @@ class BoolQuantifierConstraintBuilder:
         # TODO: Add support for additional expression in range
         and_implies = And(*range_expressions)
 
-        final_expr = constraint_builder.build_expression_constraint(copied_parameters, expression.expression)
+        final_expr = constraint_builder.build_expression_constraint(copied_parameters, expression.expression,
+                                                                    jml_problem)
 
         if expression.quantifier_type == BoolQuantifierType.FORALL:
             return self.evaluate_for_all(variable_values, and_implies, final_expr)

@@ -35,5 +35,5 @@ class ConstraintsBuilder:
     def add_expression_constraints(self, jml_problem: JMLProblem, expressions: list[AstTreeNode]):
         for expression in expressions:
             constraint = self.expression_constraint_builder.build_expression_constraint(jml_problem.parameters,
-                                                                                        expression)
+                                                                                        expression, jml_problem)
             jml_problem.add_constraint(constraint)
