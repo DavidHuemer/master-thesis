@@ -1,8 +1,10 @@
-from definitions.ast.RangeTreeNode import RangeTreeNode
+from __future__ import annotations
+
+from parser.generated import JMLParser
+
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
 from definitions.parser.parserResult import ParserResult
-from parser.generated import JMLParser
 from parser.simplifier.quantifierSimplifier import QuantifierSimplifier
 
 
@@ -11,6 +13,9 @@ class BoolQuantifierSimplifier:
         self.quantifier_simplifier = quantifier_simplifier
 
     def simplify(self, rule, parser_result: ParserResult, jml_simplifier) -> BoolQuantifierTreeNode:
+        from parser.simplifier.rule_simplifier import RuleSimplifier
+        jml_simplifier: RuleSimplifier = jml_simplifier
+
         # If the children count of the rule is greater than 1 raise an error
         if len(rule.children) > 1:
             raise Exception("BoolQuantifierSimplifier: Rule has more than 1 child")

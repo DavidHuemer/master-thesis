@@ -8,5 +8,7 @@ class ArrayIndexNode(AstTreeNode):
         self.arr_expression = arr_expression
         self.index_expression = index_expression
 
+        self.children = [arr_expression, index_expression]
+
     def get_tree_string(self):
         return f"{self.name} [{self.index_expression}]"

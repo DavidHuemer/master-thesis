@@ -7,6 +7,8 @@ class InfixExpression(AstTreeNode):
         self.left = left
         self.right = right
 
+        self.children = [left, right]
+
     def get_tree_string(self):
         return f"{self.name} ({self.left.get_tree_string()}, {self.right.get_tree_string()})"
 

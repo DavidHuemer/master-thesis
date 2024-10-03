@@ -11,5 +11,7 @@ class RangeTreeNode(AstTreeNode):
         self.start_operator = start_operator
         self.end_operator = end_operator
 
+        self.children = [start, end]
+
     def get_tree_string(self):
         return f'Range: {self.start.get_tree_string()} - {self.end.get_tree_string()}'

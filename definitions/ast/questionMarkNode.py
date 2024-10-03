@@ -7,3 +7,5 @@ class QuestionMarkNode(AstTreeNode):
         self.expr = expr
         self.true_expr = true_expr
         self.false_expr = false_expr
+
+        self.children = [expr, true_expr, false_expr]

@@ -8,6 +8,8 @@ class ExceptionExpression(AstTreeNode):
         self.exception_name = exception_name
         self.expression = expression
 
+        self.children = [expression]
+
     def get_tree_string(self):
         return f'{self.exception_type} {self.exception_name} {self.expression.get_tree_string()}'
 

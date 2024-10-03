@@ -29,6 +29,7 @@ also_condition: ALSO behavior = special_behavior?;
 expression:
 	primary
 	| old_expression
+	| this_expression
 	| method_call
 	| quantifier_expression
 	| expr = expression LEFT_SQUARE_BRACKET index_expr = expression RIGHT_SQUARE_BRACKET
@@ -59,7 +60,7 @@ expressionList: expression (',' expression)*;
 
 primary: '(' expression ')';
 
-method_call: ident = IDENTIFIER arg = arguments;
+method_call: ident = IDENTIFIER args = arguments;
 
 arguments: '(' expressions = expressionList? ')';
 
@@ -130,6 +131,8 @@ end_range_comparison:
 range_expression_value:
 	primary
 	| old_expression
+	| this_expression
+	| method_call
 	| range_expression_value '[' range_expression_value ']'
 	| range_expression_value '.' LENGTH
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | NOT) range_expression_value
@@ -187,6 +190,8 @@ exception_declaration:
 
 old_expression: OLD '(' expr = expression ')';
 
+this_expression: JML_THIS '.' expr = expression;
+
 // jml rules
 BOOL_LITERAL: 'true' | 'false';
 
@@ -240,6 +245,7 @@ SUM: '\\sum';
 PRODUCT: '\\product';
 
 OLD: '\\old';
+JML_THIS: '\\this';
 
 // Behaviors
 NORMAL_BEHAVIOR: 'normal_behavior';

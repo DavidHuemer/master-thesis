@@ -8,5 +8,7 @@ class PrefixNode(AstTreeNode):
         self.prefix = prefix
         self.expr = expr
 
+        self.children = [expr]
+
     def get_tree_string(self):
         return f"{self.prefix} {self.expr.get_tree_string()}"

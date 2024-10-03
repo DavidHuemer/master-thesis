@@ -1,3 +1,5 @@
+from __future__ import annotations
+from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
 from typing import Callable, Any
 
 import parser.generated.JMLParser as JMLParser
@@ -10,11 +12,13 @@ from definitions.ast.prefixNode import PrefixNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.parser.parserResult import ParserResult
 from parser.simplifier.arraySimplifier import ArraySimplifier
-from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
 from parser.simplifier.exceptionSimplifier import ExceptionSimplifier
 from parser.simplifier.infixSimplifier import InfixSimplifier
+
+from parser.simplifier.methodCallSimplifier import MethodCallSimplifier
 from parser.simplifier.numericQuantifierSimplifier import NumericQuantifierSimplifier
 from parser.simplifier.questionMarkExpressionSimplifier import QuestionMarkExpressionSimplifier
+from parser.simplifier.referenceSimplifier import ReferenceSimplifier
 
 
 class RuleSimplifier:
@@ -23,13 +27,17 @@ class RuleSimplifier:
                  array_simplifier=ArraySimplifier(),
                  infix_simplifier=InfixSimplifier(),
                  exception_simplifier=ExceptionSimplifier(),
-                 question_mark_expression_simplifier=QuestionMarkExpressionSimplifier()):
+                 question_mark_expression_simplifier=QuestionMarkExpressionSimplifier(),
+                 reference_simplifier=ReferenceSimplifier(),
+                 method_simplifier=MethodCallSimplifier()):
         self.bool_quantifier_simplifier = bool_quantifier_simplifier
         self.numeric_quantifier_simplifier = numeric_quantifier_simplifier
         self.array_simplifier = array_simplifier
         self.infix_simplifier = infix_simplifier
         self.exception_simplifier = exception_simplifier
         self.question_mark_expr_simplifier = question_mark_expression_simplifier
+        self.reference_simplifier = reference_simplifier
+        self.method_simplifier = method_simplifier
 
         self.simplify_options: list[(str, Callable[[Any, ParserResult], AstTreeNode | None])] = [
             ("terminal node",
@@ -48,9 +56,12 @@ class RuleSimplifier:
              lambda rule, parser_result: self.array_simplifier.simplify_array(rule, parser_result, self)),
             ('prefix',
              lambda rule, parser_result: self.can_simplify_prefix(rule, parser_result)),
+            ('reference',
+             lambda rule, parser_result: self.reference_simplifier.simplify(rule, parser_result, self)),
+            ('method call',
+             lambda rule, parser_result: self.method_simplifier.simplify(rule, parser_result, self)),
             ('fallback',
              lambda rule, parser_result: self.fallback_simplify(rule, parser_result))
-            # TODO: Add simplification options for \old, method calls, etc.
         ]
         # list of methods
 
