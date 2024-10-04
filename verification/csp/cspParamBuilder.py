@@ -2,6 +2,9 @@ from z3 import Int, Array, IntSort, Real, Bool, RealSort, BoolSort, String, Stri
 
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
+from verification.csp.cspParamNameGenerator import CspParamNameGenerator
 
 
 class CSPParameterBuilder:
@@ -9,26 +12,46 @@ class CSPParameterBuilder:
     Class that is used for building parameters that are needed for the solver
     """
 
-    def build_parameters(self, parameters: list[ParameterExtractionInfo]) -> dict[str, CSPParameter]:
-        csp_params: dict[str, CSPParameter] = dict()
+    def __init__(self, csp_param_name_generator=CspParamNameGenerator()):
+        self.csp_param_name_generator = csp_param_name_generator
 
-        # Add is_null parameter
-        csp_params["is_null"] = CSPParameter("is_null", Bool("is_null"), "boolean", helper=True)
+    def build_csp_parameters(self, parameters: list[ParameterExtractionInfo]) -> CSPParameters:
+        csp_parameters = CSPParameters()
 
+        # Add normal parameters
         for param in parameters:
-            csp_params[param.name] = self.get_csp_param_for_param(param)
+            csp_parameters.add_csp_parameter(self.get_csp_param_for_param(param))
 
-            # Add is_null parameter for each parameter
-            is_null_name = f"{param.name}_is_null"
-            csp_params[is_null_name] = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
+        # Add special parameters
+        self.build_special_parameters(csp_parameters)
 
-            # For array parameters add the length of the array
-            # Check if param includes []
+        # Add helper parameters
+        self.build_helper_parameters(csp_parameters, parameters)
+        return csp_parameters
+
+    def build_special_parameters(self, csp_parameters: CSPParameters):
+        # Add is_null parameter
+        is_null_name = self.csp_param_name_generator.find_name(csp_parameters, "is_null")
+        is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
+
+        csp_parameters.add_csp_parameter(is_null_param)
+        csp_parameters.is_null_helper_param = is_null_param
+
+    def build_helper_parameters(self, csp_parameters: CSPParameters, parameters: list[ParameterExtractionInfo]):
+        # Build helper parameters for each parameter
+        for param in parameters:
+            # Add is null
+            is_null_name = self.csp_param_name_generator.find_name(csp_parameters, f"{param.name}_is_null")
+            is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
+            csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.IS_NULL, is_null_param)
+
+            # Add length for array parameters
             if "[]" in param.parameter_type:
-                csp_params[param.name + "_length"] = CSPParameter(param.name + "_length",
-                                                                  Int(param.name + "_length"), "int", helper=True)
+                length_name = self.csp_param_name_generator.find_name(csp_parameters, f"{param.name}_length")
+                length_param = CSPParameter(length_name, Int(length_name), "int", helper=True)
+                csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.LENGTH, length_param)
 
-        return csp_params
+    # for param in parameters:
 
     def get_csp_param_for_param(self, param: ParameterExtractionInfo) -> CSPParameter:
         if '[]' in param.parameter_type:

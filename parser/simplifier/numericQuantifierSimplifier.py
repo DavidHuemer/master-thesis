@@ -4,7 +4,7 @@ from definitions.parser.parserResult import ParserResult
 from parser.generated import JMLParser
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
-from parser.simplifier.quantifierSimplifier import QuantifierSimplifier
+from parser.simplifier.quantifier_simplifier.quantifierRangeSimplifier import QuantifierSimplifier
 
 
 class NumericQuantifierSimplifier:

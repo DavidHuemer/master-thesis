@@ -5,7 +5,7 @@ from parser.generated import JMLParser
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
 from definitions.parser.parserResult import ParserResult
-from parser.simplifier.quantifierSimplifier import QuantifierSimplifier
+from parser.simplifier.quantifier_simplifier.quantifierRangeSimplifier import QuantifierSimplifier
 
 
 class BoolQuantifierSimplifier:

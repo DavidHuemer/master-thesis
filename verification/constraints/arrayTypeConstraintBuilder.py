@@ -2,6 +2,8 @@ from z3 import Int, ForAll, Implies, And, Length
 
 from definitions import javaTypes
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.jmlProblem import JMLProblem
+from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from verification.constraints.typeRanges import TypeRanges
 
 
@@ -9,9 +11,9 @@ class ArrayTypeConstraintBuilder:
     def __init__(self, type_ranges=TypeRanges()):
         self.type_ranges = type_ranges
 
-    def add_array_constraint(self, jml_problem, parameter: CSPParameter):
-        length_name = f"{parameter.name}_length"
-        length_parameter = jml_problem.parameters[length_name].value
+    def add_array_constraint(self, jml_problem: JMLProblem, parameter: CSPParameter):
+        length_parameter = (jml_problem.parameters.csp_parameters
+                            .get_helper(parameter.name, CSPParamHelperType.LENGTH).value)
         jml_problem.add_constraint(length_parameter >= 0)
 
         array_type = parameter.param_type[:-2]

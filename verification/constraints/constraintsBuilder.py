@@ -25,15 +25,16 @@ class ConstraintsBuilder:
 
     @staticmethod
     def add_special_constraints(jml_problem: JMLProblem):
-        is_null_param = jml_problem.parameters["is_null"]
+        is_null_param = jml_problem.parameters.csp_parameters.is_null_helper_param
         jml_problem.add_constraint(And(is_null_param.value, True))
 
     def add_type_constraints(self, jml_problem: JMLProblem):
-        for param in jml_problem.parameters.values():
+        for param in jml_problem.parameters.csp_parameters.get_actual_parameters():
             self.type_constraint_builder.build_type_constraint(jml_problem, param)
 
     def add_expression_constraints(self, jml_problem: JMLProblem, expressions: list[AstTreeNode]):
         for expression in expressions:
-            constraint = self.expression_constraint_builder.build_expression_constraint(jml_problem.parameters,
-                                                                                        expression, jml_problem)
+            constraint = (self.expression_constraint_builder
+                          .build_expression_constraint(jml_problem=jml_problem, expression=expression,
+                                                       jml_parameters=jml_problem.parameters))
             jml_problem.add_constraint(constraint)

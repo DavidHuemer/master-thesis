@@ -2,6 +2,7 @@ from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.expressionNode import ExpressionNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.jmlProblem import JMLProblem
+from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
 from definitions.javaMethod import JavaMethod
 from verification.constraints.constraintsBuilder import ConstraintsBuilder
 from verification.csp.cspParamBuilder import CSPParameterBuilder
@@ -23,7 +24,10 @@ class JMLProblemBuilder:
         :param expressions: The expressions that are required for the initial constraints
         :return:
         """
-        parameters = self.csp_param_builder.build_parameters(parameters)
-        jml_problem = JMLProblem(parameters)
+
+        csp_parameters = self.csp_param_builder.build_csp_parameters(parameters)
+
+        jml_parameters = JmlParameters(csp_parameters)
+        jml_problem = JMLProblem(jml_parameters)
         self.constraints_builder.build_constraints(jml_problem, expressions)
         return jml_problem

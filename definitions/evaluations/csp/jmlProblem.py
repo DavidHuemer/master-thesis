@@ -1,7 +1,7 @@
-from z3 import Or, ArithRef, Select, And, sat, ModelRef, ArrayRef, BoolRef, Implies
+from z3 import Or, ArithRef, sat, ModelRef, ArrayRef, BoolRef
 
-from definitions.evaluations.csp.cspParameter import CSPParameter
-from definitions.evaluations.csp.jmlParameters import JmlParameters
+from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
 from verification.csp.jmlSolver import JmlSolver
 
 
@@ -10,9 +10,8 @@ class JMLProblem:
     Represents a JML problem that can be solved
     """
 
-    def __init__(self, parameters: dict[str, CSPParameter]):
+    def __init__(self, parameters: JmlParameters):
         self.parameters = parameters
-        self.jml_parameters = JmlParameters()
         self.solver = JmlSolver()
 
     def add_constraint(self, constraint):
@@ -42,8 +41,7 @@ class JMLProblem:
             return param != solution[param]
         elif isinstance(param, ArrayRef):
             # Get length parameter
-            length_name = f"{str(param)}_length"
-            length_param = self.parameters[length_name].value
+            length_param = self.parameters.csp_parameters.get_helper(str(param), CSPParamHelperType.LENGTH).value
             length = solution[length_param].as_long()
 
             if length == 0:
@@ -74,7 +72,7 @@ class JMLProblem:
         if solution is None:
             return
 
-        solution_params = [self.parameters[str(var)].value for var in solution if str(var) in self.parameters]
+        solution_params = [self.parameters.csp_parameters[str(var)].value for var in solution if self.parameters.csp_parameters.parameter_exists(str(var))]
 
         distinct_constraints = [self.get_distinct_constraint(solution, param) for param in solution_params]
         valid_constraints = [constraint for constraint in distinct_constraints if constraint is not None]

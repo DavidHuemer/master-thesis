@@ -22,8 +22,7 @@ class TestCasesGenerator:
     def generate_solver_test_cases(self, jml_problem: JMLProblem) -> list[TestCase]:
 
         # All real parameters (that are not helper)
-        real_parameters = [jml_problem.parameters[param] for param in jml_problem.parameters if
-                           not jml_problem.parameters[param].is_helper]
+        real_parameters = jml_problem.parameters.csp_parameters.get_actual_parameters()
         LoggingHelper.log_info("Generating for parameters")
 
         start_time = time.time()

@@ -1,6 +1,7 @@
 from z3 import ModelRef, ArrayRef, Select, QuantifierRef, BoolRef
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
+from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.verification.testCase import TestCase
 
 
@@ -15,15 +16,16 @@ class TestCaseBuilder:
 
         parameters_dict = dict()
         solution_param_keys = [str(var) for var in solution]
-        required_param_keys = [param for param in jml_problem.parameters if not jml_problem.parameters[param].is_helper]
+        required_param_keys = [param.name for param in jml_problem.parameters.csp_parameters.get_actual_parameters()]
 
         for parameter_key in required_param_keys:
             if parameter_key in solution_param_keys:
-                jml_problem_param = jml_problem.parameters[parameter_key]
+                jml_problem_param = jml_problem.parameters.csp_parameters[parameter_key]
                 solution_param = solution[jml_problem_param.value]
                 null_value_key = f"{parameter_key}_is_null"
                 # TODO: Add support for char, string
-                if null_value_key in solution_param_keys and solution[jml_problem.parameters[null_value_key].value]:
+                if null_value_key in solution_param_keys and solution[
+                    jml_problem.parameters.csp_parameters[null_value_key].value]:
                     parameters_dict[parameter_key] = None
                 elif hasattr(solution_param, "as_long"):
                     parameters_dict[parameter_key] = solution_param.as_long()
@@ -42,8 +44,8 @@ class TestCaseBuilder:
     @staticmethod
     def get_array_values(jml_problem: JMLProblem, jml_problem_param, parameter_key: str, solution: ModelRef):
         # Get array length
-        length_name = f"{parameter_key}_length"
-        length_value = solution[jml_problem.parameters[length_name].value].as_long()
+        length_param = jml_problem.parameters.csp_parameters.get_helper(parameter_key, CSPParamHelperType.LENGTH)
+        length_value = solution[length_param.value].as_long()
         # Get array values
         array_values = []
         for i in range(length_value):

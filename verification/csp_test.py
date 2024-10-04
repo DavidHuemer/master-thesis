@@ -1,5 +1,3 @@
-import time
-
 from z3 import *
 
 
@@ -25,13 +23,25 @@ arr = Array('arr', IntSort(), IntSort())
 min_arr = Int('min_arr')
 
 # Solution:
+i = Int('i')
+f = ForAll([i], Implies(And(And(i >= 0, i < length)), min_arr <= arr[i]))
+e = Exists([i], And(i >= 0, i < length, min_arr == arr[i]))
 
-# i = Int('i')
+s.add(f)
+s.add(e)
+s.add(min_arr == 2)
+s.add(length == 1)
+
+s.add(Or(length != 1, arr[0] != 2))
+
+#  And(And(And(arr[0] < arr[1]), arr_length == 1))]
+s.add(And(And(And(arr[0] < arr[1]), length == 1)))
+
 # j = Int('j')
 # f = ForAll([i, j], Implies(And(i >= 0, i < length, j >= i, j < 5), min_arr <= arr[i]))
 # s.add(f)
 #
-# e = Exists([i], And(i >= 0, i < length, min_arr == arr[i]))
+# e = Exists([i], And(i >= 0, i < length, min_ar r == arr[i]))
 # s.add(e)
 #
 # s.add(length == 5)
@@ -41,9 +51,9 @@ min_arr = Int('min_arr')
 
 # Sum solution:
 
-i = Int('i')
-
-s.add(length == 5)
+# i = Int('i')
+#
+# s.add(length == 5)
 # s.add(Sum([i], And(i >= 0, i < length, arr[i] == 2)) == 1)
 
 # f = Function('f', IntSort(), IntSort())
@@ -82,8 +92,8 @@ s.add(length == 5)
 
 print(s.check())
 m = s.model()
-arr_str = ",".join([f"{m.evaluate(arr[i]).as_long()}" for i in range(5)])
+arr_str = ",".join([f"{m.evaluate(arr[i]).as_long()}" for i in range(2)])
 print(f"arr: {arr_str}")
 # print(f"length: {m.evaluate(length).as_long()}")
 # print(f"min_arr: {m.evaluate(min_arr).as_long()}")
-print(f"sumResult: {m.evaluate(sumResult).as_long()}")
+#print(f"sumResult: {m.evaluate(sumResult).as_long()}")

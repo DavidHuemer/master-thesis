@@ -48,7 +48,7 @@ class ResultVerifier:
             return self.infix_helper.evaluate_infix(infix_operator=expression.name,
                                                     left=lambda: self.evaluate(result, expression.left),
                                                     right=lambda: self.evaluate(result, expression.right),
-                                                    is_smt=False)
+                                                    is_smt=False, parameters=None) # TODO: Add parameters
 
         if isinstance(expression, TerminalNode):
             return self.evaluate_terminal_node(result, expression)
