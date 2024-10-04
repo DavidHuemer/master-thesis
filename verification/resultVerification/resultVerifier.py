@@ -9,6 +9,7 @@ from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNo
 from definitions.ast.questionMarkNode import QuestionMarkNode
 from definitions.ast.terminalNode import TerminalNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
+from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
 from helper.infixHelper import InfixHelper
 from helper.logs.loggingHelper import LoggingHelper
 from verification.resultVerification.boolQuantifierExecution import BoolQuantifierExecution
@@ -34,7 +35,7 @@ class ResultVerifier:
             LoggingHelper.log_error(f"Error while verifying result: {e}")
             raise e
 
-    def evaluate(self, result: ExecutionResult, expression: AstTreeNode):
+    def evaluate(self, result: ExecutionResult, expression: AstTreeNode, parameters: JmlParameters):
         # Evaluate expression
 
         if isinstance(expression, QuestionMarkNode):
@@ -48,7 +49,7 @@ class ResultVerifier:
             return self.infix_helper.evaluate_infix(infix_operator=expression.name,
                                                     left=lambda: self.evaluate(result, expression.left),
                                                     right=lambda: self.evaluate(result, expression.right),
-                                                    is_smt=False, parameters=None) # TODO: Add parameters
+                                                    is_smt=False, parameters=parameters)
 
         if isinstance(expression, TerminalNode):
             return self.evaluate_terminal_node(result, expression)
