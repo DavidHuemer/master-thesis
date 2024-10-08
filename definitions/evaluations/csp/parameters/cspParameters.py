@@ -3,6 +3,10 @@ from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHe
 
 
 class CSPParameters:
+    """
+    This class stores the parameters that are used for generating valid method parameters
+    """
+
     def __init__(self):
         self.parameters: dict[str, CSPParameter] = dict()
         self.helper_parameters: dict[tuple[str, CSPParamHelperType], str] = dict()

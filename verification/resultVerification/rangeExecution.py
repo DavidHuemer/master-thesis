@@ -9,6 +9,9 @@ from definitions.codeExecution.result.executionResult import ExecutionResult
 class RangeExecution:
     def execute_range(self, range_: FullRangeTreeNode, ranges: list[RangeTreeNode], result: ExecutionResult,
                       result_verifier):
+        from verification.resultVerification.resultVerifier import ResultVerifier
+        result_verifier: ResultVerifier = result_verifier
+
         range_expr: RangeTreeNode = ranges[0]
         start = result_verifier.evaluate(result, range_expr.start)
         if range_expr.start_operator == "<":

@@ -5,6 +5,10 @@ type InstanceVariables = InstanceVariables | None
 
 
 class JmlParameters:
+    """
+    This class is used to store the parameters and variable values of the JML problem.
+    """
+
     def __init__(self, csp_parameters: CSPParameters):
         self.instance_variables: InstanceVariables = None
         self.old_instance_variables: InstanceVariables = None

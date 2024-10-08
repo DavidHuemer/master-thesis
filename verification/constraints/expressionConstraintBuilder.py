@@ -14,6 +14,7 @@ from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
 from helper.infixHelper import InfixHelper
+from verification.constraints.arrayLengthConstraintBuilder import ArrayLengthConstraintBuilder
 from verification.constraints.boolQuantifierConstraintBuilder import BoolQuantifierConstraintBuilder
 from verification.constraints.prefixConstraintBuilder import PrefixConstraintBuilder
 from verification.constraints.quantifier.numQuantifierConstraintBuilder import NumQuantifierConstraintBuilder
@@ -24,12 +25,14 @@ class ExpressionConstraintBuilder:
     def __init__(self, terminal_constraint_builder=TerminalConstraintBuilder(),
                  bool_quantifier_constraint_builder=BoolQuantifierConstraintBuilder(),
                  num_quantifier_constraint_builder=NumQuantifierConstraintBuilder(),
-                 infix_helper=InfixHelper(), prefix_constraint_builder=PrefixConstraintBuilder()):
+                 infix_helper=InfixHelper(), prefix_constraint_builder=PrefixConstraintBuilder(),
+                 array_length_constraint_builder=ArrayLengthConstraintBuilder()):
         self.terminal_constraint_builder = terminal_constraint_builder
         self.bool_quantifier_constraint_builder = bool_quantifier_constraint_builder
         self.infix_helper = infix_helper
         self.num_quantifier_constraint_builder = num_quantifier_constraint_builder
         self.prefix_constraint_builder = prefix_constraint_builder
+        self.array_length_constraint_builder = array_length_constraint_builder
 
     def build_expression_constraint(self, jml_problem: JMLProblem, jml_parameters: JmlParameters,
                                     expression: AstTreeNode):
@@ -62,12 +65,11 @@ class ExpressionConstraintBuilder:
             expr = self.build_expression_constraint(jml_problem, jml_parameters, expression.index_expression)
             return array[expr]
 
-        if isinstance(expression, ArrayLengthNode):
-            arr_name = expression.arr_expr
-            if hasattr(arr_name, 'value'):
-                return jml_parameters.csp_parameters.get_helper(arr_name.value, CSPParamHelperType.LENGTH).value
-            else:
-                raise Exception("Array length expression not supported")
+        if self.array_length_constraint_builder.is_array_length(expression):
+            return self.array_length_constraint_builder.handle_array_length(expression,
+                                                                            jml_problem,
+                                                                            jml_parameters,
+                                                                            self)
 
         if isinstance(expression, PrefixNode):
             return self.prefix_constraint_builder.evaluate(expression, jml_problem, jml_parameters, self)
