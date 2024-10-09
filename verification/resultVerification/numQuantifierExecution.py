@@ -1,7 +1,6 @@
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
-from definitions.codeExecution.result.executionResult import ExecutionResult
 from nodes.baseNodeHandler import BaseNodeHandler
 from verification.resultVerification.rangeExecution import RangeExecution
 from verification.resultVerification.resultDto import ResultDto
@@ -14,16 +13,20 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
     def is_node(self, t: ResultDto):
         return isinstance(t.node, NumQuantifierTreeNode)
 
-    def evaluate_num_quantifier(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
+    def handle(self, t: ResultDto):
+        expression: NumQuantifierTreeNode = t.node
+        return self.evaluate_num_quantifier(expression, t)
+
+    def evaluate_num_quantifier(self, expression: NumQuantifierTreeNode, t: ResultDto):
         if expression.quantifier_expression_type == NumericQuantifierExpressionType.VALUE:
-            return self.evaluate_with_value(result, expression, result_verifier)
+            return self.evaluate_with_value(expression, t)
         elif expression.quantifier_expression_type == NumericQuantifierExpressionType.RANGE:
-            return self.evaluate_with_range(result, expression, result_verifier)
+            return self.evaluate_with_range(expression, t)
 
         raise Exception("NumQuantifierExecution: Invalid quantifier expression type")
 
-    def evaluate_with_value(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
-        values = [result_verifier.evaluate(result, expr) for expr in expression.expressions]
+    def evaluate_with_value(self, expression: NumQuantifierTreeNode, t: ResultDto):
+        values = [t.result_verifier.evaluate(t.copy_with_other_node(expr)) for expr in expression.expressions]
 
         # check if value is a list
         if not isinstance(values, list):
@@ -49,16 +52,18 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
 
         raise Exception("Numeric quantifier expression type not supported")
 
-    def evaluate_with_range(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
-        values = list(self.get_values_by_range(result, expression, result_verifier))
+    def evaluate_with_range(self, expression: NumQuantifierTreeNode, t: ResultDto):
+        values = list(self.get_values_by_range(expression, t))
         return self.evaluate_list(expression, values)
 
-    def get_values_by_range(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
-        r = self.range_execution.execute_range(expression.range_, expression.range_.ranges, result,
-                                               result_verifier)
+    def get_values_by_range(self, expression: NumQuantifierTreeNode, t: ResultDto):
+        r = self.range_execution.execute_range(expression.range_, expression.range_.ranges, t)
 
-        for range_result in r:
-            yield result_verifier.evaluate(range_result, expression.expressions)
+        for _ in r:
+            yield t.result_verifier.evaluate(t.copy_with_other_node(expression.expressions))
+
+        for var_name in expression.variable_names:
+            t.result_parameters.local_parameters.pop(var_name[1])
 
     @staticmethod
     def get_product(value):

@@ -5,9 +5,10 @@ from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 jml_code = ("//@ requires arr != null;\n"
-            "//@ ensures (\\exists int i; 0 <= i && i < arr.length; arr[i] == target) ==> \\result == (\\min int i; 0 <= i && i < arr.length && arr[i] == target; i);\n"
-            "//@ ensures !(\\exists int i; 0 <= i && i < arr.length; arr[i] == target) ==> \\result == -1;\n"
-            "//@ signals (NullPointerException e) arr == null;")
+            "//@ ensures \\result.length == arr.length;\n"
+            "//@ ensures (\\forall int i; 0 <= i && i < arr.length; (\\exists int j; 0 <= j && j < arr.length; \\result[j] == arr[i]));\n"
+            "//@ ensures (\\forall int i; 0 <= i && i < \\result.length - 1; \\result[i] <= \\result[i + 1]);\n"
+            "//@ ensures (\\forall int i; 0 <= i && i < arr.length; arr[i] == \\old(arr[i]));")
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\find\\IndexOf.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\find\\BubbleSort.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

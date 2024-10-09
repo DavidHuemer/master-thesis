@@ -1,6 +1,5 @@
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
-from definitions.codeExecution.result.executionResult import ExecutionResult
 from nodes.baseNodeHandler import BaseNodeHandler
 from verification.resultVerification.rangeExecution import RangeExecution
 from verification.resultVerification.resultDto import ResultDto
@@ -29,6 +28,8 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
         for _ in self.range_execution.execute_range(expression.range_, expression.range_.ranges, t):
             evaluation_result = t.result_verifier.evaluate(t.copy_with_other_node(expression.expression))
             if not evaluation_result:
+                for var_name in expression.variable_names:
+                    t.result_parameters.local_parameters.pop(var_name[1])
                 return False
 
         # TODO: Remove here all the range variables of the current range
