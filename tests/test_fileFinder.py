@@ -1,10 +1,8 @@
 import os
-import shutil
 from unittest import TestCase
-from unittest.mock import MagicMock, Mock
+from unittest.mock import Mock
 
 from helper.files.fileFinder import FileFinder
-from helper.files.fileHelper import FileHelper
 
 
 class TestFileFinder(TestCase):

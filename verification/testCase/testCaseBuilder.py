@@ -1,4 +1,4 @@
-from z3 import ModelRef, ArrayRef, Select, QuantifierRef, BoolRef
+from z3 import ModelRef, ArrayRef, QuantifierRef, BoolRef
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType

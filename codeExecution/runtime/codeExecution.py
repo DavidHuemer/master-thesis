@@ -1,4 +1,3 @@
-from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.verification.testCase import TestCase
 

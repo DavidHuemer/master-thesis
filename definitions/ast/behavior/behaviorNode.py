@@ -27,5 +27,6 @@ class BehaviorNode(AstTreeNode):
         return (f'{self.name} ({self.get_conditions_string(self.pre_conditions)}) '
                 f'-> ({self.get_conditions_string(self.post_conditions)})')
 
-    def get_conditions_string(self, conditions: list[AstTreeNode]):
+    @staticmethod
+    def get_conditions_string(conditions: list[AstTreeNode]):
         return f'{",".join([x.get_tree_string() for x in conditions])}'

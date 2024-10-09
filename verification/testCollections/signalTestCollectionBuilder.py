@@ -1,7 +1,6 @@
 from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.tests.signalTestCollection import SignalTestCollection
-from definitions.javaMethod import JavaMethod
 from verification.jmlProblem.jmlProblemBuilder import JMLProblemBuilder
 from verification.testCase.testCaseGenerator import TestCasesGenerator
 

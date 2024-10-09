@@ -1,4 +1,3 @@
-from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
 from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.ast.quantifier.quantifierTreeNode import QuantifierTreeNode

@@ -38,10 +38,12 @@ class StatisticsWriter:
         # Print confusion matrix
         pass
 
-    def print_spacing(self):
+    @staticmethod
+    def print_spacing():
         LoggingHelper.log_info("\n\n\n", show_level=False)
 
-    def print_results(self, test_results: list[VerificationResult]):
+    @staticmethod
+    def print_results(test_results: list[VerificationResult]):
         for test_result in test_results:
             LoggingHelper.log_info(f"Test case:", show_level=False)
             LoggingHelper.log_info(test_result.consistency_test_case.get_name(), show_level=False)

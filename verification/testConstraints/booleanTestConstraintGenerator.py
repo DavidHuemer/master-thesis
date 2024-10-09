@@ -9,6 +9,7 @@ class BooleanTestConstraintGenerator:
     def is_boolean(parameter):
         return parameter.param_type == "boolean"
 
-    def get_test_constraints(self, parameter: CSPParameter):
+    @staticmethod
+    def get_test_constraints(parameter: CSPParameter):
         yield parameter.value == True
         yield parameter.value == False

@@ -36,7 +36,8 @@ class ParserTestRunner:
                 LoggingHelper.log_error(f"Error parsing example:\n {example}")
                 LoggingHelper.log_error(e)
 
-    def run_negative_tests(self):
+    @staticmethod
+    def run_negative_tests():
         """
         Run the tests that should not be able to be parsed
         """

@@ -1,7 +1,6 @@
 from definitions.ast.expressionNode import ExpressionNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.tests.testCollection import TestCollection
-from definitions.javaMethod import JavaMethod
 from verification.jmlProblem.jmlProblemBuilder import JMLProblemBuilder
 from verification.testCase.testCaseGenerator import TestCasesGenerator
 

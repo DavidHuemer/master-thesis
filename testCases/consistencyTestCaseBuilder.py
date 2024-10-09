@@ -1,5 +1,3 @@
-import os
-
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.expectedResult import ExpectedResult
 from definitions.javaCode import JavaCode

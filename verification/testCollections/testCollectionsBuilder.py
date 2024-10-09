@@ -1,7 +1,6 @@
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.tests.testCollections import TestCollections
-from definitions.javaMethod import JavaMethod
 from helper.logs.loggingHelper import LoggingHelper
 from verification.testCollections.signalTestCollectionBuilder import SignalTestCollectionBuilder
 from verification.testCollections.testCollectionBuilder import TestCollectionBuilder

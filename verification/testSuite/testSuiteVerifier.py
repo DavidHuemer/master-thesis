@@ -1,9 +1,7 @@
 from codeExecution.compilation.javaCompilationRunner import JavaCompilationRunner
 from definitions.evaluations.tests.testSuite import TestSuite
 from definitions.verification.verificationResult import VerificationResult
-from definitions.verification.verificatonException import VerificationException
 from helper.logs.loggingHelper import LoggingHelper
-from verification.result.verificationResultFactory import VerificationResultFactory
 from verification.testSuite.testSuiteEnvironmentChecker import TestSuiteEnvironmentChecker
 from verification.testSuite.testSuiteVerificationRunner import TestSuiteVerificationRunner
 

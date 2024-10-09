@@ -1,6 +1,7 @@
 from unittest import TestCase
+
 from parameterized import parameterized
-from z3 import Int, ArithRef, ArrayRef, BoolRef, SeqRef
+from z3 import ArithRef, ArrayRef, BoolRef, SeqRef
 
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from verification.csp.cspParamBuilder import CSPParameterBuilder

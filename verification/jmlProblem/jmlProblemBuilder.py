@@ -1,9 +1,7 @@
 from definitions.ast.astTreeNode import AstTreeNode
-from definitions.ast.expressionNode import ExpressionNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
-from definitions.javaMethod import JavaMethod
 from verification.constraints.constraintsBuilder import ConstraintsBuilder
 from verification.csp.cspParamBuilder import CSPParameterBuilder
 
