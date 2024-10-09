@@ -1,20 +1,24 @@
 import parser.generated.JMLParser as JMLParser
 from definitions.ast.exceptionExpression import ExceptionExpression
+from nodes.baseNodeHandler import BaseNodeHandler
+
+from parser.simplifier.simplifierDto import SimplifierDto
 
 
-class ExceptionSimplifier:
-    def simplify(self, rule, parser_result, rule_simplifier):
-        if not isinstance(rule, JMLParser.JMLParser.Exception_expressionContext):
-            return None
+class ExceptionSimplifier(BaseNodeHandler[SimplifierDto]):
 
+    def is_node(self, t: SimplifierDto):
+        return isinstance(t.rule, JMLParser.JMLParser.Exception_expressionContext)
+
+    def handle(self, t: SimplifierDto):
         # Check declaration and expr
-        exception_type, exception_name = self.get_declaration(rule)
+        exception_type, exception_name = self.get_declaration(t.rule)
 
-        if not hasattr(rule, "expr"):
+        if not hasattr(t.rule, "expr"):
             raise Exception("Exception node must have an expression")
 
-        expr = rule.expr
-        simplified_expr = rule_simplifier.simplify_rule(expr, parser_result)
+        expr = t.rule.expr
+        simplified_expr = t.rule_simplifier.evaluate(SimplifierDto(expr, t.rule_simplifier, t.parser_result))
         return ExceptionExpression(exception_type, exception_name, simplified_expr)
 
     @staticmethod

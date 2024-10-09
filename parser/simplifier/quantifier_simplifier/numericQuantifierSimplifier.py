@@ -1,78 +1,78 @@
+from parser.generated import JMLParser
+
 from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
-from definitions.parser.parserResult import ParserResult
-from parser.generated import JMLParser
-from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
-from parser.simplifier.quantifier_simplifier.quantifierRangeSimplifier import QuantifierSimplifier
+from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
+from nodes.baseNodeHandler import BaseNodeHandler
+from parser.simplifier.quantifier_simplifier.quantifierRangeSimplifier import QuantifierRangeSimplifier
+from parser.simplifier.simplifierDto import SimplifierDto
+
+type QuantifierType = (JMLParser.JMLParser.Max_quantifier_expressionContext
+                       | JMLParser.JMLParser.Min_quantifier_expressionContext
+                       | JMLParser.JMLParser.Sum_quantifier_expressionContext
+                       | JMLParser.JMLParser.Product_quantifier_expressionContext)
 
 
-class NumericQuantifierSimplifier:
-    def __init__(self, quantifier_simplifier=QuantifierSimplifier()):
+class NumericQuantifierSimplifier(BaseNodeHandler[SimplifierDto]):
+    def __init__(self, quantifier_simplifier=QuantifierRangeSimplifier()):
         self.quantifier_simplifier = quantifier_simplifier
 
-    def simplify(self, rule, parser_result: ParserResult, jml_simplifier):
-        if len(rule.children) > 1:
-            raise Exception("NumericQuantifierSimplifier: Rule has more than 1 child")
+    def is_node(self, t: SimplifierDto):
+        return isinstance(t.rule.children[0], JMLParser.JMLParser.Numeric_quantifier_expressionContext)
 
-        quantified_expression = rule.children[0]
+    def handle(self, t: SimplifierDto):
+        quantified_expression = t.rule.children[0].children[0]
 
         if isinstance(quantified_expression, JMLParser.JMLParser.Max_quantifier_expressionContext):
-            return self.simplify_generic(NumericQuantifierType.MAX, quantified_expression, parser_result,
-                                         jml_simplifier)
+            return self.simplify_generic(NumericQuantifierType.MAX, quantified_expression, t)
         elif isinstance(quantified_expression, JMLParser.JMLParser.Min_quantifier_expressionContext):
-            return self.simplify_generic(NumericQuantifierType.MIN, quantified_expression, parser_result,
-                                         jml_simplifier)
+            return self.simplify_generic(NumericQuantifierType.MIN, quantified_expression, t)
         elif isinstance(quantified_expression, JMLParser.JMLParser.Sum_quantifier_expressionContext):
-            return self.simplify_generic(NumericQuantifierType.SUM, quantified_expression, parser_result,
-                                         jml_simplifier)
+            return self.simplify_generic(NumericQuantifierType.SUM, quantified_expression, t)
         elif isinstance(quantified_expression, JMLParser.JMLParser.Product_quantifier_expressionContext):
-            return self.simplify_generic(NumericQuantifierType.PRODUCT, quantified_expression, parser_result,
-                                         jml_simplifier)
-        else:
-            raise Exception("NumericQuantifierSimplifier: Rule is not a quantified expression")
+            return self.simplify_generic(NumericQuantifierType.PRODUCT, quantified_expression, t)
 
-    def simplify_generic(self, quantifier_type: NumericQuantifierType, rule, parser_result: ParserResult,
-                         jml_simplifier):
-        if not isinstance(rule.children[1], JMLParser.JMLParser.Numeric_quantifier_core_expressionContext):
+    def simplify_generic(self, quantifier_type: NumericQuantifierType,
+                         rule: QuantifierType, t: SimplifierDto):
+        if not isinstance(rule.expr, JMLParser.JMLParser.Numeric_quantifier_core_expressionContext):
             raise Exception("NumericQuantifierSimplifier: Rule does not have a numeric quantifier core node")
 
-        return self.generate(quantifier_type.value, quantifier_type, rule.children[1], parser_result, jml_simplifier)
+        return self.generate(quantifier_type.value, quantifier_type, rule.expr, t)
 
     def generate(self, name: str, quantifier_type: NumericQuantifierType,
-                 expr: JMLParser.JMLParser.Numeric_quantifier_core_expressionContext, parser_result,
-                 jml_simplifier):
+                 expr: JMLParser.JMLParser.Numeric_quantifier_core_expressionContext, t: SimplifierDto):
         # Check if it is a IDENTIFIER or range expression
         if isinstance(expr.children[0], JMLParser.JMLParser.Numeric_quantifier_values_expressionContext):
-            # It is an identifier
-            return self.generate_with_value(name, quantifier_type, expr.children[0], parser_result, jml_simplifier)
+            # Simplify by values
+            return self.generate_with_value(name, quantifier_type, expr.children[0], t)
         elif isinstance(expr.children[0], JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext):
-            # It is a range expression
-            return self.generate_with_range(name, quantifier_type, expr.children[0], parser_result, jml_simplifier)
+            # Simplify by range
+            return self.generate_with_range(name, quantifier_type, expr.children[0], t)
         else:
             raise Exception("NumericQuantifierSimplifier: Rule is not a quantified expression")
 
     @staticmethod
     def generate_with_value(name: str, quantifier_type: NumericQuantifierType,
                             expr: JMLParser.JMLParser.Numeric_quantifier_values_expressionContext,
-                            parser_result, jml_simplifier) \
-            -> NumQuantifierTreeNode:
+                            t: SimplifierDto) -> NumQuantifierTreeNode:
 
         # Filter child values that are instances of Numeric_quantifier_valueContext
         filtered_values = list(filter(lambda x: isinstance(x, JMLParser.JMLParser.ExpressionContext),
                                       expr.children))
 
         # Get the expressions of the values
-        expression_values = [jml_simplifier.simplify_rule(value, parser_result) for value in filtered_values]
-
+        expression_values = [t.rule_simplifier.evaluate(SimplifierDto(value, t.rule_simplifier, t.parser_result)) for
+                             value in
+                             filtered_values]
         return NumQuantifierTreeNode(name, quantifier_type, NumericQuantifierExpressionType.VALUE, expression_values)
 
     def generate_with_range(self, name: str, quantifier_type: NumericQuantifierType,
                             expr: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,
-                            parser_result, jml_simplifier):
+                            t: SimplifierDto):
         variable_names = self.get_type_declarations(expr)
-        range_ = self.get_range(expr, parser_result, jml_simplifier)
-        expression = self.get_expression(expr, parser_result, jml_simplifier)
+        range_ = self.get_range(expr, t)
+        expression = self.get_expression(expr, t)
 
         return NumQuantifierTreeNode(name, quantifier_type, NumericQuantifierExpressionType.RANGE, expression,
                                      variable_names, range_)
@@ -84,17 +84,17 @@ class NumericQuantifierSimplifier:
         return self.quantifier_simplifier.get_type_declarations(rule.types)
 
     def get_range(self, rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,
-                  parser_result: ParserResult, jml_simplifier) -> FullRangeTreeNode:
+                  t: SimplifierDto) -> FullRangeTreeNode:
         if not isinstance(rule.ranges, JMLParser.JMLParser.Full_range_expressionContext):
             raise Exception(
                 "NumericQuantifierSimplifier: Numeric quantifier core expression does not have range expression")
 
-        return self.quantifier_simplifier.get_full_range(rule.ranges, parser_result, jml_simplifier)
+        return self.quantifier_simplifier.get_full_range(rule.ranges, t)
 
     @staticmethod
     def get_expression(rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,
-                       parser_result: ParserResult, jml_simplifier):
+                       t: SimplifierDto):
         if not isinstance(rule.children[4], JMLParser.JMLParser.ExpressionContext):
             raise Exception("BoolQuantifierSimplifier: Bool quantifier core expression does not have an expression")
 
-        return jml_simplifier.simplify_rule(rule.children[4], parser_result)
+        return t.rule_simplifier.evaluate(SimplifierDto(rule.children[4], t.rule_simplifier, t.parser_result))

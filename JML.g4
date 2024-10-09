@@ -75,16 +75,17 @@ atomic_value:
 	| IDENTIFIER;
 
 quantifier_expression:
-	bool_quantifier_expression
-	| numeric_quantifier_expression;
+	(bool_quantifier_expression | numeric_quantifier_expression);
 
 bool_quantifier_expression:
 	forall_expression
 	| exists_expression;
 
-forall_expression: FORALL bool_quantifier_core_expression;
+forall_expression:
+	FORALL expr = bool_quantifier_core_expression;
 
-exists_expression: EXISTS bool_quantifier_core_expression;
+exists_expression:
+	EXISTS expr = bool_quantifier_core_expression;
 
 bool_quantifier_core_expression:
 	types = type_declarations ';' ranges = full_range_expression ';' expr = expression;
@@ -153,16 +154,16 @@ numeric_quantifier_expression:
 	| product_quantifier_expression;
 
 max_quantifier_expression:
-	MAX numeric_quantifier_core_expression ';'?;
+	MAX expr = numeric_quantifier_core_expression ';'?;
 
 min_quantifier_expression:
-	MIN numeric_quantifier_core_expression ';'?;
+	MIN expr = numeric_quantifier_core_expression ';'?;
 
 sum_quantifier_expression:
-	SUM numeric_quantifier_core_expression ';'?;
+	SUM expr = numeric_quantifier_core_expression ';'?;
 
 product_quantifier_expression:
-	PRODUCT numeric_quantifier_core_expression ';'?;
+	PRODUCT expr = numeric_quantifier_core_expression ';'?;
 
 numeric_quantifier_core_expression:
 	numeric_quantifier_values_expression

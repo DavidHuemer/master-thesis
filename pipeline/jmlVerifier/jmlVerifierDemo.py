@@ -4,10 +4,10 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("// @requires \\sum(arr) == 5\n"
-            "// @requires arr != null;\n"
-            "// @requires arr.length > 0;\n"
-            "// @ensures \\result[0] > 0;")
+jml_code = (" // @requires arr != null;\n"
+            "// @ensures (\\result == -1) <==> (\\forall int i; 0 <= i && i < arr.length; arr[i] != target);\n"
+            "// @ensures (\\result != -1) ==> (0 <= \\result && \\result < arr.length && arr[\\result] == target);\n"
+            "// @signals (NullPointerException) arr == null;")
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\find\\BubbleSort.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\find\\IndexOf.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

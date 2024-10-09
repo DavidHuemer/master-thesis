@@ -6,8 +6,9 @@ from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
 from helper.objectHelper import ObjectHelper
-from parser.simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
+from parser.simplifier.quantifier_simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
+from parser.simplifier.simplifierDto import SimplifierDto
 
 
 class JmlSimplifier:
@@ -56,7 +57,8 @@ class JmlSimplifier:
             self.handle_condition_expression(condition, parser_result)
 
     def handle_condition_expression(self, condition, parser_result: ParserResult):
-        expr = self.rule_simplifier.simplify_rule(condition.children[1], parser_result)
+        simplifier_dto = SimplifierDto(condition.children[1], self.rule_simplifier, parser_result)
+        expr = self.rule_simplifier.evaluate(simplifier_dto)
 
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):
             self.current_behavior.add_pre_condition(expr)

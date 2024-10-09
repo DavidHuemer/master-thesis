@@ -1,48 +1,44 @@
 import parser.generated.JMLParser as JMLParser
 
 from definitions.ast.astTreeNode import AstTreeNode
-from helper.objectHelper import ObjectHelper
+from nodes.baseNodeHandler import BaseNodeHandler
+from parser.simplifier.simplifierDto import SimplifierDto
 
 
-class ReferenceSimplifier:
+class ReferenceSimplifier(BaseNodeHandler[SimplifierDto]):
     """
     Simplifies references like \\old and \\this
     """
 
-    def simplify(self, rule, parser_result, rule_simplifier):
-        old_expr = self.simplify_old(rule, parser_result, rule_simplifier)
-        if old_expr is not None:
-            return old_expr
+    def is_node(self, t: SimplifierDto):
+        return (self.is_old_expression(t) or
+                self.is_this_expression(t))
 
-        this_expr = self.simplify_this(rule, parser_result, rule_simplifier)
-        if this_expr is not None:
-            return this_expr
+    @staticmethod
+    def is_old_expression(t: SimplifierDto):
+        return isinstance(t.rule, JMLParser.JMLParser.Old_expressionContext)
 
-        return None
+    @staticmethod
+    def is_this_expression(t: SimplifierDto):
+        return isinstance(t.rule, JMLParser.JMLParser.This_expressionContext)
 
-    def simplify_old(self, rule, parser_result, rule_simplifier) -> AstTreeNode | None:
-        from parser.simplifier.rule_simplifier import RuleSimplifier
-        rule_simplifier: RuleSimplifier = rule_simplifier
+    def handle(self, t: SimplifierDto):
+        if self.is_old_expression(t):
+            return self.simplify_old(t)
+        elif self.is_this_expression(t):
+            return self.simplify_this(t)
 
-        if (not isinstance(rule, JMLParser.JMLParser.Old_expressionContext) or
-                not ObjectHelper.check_has_child(rule, "expr")):
-            return None
+        raise Exception("ReferenceSimplifier: Rule is not a reference expression")
 
-        expr = rule_simplifier.simplify_rule(rule.expr, parser_result)
+    def simplify_old(self, t: SimplifierDto) -> AstTreeNode | None:
+        expr = t.rule_simplifier.evaluate(SimplifierDto(t.rule.expr, t.rule_simplifier, t.parser_result))
         # Set for all expressions that they are old
         self.set_old(expr)
         return expr
 
     @staticmethod
-    def simplify_this(rule, parser_result, rule_simplifier):
-        from parser.simplifier.rule_simplifier import RuleSimplifier
-        rule_simplifier: RuleSimplifier = rule_simplifier
-
-        if not (isinstance(rule, JMLParser.JMLParser.This_expressionContext) or
-                not ObjectHelper.check_has_child(rule, "expr")):
-            return None
-
-        expr = rule_simplifier.simplify_rule(rule.expr, parser_result)
+    def simplify_this(t: SimplifierDto):
+        expr = t.rule_simplifier.evaluate(SimplifierDto(t.rule.expr, t.rule_simplifier, t.parser_result))
         expr.use_this = True
         return expr
 
