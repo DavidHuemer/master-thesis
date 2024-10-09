@@ -4,10 +4,10 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = (" // @requires arr != null;\n"
-            "// @ensures (\\result == -1) <==> (\\forall int i; 0 <= i && i < arr.length; arr[i] != target);\n"
-            "// @ensures (\\result != -1) ==> (0 <= \\result && \\result < arr.length && arr[\\result] == target);\n"
-            "// @signals (NullPointerException) arr == null;")
+jml_code = ("//@ requires arr != null;\n"
+            "//@ ensures (\\exists int i; 0 <= i && i < arr.length; arr[i] == target) ==> \\result == (\\min int i; 0 <= i && i < arr.length && arr[i] == target; i);\n"
+            "//@ ensures !(\\exists int i; 0 <= i && i < arr.length; arr[i] == target) ==> \\result == -1;\n"
+            "//@ signals (NullPointerException e) arr == null;")
 
 
 def main():

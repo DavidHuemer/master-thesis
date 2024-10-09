@@ -34,7 +34,7 @@ class BoolQuantifierSimplifier(BaseNodeHandler[SimplifierDto]):
         return self.generate_bool_quantifier_node('FORALL', BoolQuantifierType.FORALL, forall_expr, t)
 
     def simplify_exists(self, exists_expr: JMLParser.JMLParser.Exists_expressionContext, t: SimplifierDto):
-        if not isinstance(t.rule.children[1], JMLParser.JMLParser.Bool_quantifier_core_expressionContext):
+        if not isinstance(exists_expr.expr, JMLParser.JMLParser.Bool_quantifier_core_expressionContext):
             raise Exception("BoolQuantifierSimplifier: Exists expression does not have a bool quantifier core node")
 
         return self.generate_bool_quantifier_node('EXISTS', BoolQuantifierType.EXISTS, exists_expr, t)

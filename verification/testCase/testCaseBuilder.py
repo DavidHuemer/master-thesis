@@ -2,6 +2,7 @@ from z3 import ModelRef, ArrayRef, Select, QuantifierRef, BoolRef
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from definitions.evaluations.csp.parameters.methodCallParameters import MethodCallParameters
 from definitions.verification.testCase import TestCase
 
 
@@ -14,7 +15,7 @@ class TestCaseBuilder:
         :return: The test case
         """
 
-        parameters_dict = dict()
+        method_call_parameters = MethodCallParameters()
         solution_param_keys = [str(var) for var in solution]
         required_param_keys = [param.name for param in jml_problem.parameters.csp_parameters.get_actual_parameters()]
 
@@ -26,20 +27,20 @@ class TestCaseBuilder:
                 # TODO: Add support for char, string
                 if null_value_key in solution_param_keys and solution[
                     jml_problem.parameters.csp_parameters[null_value_key].value]:
-                    parameters_dict[parameter_key] = None
+                    method_call_parameters[parameter_key] = None
                 elif hasattr(solution_param, "as_long"):
-                    parameters_dict[parameter_key] = solution_param.as_long()
+                    method_call_parameters[parameter_key] = solution_param.as_long()
                 elif isinstance(solution_param, ArrayRef) or isinstance(solution_param, QuantifierRef):
                     array_values = self.get_array_values(jml_problem, jml_problem_param, parameter_key, solution)
-                    parameters_dict[parameter_key] = array_values
+                    method_call_parameters[parameter_key] = array_values
                 elif isinstance(solution_param, BoolRef):
-                    parameters_dict[parameter_key] = str(solution_param).lower() == 'true'
+                    method_call_parameters[parameter_key] = str(solution_param).lower() == 'true'
                 else:
                     raise Exception(f"Unsupported parameter type: {type(solution_param)}")
             else:
-                parameters_dict[parameter_key] = None
+                method_call_parameters[parameter_key] = None
 
-        return TestCase(parameters_dict)
+        return TestCase(method_call_parameters)
 
     @staticmethod
     def get_array_values(jml_problem: JMLProblem, jml_problem_param, parameter_key: str, solution: ModelRef):

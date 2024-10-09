@@ -40,7 +40,8 @@ class QuantifierRangeSimplifier:
     @staticmethod
     def get_range_predicate(expr: JMLParser.JMLParser.range_expression_predicate, t: SimplifierDto):
         if hasattr(expr, 'expr'):
-            return t.rule_simplifier.evaluate(expr.expr, t.rule_simplifier)
+            return t.rule_simplifier.evaluate(
+                SimplifierDto(expr.expr, t.rule_simplifier, parser_result=t.parser_result))
         else:
             return None
 

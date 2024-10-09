@@ -2,7 +2,9 @@ from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.codeExecution.result.executionResult import ExecutionResult
+from definitions.codeExecution.result.resultInstances import ResultInstances
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import LoggingHelper
 from verification.resultVerification.resultVerifier import ResultVerifier
@@ -16,8 +18,11 @@ class ExecutionVerifier:
     def __init__(self, result_verifier=ResultVerifier()):
         self.result_verifier = result_verifier
 
-    def verify(self, execution_result: ExecutionResult, consistency_test_case: ConsistencyTestCase,
-               behavior: BehaviorNode, expected_exception, test_case: TestCase):
+    def verify(self, execution_result: ExecutionResult,
+               result_parameters: ResultParameters,
+               consistency_test_case: ConsistencyTestCase,
+               behavior: BehaviorNode, expected_exception, test_case: TestCase,
+               result_instances: ResultInstances):
         try:
             if execution_result.exception is not None:
                 result = execution_result.exception
@@ -28,7 +33,9 @@ class ExecutionVerifier:
                                                             signal_conditions=behavior.signals_conditions)
             else:
                 result = execution_result.result
-                verification_result = self.verify_result(execution_result=execution_result, behavior=behavior)
+                verification_result = self.verify_result(execution_result=execution_result,
+                                                         behavior=behavior,
+                                                         result_parameters=result_parameters)
 
             self.log_result(consistency_test_case, test_case, result, verification_result)
             return verification_result
@@ -53,11 +60,12 @@ class ExecutionVerifier:
 
         return False
 
-    def verify_result(self, execution_result: ExecutionResult, behavior: BehaviorNode):
+    def verify_result(self, execution_result: ExecutionResult, behavior: BehaviorNode,
+                      result_parameters: ResultParameters):
         if behavior.behavior_type == BehaviorType.EXCEPTIONAL_BEHAVIOR:
             return False
 
-        return self.result_verifier.verify(execution_result, behavior)
+        return self.result_verifier.verify(execution_result, behavior, result_parameters)
 
     @staticmethod
     def log_result(consistency_test_case: ConsistencyTestCase, test_case: TestCase,

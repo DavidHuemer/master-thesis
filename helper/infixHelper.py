@@ -8,7 +8,7 @@ from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
 
 class InfixHelper:
     @staticmethod
-    def evaluate_infix(infix_operator: str, csp_parameters: CSPParameters, left: Callable, right: Callable,
+    def evaluate_infix(infix_operator: str, csp_parameters: CSPParameters | None, left: Callable, right: Callable,
                        is_smt: bool):
         left_expr = left()
 

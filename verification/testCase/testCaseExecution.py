@@ -2,6 +2,7 @@ import jpype
 
 from codeExecution.runtime.codeExecution import CodeExecution
 from definitions.codeExecution.result.executionResult import ExecutionResult
+from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import LoggingHelper
 
 
@@ -9,7 +10,7 @@ class TestCaseExecution:
     def __init__(self, code_execution=CodeExecution()):
         self.code_execution = code_execution
 
-    def execute_method(self, test_instance, test_case, consistency_test_case) -> ExecutionResult:
+    def execute_method(self, test_instance, test_case: TestCase, consistency_test_case) -> ExecutionResult:
         result = self.get_original_result(test_instance, test_case, consistency_test_case)
         if isinstance(result, ExecutionResult):
             return result

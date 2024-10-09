@@ -2,12 +2,17 @@ from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNo
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from definitions.codeExecution.result.executionResult import ExecutionResult
+from nodes.baseNodeHandler import BaseNodeHandler
 from verification.resultVerification.rangeExecution import RangeExecution
+from verification.resultVerification.resultDto import ResultDto
 
 
-class NumQuantifierExecution:
+class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
     def __init__(self, range_execution=RangeExecution()):
         self.range_execution = range_execution
+
+    def is_node(self, t: ResultDto):
+        return isinstance(t.node, NumQuantifierTreeNode)
 
     def evaluate_num_quantifier(self, result: ExecutionResult, expression: NumQuantifierTreeNode, result_verifier):
         if expression.quantifier_expression_type == NumericQuantifierExpressionType.VALUE:

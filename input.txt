@@ -1,1 +1,1 @@
-// @ensures (\result == -1) <==> (\forall int i; 0 <= i && i < arr.length; arr[i] != target);
+// @ensures 10 == \this.getMethod(1)
