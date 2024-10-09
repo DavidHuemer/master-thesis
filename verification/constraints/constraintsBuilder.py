@@ -2,6 +2,8 @@ from z3 import And
 
 from definitions.ast.astTreeNode import AstTreeNode
 from definitions.evaluations.csp.jmlProblem import JMLProblem
+from definitions.evaluations.csp.parameters.constraintParameters import ConstraintParameters
+from verification.constraints.constraintsDto import ConstraintsDto
 from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
 from verification.constraints.typeConstraintBuilder import TypeConstraintBuilder
 
@@ -34,7 +36,10 @@ class ConstraintsBuilder:
 
     def add_expression_constraints(self, jml_problem: JMLProblem, expressions: list[AstTreeNode]):
         for expression in expressions:
-            constraint = (self.expression_constraint_builder
-                          .build_expression_constraint(jml_problem=jml_problem, expression=expression,
-                                                       jml_parameters=jml_problem.parameters))
+            constraint_parameters = ConstraintParameters(jml_problem.parameters.csp_parameters)
+            constraints_dto = ConstraintsDto(node=expression,
+                                             jml_problem=jml_problem,
+                                             constraint_builder=self.expression_constraint_builder,
+                                             constraint_parameters=constraint_parameters)
+            constraint = self.expression_constraint_builder.evaluate(constraints_dto)
             jml_problem.add_constraint(constraint)

@@ -1,80 +1,38 @@
-from z3 import If
-
-from definitions.ast.arrayIndexNode import ArrayIndexNode
-from definitions.ast.arrayLengthNode import ArrayLengthNode
-from definitions.ast.astTreeNode import AstTreeNode
-from definitions.ast.infixExpression import InfixExpression
-from definitions.ast.methodCallNode import MethodCallNode
-from definitions.ast.prefixNode import PrefixNode
-from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
-from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
-from definitions.ast.questionMarkNode import QuestionMarkNode
-from definitions.ast.terminalNode import TerminalNode
-from definitions.evaluations.csp.jmlProblem import JMLProblem
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
-from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
-from helper.infixHelper import InfixHelper
+from nodes.baseNodeRunner import BaseNodeRunner
+from verification.constraints.arrayIndexConstraintBuilder import ArrayIndexConstraintBuilder
 from verification.constraints.arrayLengthConstraintBuilder import ArrayLengthConstraintBuilder
-from verification.constraints.boolQuantifierConstraintBuilder import BoolQuantifierConstraintBuilder
+from verification.constraints.constraintsDto import ConstraintsDto
+from verification.constraints.infixConstraintBuilder import InfixConstraintBuilder
+from verification.constraints.methodCallHandler import MethodCallHandler
 from verification.constraints.prefixConstraintBuilder import PrefixConstraintBuilder
-from verification.constraints.quantifier.numQuantifierConstraintBuilder import NumQuantifierConstraintBuilder
+from verification.constraints.quantifierConstraintBuilder import QuantifierConstraintBuilder
+from verification.constraints.questionMarkConstraintBuilder import QuestionMarkConstraintBuilder
 from verification.constraints.terminalConstraintBuilder import TerminalConstraintBuilder
 
 
-class ExpressionConstraintBuilder:
+class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto]):
     def __init__(self, terminal_constraint_builder=TerminalConstraintBuilder(),
-                 bool_quantifier_constraint_builder=BoolQuantifierConstraintBuilder(),
-                 num_quantifier_constraint_builder=NumQuantifierConstraintBuilder(),
-                 infix_helper=InfixHelper(), prefix_constraint_builder=PrefixConstraintBuilder(),
-                 array_length_constraint_builder=ArrayLengthConstraintBuilder()):
-        self.terminal_constraint_builder = terminal_constraint_builder
-        self.bool_quantifier_constraint_builder = bool_quantifier_constraint_builder
-        self.infix_helper = infix_helper
-        self.num_quantifier_constraint_builder = num_quantifier_constraint_builder
-        self.prefix_constraint_builder = prefix_constraint_builder
-        self.array_length_constraint_builder = array_length_constraint_builder
+                 quantifier_constraint_builder=QuantifierConstraintBuilder(),
+                 question_mark_constraint_builder=QuestionMarkConstraintBuilder(),
+                 prefix_constraint_builder=PrefixConstraintBuilder(),
+                 infix_constraint_builder=InfixConstraintBuilder(),
+                 array_index_constraint_builder=ArrayIndexConstraintBuilder(),
+                 array_length_constraint_builder=ArrayLengthConstraintBuilder(),
+                 method_call_handler=MethodCallHandler()):
+        super().__init__(
+            terminal_handler=terminal_constraint_builder,
+            quantifier_handler=quantifier_constraint_builder,
+            prefix_handler=prefix_constraint_builder,
+            question_mark_handler=question_mark_constraint_builder,
+            infix_handler=infix_constraint_builder,
+            array_index_handler=array_index_constraint_builder,
+            length_handler=array_length_constraint_builder,
+            method_call_handler=method_call_handler
+        )
 
-    def build_expression_constraint(self, jml_problem: JMLProblem, jml_parameters: JmlParameters,
-                                    expression: AstTreeNode):
-        if isinstance(expression, TerminalNode):
-            return self.terminal_constraint_builder.evaluate_terminal_node(expression, jml_parameters)
+    def evaluate(self, t: ConstraintsDto):
+        base_constraint = super().evaluate(t)
+        if base_constraint is not None:
+            return base_constraint
 
-        if isinstance(expression, BoolQuantifierTreeNode):
-            return self.bool_quantifier_constraint_builder.evaluate(jml_problem, jml_parameters, expression, self)
-
-        if isinstance(expression, NumQuantifierTreeNode):
-            return self.num_quantifier_constraint_builder.evaluate(jml_problem, jml_parameters, expression, self)
-
-        if isinstance(expression, InfixExpression) and hasattr(expression, "left") and hasattr(expression, "right"):
-            return self.infix_helper.evaluate_infix(infix_operator=expression.name,
-                                                    left=lambda: self.build_expression_constraint(jml_problem,
-                                                                                                  jml_parameters,
-                                                                                                  expression.left),
-                                                    right=lambda: self.build_expression_constraint(jml_problem,
-                                                                                                   jml_parameters,
-                                                                                                   expression.right),
-                                                    is_smt=True, parameters=jml_parameters)
-
-        if isinstance(expression, QuestionMarkNode):
-            return If(self.build_expression_constraint(jml_problem, jml_parameters, expression.expr),
-                      self.build_expression_constraint(jml_problem, jml_parameters, expression.true_expr),
-                      self.build_expression_constraint(jml_problem, jml_parameters, expression.false_expr))
-
-        if isinstance(expression, ArrayIndexNode):
-            array = self.build_expression_constraint(jml_problem, jml_parameters, expression.arr_expression)
-            expr = self.build_expression_constraint(jml_problem, jml_parameters, expression.index_expression)
-            return array[expr]
-
-        if self.array_length_constraint_builder.is_array_length(expression):
-            return self.array_length_constraint_builder.handle_array_length(expression,
-                                                                            jml_problem,
-                                                                            jml_parameters,
-                                                                            self)
-
-        if isinstance(expression, PrefixNode):
-            return self.prefix_constraint_builder.evaluate(expression, jml_problem, jml_parameters, self)
-
-        if isinstance(expression, MethodCallNode):
-            raise Exception("Method call expression not supported")
-
-        raise Exception("ExpressionConstraintBuilder: Expression type not supported")
+        raise Exception("ExpressionConstraintBuilder: Node type not supported")

@@ -1,55 +1,40 @@
-import copy
-
-from z3 import Int, And, ForAll, Implies, Exists
+from z3 import And, ForAll, Implies, Exists
 
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
-from definitions.evaluations.csp.cspParameter import CSPParameter
-from definitions.evaluations.csp.jmlProblem import JMLProblem
-from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
+from nodes.baseNodeHandler import BaseNodeHandler
+from verification.constraints.constraintsDto import ConstraintsDto
 from verification.constraints.quantifier.quantifierRangeValuesHelper import QuantifierRangeValuesHelper
-from verification.constraints.quantifierConstraintBuilder import QuantifierConstraintBuilder
+from verification.constraints.quantifier.quantifier_range_builder import QuantifierRangeBuilder
 
 
-class BoolQuantifierConstraintBuilder:
-    def __init__(self, quantifier_constraint_builder=QuantifierConstraintBuilder,
+class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
+    def __init__(self, quantifier_constraint_builder=QuantifierRangeBuilder(),
                  quantifier_range_values_helper=QuantifierRangeValuesHelper()):
-        self.quantifier_constraint_builder = quantifier_constraint_builder()
+        self.quantifier_constraint_builder = quantifier_constraint_builder
         self.quantifier_range_values_helper = quantifier_range_values_helper
 
-    def evaluate(self, jml_problem: JMLProblem, parameters: JmlParameters, expression: BoolQuantifierTreeNode,
-                 constraint_builder):
-        from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
-        constraint_builder: ExpressionConstraintBuilder = constraint_builder
+    def is_node(self, t: ConstraintsDto):
+        return isinstance(t.node, BoolQuantifierTreeNode)
 
-        # First get variables
+    def handle(self, t: ConstraintsDto):
+        expression: BoolQuantifierTreeNode = t.node
         variables = self.quantifier_range_values_helper.get_variables(expression)
-        copied_jml_parameters = copy.deepcopy(parameters)
 
         for var in variables:
-            copied_jml_parameters.csp_parameters[var] = variables[var]
+            # TODO: Check if variable already exists
+            t.constraint_parameters.loop_parameters.add_csp_parameter(var)
 
-        range_expressions = (self.quantifier_constraint_builder.get_range_expressions(
-            jml_problem=jml_problem,
-            range_=expression.range_,
-            parameters=copied_jml_parameters,
-            constraint_builder=constraint_builder))
-
-        variable_values = [variables[var].value for var in variables]
-
-        # TODO: Add support for additional expression in range
+        range_expressions = self.quantifier_constraint_builder.get_range_expressions(expression.range_, t)
         and_implies = And(*range_expressions)
+        final_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expression))
 
-        final_expr = constraint_builder.build_expression_constraint(jml_problem,
-                                                                    copied_jml_parameters,
-                                                                    expression.expression)
+        variable_values = [var.value for var in variables]
 
         if expression.quantifier_type == BoolQuantifierType.FORALL:
             return self.evaluate_for_all(variable_values, and_implies, final_expr)
         elif expression.quantifier_type == BoolQuantifierType.EXISTS:
             return self.evaluate_exists(variable_values, and_implies, final_expr)
-
-        raise Exception("BoolQuantifierConstraintBuilder: Quantifier type not supported")
 
     @staticmethod
     def evaluate_for_all(variable_values, range_, expr):

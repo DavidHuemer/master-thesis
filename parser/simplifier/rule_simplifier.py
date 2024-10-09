@@ -36,10 +36,10 @@ class RuleSimplifier(BaseNodeRunner[SimplifierDto]):
             prefix_handler=prefix_simplifier,
             array_index_handler=array_index_simplifier,
             length_handler=length_simplifier,
-            reference_handler=reference_simplifier,
             method_call_handler=method_simplifier
         )
         self.exception_simplifier = exception_simplifier
+        self.reference_simplifier = reference_simplifier
 
     def evaluate(self, t: SimplifierDto):
         base_eval_result = super().evaluate(t)
@@ -53,6 +53,9 @@ class RuleSimplifier(BaseNodeRunner[SimplifierDto]):
 
         if self.exception_simplifier.is_node(t):
             return self.exception_simplifier.handle(t)
+
+        if self.reference_simplifier.simplify_old(t):
+            return self.reference_simplifier.handle(t)
 
         raise Exception("No simplification option found for rule: " + str(t.rule))
 

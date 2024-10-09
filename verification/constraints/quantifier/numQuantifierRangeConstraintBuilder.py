@@ -4,8 +4,7 @@ from z3 import ForAll, Implies, And, Exists, ArithRef
 from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
-from definitions.evaluations.csp.jmlProblem import JMLProblem
-from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
+from verification.constraints.constraintsDto import ConstraintsDto
 from verification.constraints.quantifier.quantifierRangeValuesHelper import QuantifierRangeValuesHelper
 from verification.csp.cspParamNameGenerator import CspParamNameGenerator
 
@@ -16,26 +15,20 @@ class NumQuantifierRangeConstraintBuilder:
         self.quantifier_range_values_helper = quantifier_range_values_helper
         self.name_generator = name_generator
 
-    def evaluate(self, jml_problem: JMLProblem, parameters: JmlParameters, expression: NumQuantifierTreeNode,
-                 expression_constraint_builder):
-        from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
-        expression_constraint_builder: ExpressionConstraintBuilder = expression_constraint_builder
-
+    def evaluate(self, expression: NumQuantifierTreeNode, t: ConstraintsDto):
         if (expression.quantifier_type == NumericQuantifierType.SUM
                 or expression.quantifier_type == NumericQuantifierType.PRODUCT):
             raise Exception("NumQuantifierConstraintBuilder: Sum and product quantifiers are not supported with range")
 
-        csp_parameters, copied_parameters = self.quantifier_range_values_helper.handle_range_variables(expression,
-                                                                                                       parameters)
-        tmp_key = self.name_generator.find_name(copied_parameters.csp_parameters, "tmp")
+        csp_parameters = self.quantifier_range_values_helper.get_variables(expression)
+        # TODO: Include csp and loop parameters
+        tmp_key = self.name_generator.find_name(t.constraint_parameters, "tmp")
         tmp_param = z3.Int(tmp_key)
 
         csp_values = [csp_param.value for csp_param in csp_parameters]
-        range_expr = self.get_and(expression.range_, jml_problem, copied_parameters, expression_constraint_builder)
+        range_expr = self.get_and(expression.range_, t)
 
-        result_expr = expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                                copied_parameters,
-                                                                                expression.expressions)
+        result_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expressions))
         comparison = self.get_comparison(tmp_param=tmp_param,
                                          result_expr=result_expr,
                                          quantifier_type=expression.quantifier_type)
@@ -46,8 +39,8 @@ class NumQuantifierRangeConstraintBuilder:
         exists_and = And(range_expr, tmp_param == result_expr)
         e = Exists(csp_values, exists_and)
 
-        jml_problem.add_constraint(f)
-        jml_problem.add_constraint(e)
+        t.jml_problem.add_constraint(f)
+        t.jml_problem.add_constraint(e)
         return tmp_param
 
     @staticmethod
@@ -59,20 +52,16 @@ class NumQuantifierRangeConstraintBuilder:
         else:
             raise Exception("NumQuantifierRangeConstraintBuilder: Invalid quantifier type")
 
-    def get_and(self, range_: FullRangeTreeNode, jml_problem: JMLProblem, jml_parameters: JmlParameters,
-                expression_constraint_builder):
-        from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
-        expression_constraint_builder: ExpressionConstraintBuilder = expression_constraint_builder
-
+    def get_and(self, range_: FullRangeTreeNode, t: ConstraintsDto):
         range_list = []
 
         for r in range_.ranges:
-            ident = jml_parameters.csp_parameters[r.name].value
+            ident = t.constraint_parameters.get_parameter_by_key(r.name).value
             if not isinstance(ident, ArithRef):
                 raise Exception("NumQuantifierRangeConstraintBuilder: Invalid range variable")
 
-            start = expression_constraint_builder.build_expression_constraint(jml_problem, jml_parameters, r.start)
-            end = expression_constraint_builder.build_expression_constraint(jml_problem, jml_parameters, r.end)
+            start = t.constraint_builder.build_expression_constraint(t.jml_problem, t.constraint_parameters, r.start)
+            end = t.constraint_builder.build_expression_constraint(t.jml_problem, t.constraint_parameters, r.end)
             range_list.append(self.get_single_range_and(ident, start, end, r.start_operator, r.end_operator))
 
         return And(*range_list)

@@ -1,39 +1,32 @@
 from z3 import Not
 
 from definitions.ast.prefixNode import PrefixNode
-from definitions.evaluations.csp.jmlProblem import JMLProblem
-from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
+from nodes.baseNodeHandler import BaseNodeHandler
+from verification.constraints.constraintsDto import ConstraintsDto
 
 
-class PrefixConstraintBuilder:
-    @staticmethod
-    def evaluate(prefix_expression: PrefixNode, jml_problem: JMLProblem, jml_parameters: JmlParameters,
-                 expression_constraint_builder):
-        from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
-        expression_constraint_builder: ExpressionConstraintBuilder = expression_constraint_builder
+class PrefixConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
+    def is_node(self, t: ConstraintsDto):
+        return isinstance(t.node, PrefixNode)
+
+    def handle(self, t: ConstraintsDto):
+        prefix_expression: PrefixNode = t.node
+
+        expr = self.get_expr(prefix_expression, t)
+
         if prefix_expression.prefix == '++':
-            return expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                             jml_parameters,
-                                                                             prefix_expression.expr) + 1
+            return expr + 1
         elif prefix_expression.prefix == '--':
-            return expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                             jml_parameters,
-                                                                             prefix_expression.expr) - 1
+            return expr - 1
         elif prefix_expression.prefix == '!':
-            return Not(expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                                 jml_parameters,
-                                                                                 prefix_expression.expr))
+            return Not(expr)
         elif prefix_expression.prefix == '+':
-            return expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                             jml_parameters,
-                                                                             prefix_expression.expr)
+            return expr
         elif prefix_expression.prefix == '-':
-            return -expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                              jml_parameters,
-                                                                              prefix_expression.expr)
+            return -expr
         elif prefix_expression.prefix == '~':
-            return ~expression_constraint_builder.build_expression_constraint(jml_problem,
-                                                                              jml_parameters,
-                                                                              prefix_expression.expr)
+            return ~expr
 
-        raise Exception(f"Unsupported prefix: {prefix_expression.prefix}")
+    @staticmethod
+    def get_expr(prefix_expression: PrefixNode, t: ConstraintsDto):
+        return t.constraint_builder.evaluate(t.copy_with_other_node(prefix_expression.expr))

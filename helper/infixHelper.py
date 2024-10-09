@@ -4,12 +4,11 @@ from z3 import And, Or, Not, ArrayRef, BoolRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
-from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
 
 
 class InfixHelper:
     @staticmethod
-    def evaluate_infix(infix_operator: str, parameters: JmlParameters, left: Callable, right: Callable,
+    def evaluate_infix(infix_operator: str, csp_parameters: CSPParameters, left: Callable, right: Callable,
                        is_smt: bool):
         left_expr = left()
 
@@ -17,11 +16,11 @@ class InfixHelper:
             right_expr = right()
             if isinstance(left_expr, ArrayRef) and isinstance(right_expr, BoolRef):
                 # left_expr = get_param(is_null_name).value
-                left_expr = parameters.csp_parameters.get_helper(str(left_expr), CSPParamHelperType.IS_NULL).value
+                left_expr = csp_parameters.get_helper(str(left_expr), CSPParamHelperType.IS_NULL).value
 
             if isinstance(right_expr, ArrayRef) and isinstance(left_expr, BoolRef):
                 # is_null_name = f"{str(right_expr)}_is_null"
-                right_expr = parameters.csp_parameters.get_helper(str(right_expr), CSPParamHelperType.IS_NULL).value
+                right_expr = csp_parameters.get_helper(str(right_expr), CSPParamHelperType.IS_NULL).value
         else:
             if infix_operator == "==>" and not left_expr:
                 return True
