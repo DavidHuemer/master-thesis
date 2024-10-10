@@ -11,6 +11,9 @@ public class BubbleSortDesc {
      * Returns a sorted array using the bubbleSort algorithm. The resulting array is
      * sorted in descending order.
      * The initial array is not modified.
+     * 
+     * @param arr The array to sort
+     * @return The sorted array
      */
     public int[] bubbleSort(int[] arr) {
         int n = arr.length;
