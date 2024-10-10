@@ -4,6 +4,7 @@ data/code/arithmetic/AddCorrect.java;add;true
 data/code/arithmetic/AddIncorrect.java;add;false
 data/code/arithmetic/SubtractCorrect.java;subtract;true
 data/code/arithmetic/SubtractInvalidOrder.java;subtract;false
+data/code/arithmetic/IntSquare.java;squareOf;true
 data/code/max/Biggest.java;biggest;true
 data/code/max/BiggestIncorrect.java;biggest;false
 data/code/max/BiggestFirstIncorrect.java;biggest;false

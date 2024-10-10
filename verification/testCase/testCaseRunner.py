@@ -34,7 +34,6 @@ class TestCaseRunner:
         # 2. Get the current parameters list of the class instance before the execution
         old_variables = self.java_variable_extractor.get_parameters(test_instance, test_class)
 
-        # TODO: Get the current parameters list of the class instance before the execution
         old_duplicate = self.java_duplication_helper.duplicate(test_class, test_instance)
 
         # 3. execute the method with the parameters

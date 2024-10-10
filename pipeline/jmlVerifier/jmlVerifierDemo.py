@@ -4,11 +4,8 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@ requires arr != null;\n"
-            "//@ ensures \\result.length == arr.length;\n"
-            "//@ ensures (\\forall int i; 0 <= i && i < arr.length; (\\exists int j; 0 <= j && j < arr.length; \\result[j] == arr[i]));\n"
-            "//@ ensures (\\forall int i; 0 <= i && i < \\result.length - 1; \\result[i] <= \\result[i + 1]);\n"
-            "//@ ensures (\\forall int i; 0 <= i && i < arr.length; arr[i] == \\old(arr[i]));")
+jml_code = ("//@ requires true;\n"
+            "//@ ensures \\result == (b1 && b2);")
 
 
 def main():
@@ -16,7 +13,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\find\\BubbleSort.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\comparison/Conjunction.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

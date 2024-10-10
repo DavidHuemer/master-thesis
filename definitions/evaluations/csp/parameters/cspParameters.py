@@ -1,8 +1,9 @@
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.evaluations.csp.parameters.baseParameters import BaseParameters
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 
 
-class CSPParameters:
+class CSPParameters(BaseParameters):
     """
     This class stores the parameters that are used for generating valid method parameters
     """

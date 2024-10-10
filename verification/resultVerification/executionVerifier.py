@@ -7,6 +7,7 @@ from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import LoggingHelper
+from verification.resultVerification.resultDto import ResultDto
 from verification.resultVerification.resultVerifier import ResultVerifier
 
 

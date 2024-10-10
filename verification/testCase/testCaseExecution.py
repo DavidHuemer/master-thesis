@@ -16,6 +16,7 @@ class TestCaseExecution:
             return result
 
         if isinstance(result, jpype.JArray):
+            # noinspection PyTypeChecker
             result = list(result)
 
         return ExecutionResult(result=result, parameters=test_case.parameters)

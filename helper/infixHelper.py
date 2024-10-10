@@ -33,6 +33,12 @@ class InfixHelper:
 
             right_expr = right()
 
+            if infix_operator == "==" and isinstance(left_expr, list):
+                return left_expr is right_expr
+
+            if infix_operator == "!=" and isinstance(left_expr, list):
+                return left_expr is not right_expr
+
         if infix_operator == "+":
             return left_expr + right_expr
         elif infix_operator == "-":
