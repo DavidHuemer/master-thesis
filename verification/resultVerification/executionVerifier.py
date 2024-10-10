@@ -1,14 +1,15 @@
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
+from definitions.codeExecution.result.executionException import ExecutionException
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.codeExecution.result.resultInstances import ResultInstances
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import LoggingHelper
-from verification.resultVerification.resultDto import ResultDto
 from verification.resultVerification.resultVerifier import ResultVerifier
+from verification.resultVerification.signalExecutionVerifier import SignalExecutionVerifier
 
 
 class ExecutionVerifier:
@@ -16,8 +17,9 @@ class ExecutionVerifier:
     This class is responsible for verifying the execution of a test case
     """
 
-    def __init__(self, result_verifier=ResultVerifier()):
+    def __init__(self, result_verifier=ResultVerifier(), signal_execution_verifier=SignalExecutionVerifier()):
         self.result_verifier = result_verifier
+        self.signal_execution_verifier = signal_execution_verifier
 
     def verify(self, execution_result: ExecutionResult,
                result_parameters: ResultParameters,
@@ -26,13 +28,15 @@ class ExecutionVerifier:
                result_instances: ResultInstances):
         try:
             if execution_result.exception is not None:
+                # Validate exception
                 result = execution_result.exception
                 verification_result = self.verify_exception(exception=execution_result.exception,
-                                                            execution_result=execution_result,
-                                                            behavior_type=behavior.behavior_type,
+                                                            behavior=behavior,
                                                             expected_exception=expected_exception,
-                                                            signal_conditions=behavior.signals_conditions)
+                                                            signal_conditions=behavior.signals_conditions,
+                                                            result_parameters=result_parameters)
             else:
+                # Validate result
                 result = execution_result.result
                 verification_result = self.verify_result(execution_result=execution_result,
                                                          behavior=behavior,
@@ -44,22 +48,14 @@ class ExecutionVerifier:
             self.log_result(consistency_test_case, test_case, execution_result.result, False)
             raise e
 
-    def verify_exception(self, exception, execution_result: ExecutionResult,
-                         behavior_type: BehaviorType, expected_exception,
-                         signal_conditions: list[ExceptionExpression]):
-        if behavior_type == BehaviorType.NORMAL_BEHAVIOR:
-            return False
+    def verify_exception(self, exception: ExecutionException, behavior: BehaviorNode, expected_exception,
+                         signal_conditions: list[ExceptionExpression], result_parameters: ResultParameters):
 
-        if (expected_exception is not None) and expected_exception in exception:
-            return True
-
-        # TODO: Check if other exception matches
-        for signal_condition in signal_conditions:
-            if (signal_condition.name in exception
-                    and self.result_verifier.evaluate(execution_result, signal_condition.expression)):
-                return True
-
-        return False
+        return self.signal_execution_verifier.verify_signal(exception=exception,
+                                                            behavior=behavior,
+                                                            expected_exception=expected_exception,
+                                                            signals=signal_conditions,
+                                                            result_parameters=result_parameters)
 
     def verify_result(self, execution_result: ExecutionResult, behavior: BehaviorNode,
                       result_parameters: ResultParameters):

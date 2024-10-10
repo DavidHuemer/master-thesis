@@ -1,1 +1,1 @@
-// @ensures 10 == \this.getMethod(1)
+// @signals_only IllegalArgumentException, Exception

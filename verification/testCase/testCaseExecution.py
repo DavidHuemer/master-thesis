@@ -4,11 +4,14 @@ from codeExecution.runtime.codeExecution import CodeExecution
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import LoggingHelper
+from verification.testCase.executionExceptionBuilder import ExecutionExceptionBuilder
 
 
 class TestCaseExecution:
-    def __init__(self, code_execution=CodeExecution()):
+    def __init__(self, code_execution=CodeExecution(),
+                 execution_exception_builder=ExecutionExceptionBuilder()):
         self.code_execution = code_execution
+        self.execution_exception_builder = execution_exception_builder
 
     def execute_method(self, test_instance, test_case: TestCase, consistency_test_case) -> ExecutionResult:
         result = self.get_original_result(test_instance, test_case, consistency_test_case)
@@ -27,5 +30,5 @@ class TestCaseExecution:
                                                consistency_test_case=consistency_test_case)
         except Exception as e:
             LoggingHelper().log_info(f"Error while executing java method: {e}")
-            name = e.getClass().getName()
-            return ExecutionResult(result=None, parameters=test_case.parameters, exception=name)
+            exception = self.execution_exception_builder.build_exception(e)
+            return ExecutionResult(result=None, parameters=test_case.parameters, exception=exception)

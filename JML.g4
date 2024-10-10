@@ -23,7 +23,8 @@ condition: (
 requires_condition: REQUIRES expr = expression;
 ensures_condition: ENSURES expr = expression;
 signals_condition: SIGNALS expr = exception_expression;
-signals_only_condition: SIGNALS_ONLY ident = IDENTIFIER;
+signals_only_condition:
+	SIGNALS_ONLY signals = signal_only_signals;
 also_condition: ALSO behavior = special_behavior?;
 
 expression:
@@ -57,6 +58,8 @@ expression:
 	| atomic_value;
 
 expressionList: expression (',' expression)*;
+
+signal_only_signals: IDENTIFIER (',' IDENTIFIER)*;
 
 primary: '(' expression ')';
 

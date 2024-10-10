@@ -14,6 +14,8 @@ class BehaviorNode(AstTreeNode):
         self.post_conditions: list[ExpressionNode] = []
         self.signals_conditions: list[ExceptionExpression] = []
 
+        self.allowed_signals: list[str] = []
+
     def add_pre_condition(self, pre_condition: ExpressionNode):
         self.pre_conditions.append(pre_condition)
 
@@ -22,6 +24,9 @@ class BehaviorNode(AstTreeNode):
 
     def add_signals_condition(self, expr: ExceptionExpression):
         self.signals_conditions.append(expr)
+
+    def add_allowed_signals(self, allowed_signals):
+        self.allowed_signals.extend(allowed_signals)
 
     def get_tree_string(self):
         return (f'{self.name} ({self.get_conditions_string(self.pre_conditions)}) '

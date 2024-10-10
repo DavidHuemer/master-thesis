@@ -6,15 +6,15 @@ from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
 from helper.objectHelper import ObjectHelper
-from parser.simplifier.quantifier_simplifier.boolQuantifierSimplifier import BoolQuantifierSimplifier
+from parser.simplifier.allowedSignalsSimplifier import AllowedSignalsSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
 from parser.simplifier.simplifierDto import SimplifierDto
 
 
 class JmlSimplifier:
-    def __init__(self, rule_simplifier=RuleSimplifier(), bool_quantifier_simplifier=BoolQuantifierSimplifier()):
+    def __init__(self, rule_simplifier=RuleSimplifier(), allowed_signals_simplifier=AllowedSignalsSimplifier()):
         self.rule_simplifier = rule_simplifier
-        self.bool_quantifier_simplifier = bool_quantifier_simplifier
+        self.allowed_signals_simplifier = allowed_signals_simplifier
 
         self.behavior_nodes: list[BehaviorNode] = []
         self.current_behavior: BehaviorNode = BehaviorNode()
@@ -58,15 +58,20 @@ class JmlSimplifier:
 
     def handle_condition_expression(self, condition, parser_result: ParserResult):
         simplifier_dto = SimplifierDto(condition.children[1], self.rule_simplifier, parser_result)
+
+        if isinstance(condition, JMLParser.JMLParser.Signals_only_conditionContext):
+            # TODO: Add allowed signals to behavior node
+            allowed_signals = self.allowed_signals_simplifier.simplify(condition)
+            self.current_behavior.add_allowed_signals(allowed_signals)
+            return
+
         expr = self.rule_simplifier.evaluate(simplifier_dto)
 
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):
             self.current_behavior.add_pre_condition(expr)
-
-        if isinstance(condition, JMLParser.JMLParser.Ensures_conditionContext):
+        elif isinstance(condition, JMLParser.JMLParser.Ensures_conditionContext):
             self.current_behavior.add_post_condition(expr)
-
-        if isinstance(condition, JMLParser.JMLParser.Signals_conditionContext):
+        elif isinstance(condition, JMLParser.JMLParser.Signals_conditionContext):
             if isinstance(expr, ExceptionExpression):
                 self.current_behavior.add_signals_condition(expr)
 
