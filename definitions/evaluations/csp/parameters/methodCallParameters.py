@@ -5,7 +5,7 @@ class MethodCallParameters(BaseParameters):
     def __init__(self):
         self.parameters = dict()
 
-    def get_parameter_by_key(self, key):
+    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool):
         return self.parameters[key]
 
     def __setitem__(self, key, value):

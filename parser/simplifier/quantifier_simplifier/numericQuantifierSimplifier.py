@@ -1,6 +1,6 @@
 from parser.generated import JMLParser
 
-from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
+from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQuantifierExpressionType
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
@@ -83,13 +83,11 @@ class NumericQuantifierSimplifier(BaseNodeHandler[SimplifierDto]):
                 "NumericQuantifierSimplifier: Numeric quantifier core expression does not have type declarations")
         return self.quantifier_simplifier.get_type_declarations(rule.types)
 
-    def get_range(self, rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,
-                  t: SimplifierDto) -> FullRangeTreeNode:
-        if not isinstance(rule.ranges, JMLParser.JMLParser.Full_range_expressionContext):
-            raise Exception(
-                "NumericQuantifierSimplifier: Numeric quantifier core expression does not have range expression")
+    @staticmethod
+    def get_range(rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,
+                  t: SimplifierDto) -> AstTreeNode:
 
-        return self.quantifier_simplifier.get_full_range(rule.ranges, t)
+        return t.rule_simplifier.evaluate(SimplifierDto(rule.ranges, t.rule_simplifier, t.parser_result))
 
     @staticmethod
     def get_expression(rule: JMLParser.JMLParser.Numeric_quantifier_range_core_expressionContext,

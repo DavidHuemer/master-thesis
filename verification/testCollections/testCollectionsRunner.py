@@ -20,7 +20,8 @@ class TestCollectionsRunner:
         # 1. Run positive tests
         for test_case in test_collections.test_collection.test_cases:
             result = self.test_case_runner.run(test_class, test_case, consistency_test_case=consistency_test_case,
-                                               behavior=behavior)
+                                               behavior=behavior,
+                                               csp_parameters=test_collections.test_collection.csp_parameters)
 
             if not result:
                 return VerificationResultFactory.inconsistent_result(consistency_test_case,
@@ -33,7 +34,8 @@ class TestCollectionsRunner:
                 result = self.test_case_runner.run(test_class, test_case,
                                                    consistency_test_case=consistency_test_case,
                                                    behavior=behavior,
-                                                   expected_exception=signal_collection.exception_type)
+                                                   expected_exception=signal_collection.exception_type,
+                                                   csp_parameters=signal_collection.csp_parameters)
 
                 if not result:
                     return VerificationResultFactory.inconsistent_result(consistency_test_case)

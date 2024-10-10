@@ -5,6 +5,7 @@ from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.codeExecution.result.resultInstances import ResultInstances
 from definitions.codeExecution.runtime.javaRuntimeClass import JavaRuntimeClass
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
 from verification.resultVerification.executionVerifier import ExecutionVerifier
@@ -25,7 +26,7 @@ class TestCaseRunner:
 
     # TODO: Return more than just a boolean (e.g. why the test failed)
     def run(self, test_class: JavaRuntimeClass,
-            test_case: TestCase, consistency_test_case: ConsistencyTestCase,
+            test_case: TestCase, consistency_test_case: ConsistencyTestCase, csp_parameters: CSPParameters,
             behavior: BehaviorNode, expected_exception=None) -> bool:
         # Steps to run a test case:
         # 1. Get instance of the testing class
@@ -43,7 +44,8 @@ class TestCaseRunner:
 
         result_parameters = ResultParameters(method_call_parameters=execution_result.parameters,
                                              old_instance_variables=old_variables,
-                                             new_instance_variables=new_variables)
+                                             new_instance_variables=new_variables,
+                                             csp_parameters=csp_parameters)
 
         result_instances = ResultInstances(old=old_duplicate, new=test_instance)
 

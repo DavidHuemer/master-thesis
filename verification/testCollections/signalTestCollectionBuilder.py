@@ -17,6 +17,7 @@ class SignalTestCollectionBuilder:
         for signal in signals_conditions:
             jml_problem = self.jml_problem_builder.build(parameters, [signal.expression])
             test_cases = self.test_cases_generator.generate(jml_problem)
-            test_collections.append(SignalTestCollection(test_cases, signal.exception_type))
+            test_collections.append(
+                SignalTestCollection(test_cases, signal.exception_type, jml_problem.parameters.csp_parameters))
 
         return test_collections

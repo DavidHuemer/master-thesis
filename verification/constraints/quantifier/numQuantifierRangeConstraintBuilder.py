@@ -1,6 +1,7 @@
 import z3.z3num
 from z3 import ForAll, Implies, And, Exists, ArithRef
 
+from definitions.ast.astTreeNode import AstTreeNode
 from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
@@ -25,8 +26,11 @@ class NumQuantifierRangeConstraintBuilder:
         tmp_key = self.name_generator.find_name(t.constraint_parameters, "tmp")
         tmp_param = z3.Int(tmp_key)
 
+        for csp_param in csp_parameters:
+            t.constraint_parameters.loop_parameters.add_csp_parameter(csp_param)
+
         csp_values = [csp_param.value for csp_param in csp_parameters]
-        range_expr = self.get_and(expression.range_, t)
+        range_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.range_))
 
         result_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expressions))
         comparison = self.get_comparison(tmp_param=tmp_param,
@@ -51,20 +55,6 @@ class NumQuantifierRangeConstraintBuilder:
             return tmp_param <= result_expr
         else:
             raise Exception("NumQuantifierRangeConstraintBuilder: Invalid quantifier type")
-
-    def get_and(self, range_: FullRangeTreeNode, t: ConstraintsDto):
-        range_list = []
-
-        for r in range_.ranges:
-            ident = t.constraint_parameters.get_parameter_by_key(r.name).value
-            if not isinstance(ident, ArithRef):
-                raise Exception("NumQuantifierRangeConstraintBuilder: Invalid range variable")
-
-            start = t.constraint_builder.build_expression_constraint(t.jml_problem, t.constraint_parameters, r.start)
-            end = t.constraint_builder.build_expression_constraint(t.jml_problem, t.constraint_parameters, r.end)
-            range_list.append(self.get_single_range_and(ident, start, end, r.start_operator, r.end_operator))
-
-        return And(*range_list)
 
     def get_single_range_and(self, ident: ArithRef, start, end, start_op: str, end_op: str):
         start = self.get_start_constraint(ident, start, start_op)

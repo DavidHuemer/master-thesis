@@ -1,10 +1,10 @@
 public class BiggestFirstIncorrect {
     /**
-     * Returns the biggest element in the given array.
+     * Returns the index of the biggest element in the given array.
      * If the array is empty, returns -1.
-     * 
+     *
      * @param a the array of integers
-     * @return the biggest element in the array, or -1 if the array is empty
+     * @return the index of the biggest element in the array, or -1 if the array is empty
      */
     public int biggest(int[] a) {
         if (a.length == 0)

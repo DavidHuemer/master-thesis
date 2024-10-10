@@ -19,6 +19,9 @@ class CSPParameters(BaseParameters):
 
         self.parameters[param.name] = param
 
+    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool):
+        return self.parameters[key]
+
     def add_helper_parameter(self, parameter_key: str, helper_type: CSPParamHelperType, helper_param: CSPParameter):
         if self.parameter_exists(helper_param.name):
             raise Exception(f"Key {helper_param.name} already exists in CSPParameters")
@@ -45,6 +48,9 @@ class CSPParameters(BaseParameters):
             raise Exception(f"Helper parameter for key {parameter_key} and type {helper_type} does not exist")
 
         return self.parameters[self.helper_parameters[helper_tuple]]
+
+    def get_helper_list_for_parameter(self, parameter_key: str) -> list[tuple[str, CSPParamHelperType]]:
+        return list(filter(lambda x: x[0] == parameter_key, self.helper_parameters.keys()))
 
     def parameter_exists(self, parameter_key: str) -> bool:
         return parameter_key in self.parameters

@@ -62,10 +62,7 @@ class BoolQuantifierSimplifier(BaseNodeHandler[SimplifierDto]):
         return self.quantifier_simplifier.get_type_declarations(type_declarations)
 
     def get_range(self, core_expr: JMLParser.JMLParser.RULE_bool_quantifier_core_expression, t: SimplifierDto):
-        if not isinstance(core_expr.ranges, JMLParser.JMLParser.Full_range_expressionContext):
-            raise Exception("BoolQuantifierSimplifier: Bool quantifier core expression does not have range expression")
-
-        return self.quantifier_simplifier.get_full_range(core_expr.ranges, t)
+        return t.rule_simplifier.evaluate(SimplifierDto(core_expr.ranges, t.rule_simplifier, t.parser_result))
 
     @staticmethod
     def get_expression(rule: JMLParser.JMLParser.Bool_quantifier_core_expressionContext, t: SimplifierDto):

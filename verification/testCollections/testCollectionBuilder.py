@@ -27,4 +27,4 @@ class TestCollectionBuilder:
         # Then generate the test cases out of the JMLProblem
         test_cases = self.test_cases_generator.generate(jml_problem)
 
-        return TestCollection(test_cases)
+        return TestCollection(test_cases, jml_problem.parameters.csp_parameters)

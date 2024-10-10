@@ -91,46 +91,11 @@ exists_expression:
 	EXISTS expr = bool_quantifier_core_expression;
 
 bool_quantifier_core_expression:
-	types = type_declarations ';' ranges = full_range_expression ';' expr = expression;
-
-// bool_quantifier_core_expression: types = type_declarations ';' range = full_range_expression;
+	types = type_declarations ';' ranges = expression ';' expr = expression;
 
 type_declarations: type_declaration (',' type_declaration)*;
 
 type_declaration: 'int' IDENTIFIER (',' IDENTIFIER)*;
-
-full_range_expression:
-	ranges = range_expression expr = range_expression_predicate?;
-
-range_expression_predicate: AND expr = expression;
-
-range_expression:
-	single_range_expression (AND single_range_expression)*;
-
-single_range_expression:
-	left = start_range_comparison op = AND right = end_range_comparison;
-
-// start_range_comparison: (expr = numeric_value op = ('<=' | '<') ident = IDENTIFIER) | ident =
-// IDENTIFIER op = ('>=' | '>') expr = numeric_value;
-
-start_range_comparison:
-	(
-		expr = range_expression_value op = (LESS_EQUAL | LESS) ident = IDENTIFIER
-	)
-	| (
-		ident = IDENTIFIER op = (GREATER_EQUAL | GREATER) expr = range_expression_value
-	);
-
-end_range_comparison:
-	(
-		expr = range_expression_value op = (
-			GREATER_EQUAL
-			| GREATER
-		) ident = IDENTIFIER
-	)
-	| (
-		ident = IDENTIFIER op = (LESS_EQUAL | LESS) expr = range_expression_value
-	);
 
 range_expression_value:
 	primary
@@ -180,7 +145,7 @@ numeric_quantifier_value:
 	| atomic_value;
 
 numeric_quantifier_range_core_expression:
-	types = type_declarations ';' ranges = full_range_expression (
+	types = type_declarations ';' ranges = expression (
 		';'
 		| '&&'
 		| '==>'

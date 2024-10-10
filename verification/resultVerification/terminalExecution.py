@@ -16,10 +16,10 @@ class TerminalExecution(BaseNodeHandler[ResultDto]):
         elif terminal.name == "INTEGER":
             return int(terminal.value)
         elif terminal.name == "IDENTIFIER":
-            if t.result_parameters.parameter_exists(terminal.value):
-                return t.result_parameters.get_parameter_by_key(key=terminal.value,
-                                                                use_old=terminal.use_old,
-                                                                use_this=terminal.use_this)
+            if t.parameters.parameter_exists(terminal.value):
+                return t.parameters.get_parameter_by_key(key=terminal.value,
+                                                         use_old=terminal.use_old,
+                                                         use_this=terminal.use_this)
             else:
                 return None
         elif terminal.name == "BOOL_LITERAL":

@@ -5,13 +5,10 @@ from definitions.ast.quantifier.boolQuantifierType import BoolQuantifierType
 from nodes.baseNodeHandler import BaseNodeHandler
 from verification.constraints.constraintsDto import ConstraintsDto
 from verification.constraints.quantifier.quantifierRangeValuesHelper import QuantifierRangeValuesHelper
-from verification.constraints.quantifier.quantifier_range_builder import QuantifierRangeBuilder
 
 
 class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
-    def __init__(self, quantifier_constraint_builder=QuantifierRangeBuilder(),
-                 quantifier_range_values_helper=QuantifierRangeValuesHelper()):
-        self.quantifier_constraint_builder = quantifier_constraint_builder
+    def __init__(self, quantifier_range_values_helper=QuantifierRangeValuesHelper()):
         self.quantifier_range_values_helper = quantifier_range_values_helper
 
     def is_node(self, t: ConstraintsDto):
@@ -25,16 +22,15 @@ class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
             # TODO: Check if variable already exists
             t.constraint_parameters.loop_parameters.add_csp_parameter(var)
 
-        range_expressions = self.quantifier_constraint_builder.get_range_expressions(expression.range_, t)
-        and_implies = And(*range_expressions)
+        range_expressions = t.constraint_builder.evaluate(t.copy_with_other_node(expression.range_))
         final_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expression))
 
         variable_values = [var.value for var in variables]
 
         if expression.quantifier_type == BoolQuantifierType.FORALL:
-            return self.evaluate_for_all(variable_values, and_implies, final_expr)
+            return self.evaluate_for_all(variable_values, range_expressions, final_expr)
         elif expression.quantifier_type == BoolQuantifierType.EXISTS:
-            return self.evaluate_exists(variable_values, and_implies, final_expr)
+            return self.evaluate_exists(variable_values, range_expressions, final_expr)
 
     @staticmethod
     def evaluate_for_all(variable_values, range_, expr):
