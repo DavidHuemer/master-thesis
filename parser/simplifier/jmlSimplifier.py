@@ -6,9 +6,9 @@ from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
 from helper.objectHelper import ObjectHelper
+from parser.simplificationDto import SimplificationDto
 from parser.simplifier.allowedSignalsSimplifier import AllowedSignalsSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
-from parser.simplifier.simplifierDto import SimplifierDto
 
 
 class JmlSimplifier:
@@ -57,7 +57,7 @@ class JmlSimplifier:
             self.handle_condition_expression(condition, parser_result)
 
     def handle_condition_expression(self, condition, parser_result: ParserResult):
-        simplifier_dto = SimplifierDto(condition.children[1], self.rule_simplifier, parser_result)
+        simplification_dto = SimplificationDto(condition.children[1], self.rule_simplifier, parser_result)
 
         if isinstance(condition, JMLParser.JMLParser.Signals_only_conditionContext):
             # TODO: Add allowed signals to behavior node
@@ -65,7 +65,7 @@ class JmlSimplifier:
             self.current_behavior.add_allowed_signals(allowed_signals)
             return
 
-        expr = self.rule_simplifier.evaluate(simplifier_dto)
+        expr = self.rule_simplifier.evaluate(simplification_dto)
 
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):
             self.current_behavior.add_pre_condition(expr)

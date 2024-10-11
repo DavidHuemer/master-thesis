@@ -57,7 +57,7 @@ class ResultParameters(BaseParameters):
             if self.local_parameters.parameter_exists(key):
                 return self.local_parameters.get_parameter_by_key(key)
             if self.method_call_parameters.parameter_exists(key):
-                return self.method_call_parameters.get_parameter_by_key(key)
+                return self.method_call_parameters.get_parameter_by_key(key, use_old=True, use_this=use_this)
             elif self.old_instance_variables.parameter_exists(key):
                 return self.old_instance_variables.get_parameter_by_key(key)
 

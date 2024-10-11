@@ -1,14 +1,14 @@
 from antlr4.tree.Tree import TerminalNodeImpl
 
-from nodes.baseNodeHandler import BaseNodeHandler
-from parser.simplifier.simplifierDto import SimplifierDto
 from definitions.ast.terminalNode import TerminalNode
+from nodes.baseNodeHandler import BaseNodeHandler
+from parser.simplificationDto import SimplificationDto
 
 
-class TerminalSimplifier(BaseNodeHandler[SimplifierDto]):
+class TerminalSimplifier(BaseNodeHandler[SimplificationDto]):
 
-    def is_node(self, t: SimplifierDto):
-        return isinstance(t.rule, TerminalNodeImpl)
+    def is_node(self, t: SimplificationDto):
+        return isinstance(t.node, TerminalNodeImpl)
 
-    def handle(self, t: SimplifierDto):
-        return TerminalNode(t.parser_result.jml_parser.symbolicNames[t.rule.getSymbol().type], t.rule.getText())
+    def handle(self, t: SimplificationDto):
+        return TerminalNode(t.parser_result.jml_parser.symbolicNames[t.node.getSymbol().type], t.node.getText())

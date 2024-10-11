@@ -2,15 +2,15 @@ from antlr4.Token import CommonToken
 
 from definitions.ast.prefixNode import PrefixNode
 from nodes.baseNodeHandler import BaseNodeHandler
-from parser.simplifier.simplifierDto import SimplifierDto
+from parser.simplificationDto import SimplificationDto
 
 
-class PrefixSimplifier(BaseNodeHandler[SimplifierDto]):
+class PrefixSimplifier(BaseNodeHandler[SimplificationDto]):
 
-    def is_node(self, t: SimplifierDto):
-        return hasattr(t.rule, "prefix") and t.rule.prefix is not None and isinstance(t.rule.prefix, CommonToken)
+    def is_node(self, t: SimplificationDto):
+        return hasattr(t.node, "prefix") and t.node.prefix is not None and isinstance(t.node.prefix, CommonToken)
 
-    def handle(self, t: SimplifierDto):
-        prefix = t.rule.prefix.text
-        expr = t.rule_simplifier.evaluate(SimplifierDto(t.rule.expr, t.rule_simplifier, t.parser_result))
+    def handle(self, t: SimplificationDto):
+        prefix = t.node.prefix.text
+        expr = t.evaluate_with_other_node(t.node.expr)
         return PrefixNode(prefix, expr)

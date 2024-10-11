@@ -2,27 +2,27 @@ import parser.generated.JMLParser as JMLParser
 
 from definitions.ast.astTreeNode import AstTreeNode
 from nodes.baseNodeHandler import BaseNodeHandler
-from parser.simplifier.simplifierDto import SimplifierDto
+from parser.simplificationDto import SimplificationDto
 
 
-class ReferenceSimplifier(BaseNodeHandler[SimplifierDto]):
+class ReferenceSimplifier(BaseNodeHandler[SimplificationDto]):
     """
     Simplifies references like \\old and \\this
     """
 
-    def is_node(self, t: SimplifierDto):
+    def is_node(self, t: SimplificationDto):
         return (self.is_old_expression(t) or
                 self.is_this_expression(t))
 
     @staticmethod
-    def is_old_expression(t: SimplifierDto):
-        return isinstance(t.rule, JMLParser.JMLParser.Old_expressionContext)
+    def is_old_expression(t: SimplificationDto):
+        return isinstance(t.node, JMLParser.JMLParser.Old_expressionContext)
 
     @staticmethod
-    def is_this_expression(t: SimplifierDto):
-        return isinstance(t.rule, JMLParser.JMLParser.This_expressionContext)
+    def is_this_expression(t: SimplificationDto):
+        return isinstance(t.node, JMLParser.JMLParser.This_expressionContext)
 
-    def handle(self, t: SimplifierDto):
+    def handle(self, t: SimplificationDto):
         if self.is_old_expression(t):
             return self.simplify_old(t)
         elif self.is_this_expression(t):
@@ -30,15 +30,15 @@ class ReferenceSimplifier(BaseNodeHandler[SimplifierDto]):
 
         raise Exception("ReferenceSimplifier: Rule is not a reference expression")
 
-    def simplify_old(self, t: SimplifierDto) -> AstTreeNode | None:
-        expr = t.rule_simplifier.evaluate(SimplifierDto(t.rule.expr, t.rule_simplifier, t.parser_result))
+    def simplify_old(self, t: SimplificationDto) -> AstTreeNode | None:
+        expr = t.evaluate_with_other_node(t.node.expr)
         # Set for all expressions that they are old
         self.set_old(expr)
         return expr
 
     @staticmethod
-    def simplify_this(t: SimplifierDto):
-        expr = t.rule_simplifier.evaluate(SimplifierDto(t.rule.expr, t.rule_simplifier, t.parser_result))
+    def simplify_this(t: SimplificationDto):
+        expr = t.evaluate_with_other_node(t.node.expr)
         expr.use_this = True
         return expr
 

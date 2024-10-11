@@ -1,14 +1,14 @@
 from definitions.ast.terminalNode import TerminalNode
+from definitions.evaluations.baseExecutinoDto import BaseExecutionDto
 from nodes.baseNodeHandler import BaseNodeHandler
-from verification.resultVerification.resultDto import ResultDto
 
 
-class TerminalExecution(BaseNodeHandler[ResultDto]):
+class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
 
-    def is_node(self, t: ResultDto):
+    def is_node(self, t: BaseExecutionDto):
         return isinstance(t.node, TerminalNode)
 
-    def handle(self, t: ResultDto):
+    def handle(self, t: BaseExecutionDto):
         terminal: TerminalNode = t.node
 
         if terminal.name == "RESULT":

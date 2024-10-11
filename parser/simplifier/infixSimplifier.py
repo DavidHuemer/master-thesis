@@ -1,11 +1,11 @@
-from definitions.ast.infixExpression import InfixExpression
 from parser.generated.JMLParser import JMLParser
 
+from definitions.ast.infixExpression import InfixExpression
 from nodes.baseNodeHandler import BaseNodeHandler
-from parser.simplifier.simplifierDto import SimplifierDto
+from parser.simplificationDto import SimplificationDto
 
 
-class InfixSimplifier(BaseNodeHandler[SimplifierDto]):
+class InfixSimplifier(BaseNodeHandler[SimplificationDto]):
     def simplify_infix(self, rule, parser_result, rule_simplifier):
         if self.is_infix_expression(rule):
             left = rule_simplifier.simplify_rule(rule.left, parser_result)
@@ -24,14 +24,14 @@ class InfixSimplifier(BaseNodeHandler[SimplifierDto]):
                 and hasattr(rule, "right") and rule.right is not None and
                 hasattr(rule, "op") and rule.op is not None)
 
-    def is_node(self, t: SimplifierDto):
-        rule = t.rule
+    def is_node(self, t: SimplificationDto):
+        rule = t.node
         return (hasattr(rule, "left") and rule.left is not None
                 and hasattr(rule, "right") and rule.right is not None and
                 hasattr(rule, "op") and rule.op is not None)
 
-    def handle(self, t: SimplifierDto):
-        left = t.rule_simplifier.evaluate(SimplifierDto(t.rule.left, t.rule_simplifier, t.parser_result))
-        right = t.rule_simplifier.evaluate(SimplifierDto(t.rule.right, t.rule_simplifier, t.parser_result))
+    def handle(self, t: SimplificationDto):
+        left = t.evaluate_with_other_node(t.node.left)
+        right = t.evaluate_with_other_node(t.node.right)
 
-        return InfixExpression(t.rule.op.text, left, right)
+        return InfixExpression(t.node.op.text, left, right)

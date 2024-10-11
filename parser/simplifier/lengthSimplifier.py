@@ -1,13 +1,13 @@
 from definitions.ast.arrayLengthNode import ArrayLengthNode
 from nodes.baseNodeHandler import BaseNodeHandler
-from parser.simplifier.simplifierDto import SimplifierDto
+from parser.simplificationDto import SimplificationDto
 
 
-class LengthSimplifier(BaseNodeHandler[SimplifierDto]):
-    def is_node(self, t: SimplifierDto):
-        return t.rule.getChildCount() == 3 and t.rule.children[1].getText() == '.' and t.rule.children[
+class LengthSimplifier(BaseNodeHandler[SimplificationDto]):
+    def is_node(self, t: SimplificationDto):
+        return t.node.getChildCount() == 3 and t.node.children[1].getText() == '.' and t.node.children[
             2].getText() == 'length'
 
-    def handle(self, t: SimplifierDto):
-        arr_expr = t.rule_simplifier.evaluate(SimplifierDto(t.rule.children[0], t.rule_simplifier, t.parser_result))
+    def handle(self, t: SimplificationDto):
+        arr_expr = t.evaluate_with_other_node(t.node.children[0])
         return ArrayLengthNode(arr_expr)

@@ -4,6 +4,7 @@ import parser.generated.JMLParser as JMLParser
 
 from definitions.ast.astTreeNode import AstTreeNode
 from nodes.baseNodeRunner import BaseNodeRunner
+from parser.simplificationDto import SimplificationDto
 from parser.simplifier.arrayIndexSimplifier import ArrayIndexSimplifier
 from parser.simplifier.exceptionSimplifier import ExceptionSimplifier
 from parser.simplifier.infixSimplifier import InfixSimplifier
@@ -13,11 +14,10 @@ from parser.simplifier.prefixSimplifier import PrefixSimplifier
 from parser.simplifier.quantifier_simplifier.quantifierSimplifier import QuantifierSimplifier
 from parser.simplifier.questionMarkExpressionSimplifier import QuestionMarkExpressionSimplifier
 from parser.simplifier.referenceSimplifier import ReferenceSimplifier
-from parser.simplifier.simplifierDto import SimplifierDto
 from parser.simplifier.terminalSimplifier import TerminalSimplifier
 
 
-class RuleSimplifier(BaseNodeRunner[SimplifierDto]):
+class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
     def __init__(self, terminal_simplifier=TerminalSimplifier(),
                  quantifier_simplifier=QuantifierSimplifier(),
                  array_index_simplifier=ArrayIndexSimplifier(),
@@ -41,7 +41,7 @@ class RuleSimplifier(BaseNodeRunner[SimplifierDto]):
         self.exception_simplifier = exception_simplifier
         self.reference_simplifier = reference_simplifier
 
-    def evaluate(self, t: SimplifierDto):
+    def evaluate(self, t: SimplificationDto):
         base_eval_result = super().evaluate(t)
 
         if base_eval_result is not None:
@@ -57,15 +57,15 @@ class RuleSimplifier(BaseNodeRunner[SimplifierDto]):
         if self.reference_simplifier.simplify_old(t):
             return self.reference_simplifier.handle(t)
 
-        raise Exception("No simplification option found for rule: " + str(t.rule))
+        raise Exception("No simplification option found for rule: " + str(t.node))
 
-    def can_simplify(self, t: SimplifierDto) -> AstTreeNode | None:
-        if t.rule.getChildCount() == 1:
-            return self.evaluate(SimplifierDto(t.rule.children[0], t.rule_simplifier, t.parser_result))
-        elif isinstance(t.rule, JMLParser.JMLParser.PrimaryContext) and t.rule.getChildCount() == 3:
-            return self.evaluate(SimplifierDto(t.rule.children[1], t.rule_simplifier, t.parser_result))
-        elif isinstance(t.rule, JMLParser.JMLParser.Atomic_valueContext) and t.rule.getChildCount() == 3:
-            return self.evaluate(SimplifierDto(t.rule.children[1], t.rule_simplifier, t.parser_result))
+    def can_simplify(self, t: SimplificationDto) -> AstTreeNode | None:
+        if t.node.getChildCount() == 1:
+            return t.evaluate_with_other_node(t.node.getChild(0))
+        elif isinstance(t.node, JMLParser.JMLParser.PrimaryContext) and t.node.getChildCount() == 3:
+            return t.evaluate_with_other_node(t.node.children[1])
+        elif isinstance(t.node, JMLParser.JMLParser.Atomic_valueContext) and t.node.getChildCount() == 3:
+            return t.evaluate_with_other_node(t.node.children[1])
 
         return None
 

@@ -4,14 +4,13 @@ from definitions.evaluations.csp.parameters.resultParameters import ResultParame
 
 class ResultDto(BaseExecutionDto):
     def __init__(self, node, result_parameters: ResultParameters, result, result_verifier):
-        super().__init__(result_parameters, result)
-        self.node = node
+        super().__init__(node=node, parameters=result_parameters, runner=result_verifier, result=result)
         from verification.resultVerification.resultVerifier import ResultVerifier
         self.result_verifier: ResultVerifier = result_verifier
 
     def copy_with_other_node(self, node):
         return ResultDto(node=node,
-                         result_parameters=self.parameters,
+                         result_parameters=self.get_result_parameters(),
                          result=self.result, result_verifier=self.result_verifier)
 
     def get_result_parameters(self) -> ResultParameters:
