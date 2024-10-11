@@ -13,7 +13,7 @@ class LengthRangeHandler(BaseNodeHandler[RangeDto]):
 
     def handle(self, t: RangeDto):
         expression: ArrayLengthNode = t.node
-        expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.arr_expr))
+        expr = t.evaluate_with_other_node(expression.arr_expr)
 
         if isinstance(expr, list):
             return len(expr)

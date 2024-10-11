@@ -15,8 +15,6 @@ class InfixExecution(BaseNodeHandler[ResultDto]):
     def handle(self, t: ResultDto):
         expression: InfixExpression = t.node
         return self.infix_helper.evaluate_infix(infix_operator=expression.name,
-                                                left=lambda: t.result_verifier.evaluate(
-                                                    t.copy_with_other_node(expression.left)),
-                                                right=lambda: t.result_verifier.evaluate(
-                                                    t.copy_with_other_node(expression.right)),
+                                                left=lambda: t.evaluate_with_other_node(expression.left),
+                                                right=lambda: t.evaluate_with_other_node(expression.right),
                                                 csp_parameters=None, is_smt=False)
