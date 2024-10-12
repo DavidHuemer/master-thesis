@@ -1,8 +1,6 @@
 import z3.z3num
 from z3 import ForAll, Implies, And, Exists, ArithRef
 
-from definitions.ast.astTreeNode import AstTreeNode
-from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from verification.constraints.constraintsDto import ConstraintsDto

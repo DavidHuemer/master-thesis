@@ -36,13 +36,13 @@ class ResultParameters(BaseParameters):
             return self.get_this_parameter(key)
 
         if self.local_parameters.parameter_exists(key):
-            return self.local_parameters.get_parameter_by_key(key)
+            return self.local_parameters.get_parameter_by_key(key, use_old, use_this)
         elif self.method_call_parameters.parameter_exists(key):
             return self.method_call_parameters.get_parameter_by_key(key, use_old, use_this)
         elif self.new_instance_variables.parameter_exists(key):
-            return self.new_instance_variables.get_parameter_by_key(key)
+            return self.new_instance_variables.get_parameter_by_key(key, use_old, use_this)
         elif self.old_instance_variables.parameter_exists(key):
-            return self.old_instance_variables.get_parameter_by_key(key)
+            return self.old_instance_variables.get_parameter_by_key(key, use_old, use_this)
 
         raise Exception(f"Parameter {key} does not exist")
 
@@ -50,19 +50,19 @@ class ResultParameters(BaseParameters):
         if use_this:
             # Get parameters from the old instance
             if self.old_instance_variables.parameter_exists(key):
-                return self.old_instance_variables.get_parameter_by_key(key)
+                return self.old_instance_variables.get_parameter_by_key(key, use_old=True, use_this=use_this)
 
             raise Exception(f"Parameter {key} does not exist in old instance")
         else:
             if self.local_parameters.parameter_exists(key):
-                return self.local_parameters.get_parameter_by_key(key)
+                return self.local_parameters.get_parameter_by_key(key, use_old=True, use_this=use_this)
             if self.method_call_parameters.parameter_exists(key):
                 return self.method_call_parameters.get_parameter_by_key(key, use_old=True, use_this=use_this)
             elif self.old_instance_variables.parameter_exists(key):
-                return self.old_instance_variables.get_parameter_by_key(key)
+                return self.old_instance_variables.get_parameter_by_key(key, use_old=True, use_this=use_this)
 
             raise Exception(f"Parameter {key} does not exist in old instance or method parameters")
 
     def get_this_parameter(self, key: str):
         if self.new_instance_variables.parameter_exists(key):
-            return self.new_instance_variables.get_parameter_by_key(key)
+            return self.new_instance_variables.get_parameter_by_key(key, use_old=False, use_this=True)

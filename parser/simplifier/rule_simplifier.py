@@ -59,7 +59,8 @@ class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
 
         raise Exception("No simplification option found for rule: " + str(t.node))
 
-    def can_simplify(self, t: SimplificationDto) -> AstTreeNode | None:
+    @staticmethod
+    def can_simplify(t: SimplificationDto) -> AstTreeNode | None:
         if t.node.getChildCount() == 1:
             return t.evaluate_with_other_node(t.node.getChild(0))
         elif isinstance(t.node, JMLParser.JMLParser.PrimaryContext) and t.node.getChildCount() == 3:

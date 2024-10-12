@@ -1,5 +1,4 @@
 from definitions.ast.astTreeNode import AstTreeNode
-from definitions.ast.quantifier.fullRangeTreeNode import FullRangeTreeNode
 
 
 class QuantifierTreeNode(AstTreeNode):

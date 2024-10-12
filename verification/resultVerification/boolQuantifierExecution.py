@@ -29,12 +29,12 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
             evaluation_result = t.result_verifier.evaluate(t.copy_with_other_node(expression.expression))
             if not evaluation_result:
                 for var_name in expression.variable_names:
-                    t.parameters.local_parameters.pop(var_name[1])
+                    t.get_result_parameters().local_parameters.pop(var_name[1])
                 return False
 
         # TODO: Remove here all the range variables of the current range
         for var_name in expression.variable_names:
-            t.parameters.local_parameters.pop(var_name[1])
+            t.get_result_parameters().local_parameters.pop(var_name[1])
 
         return True
 
@@ -46,5 +46,5 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
                 return True
 
         for var_name in expression.variable_names:
-            t.parameters.local_parameters.pop(var_name[1])
+            t.get_result_parameters().local_parameters.pop(var_name[1])
         return False

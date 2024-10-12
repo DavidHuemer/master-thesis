@@ -63,7 +63,7 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
             yield t.result_verifier.evaluate(t.copy_with_other_node(expression.expressions))
 
         for var_name in expression.variable_names:
-            t.parameters.local_parameters.pop(var_name[1])
+            t.get_result_parameters().local_parameters.pop(var_name[1])
 
     @staticmethod
     def get_product(value):

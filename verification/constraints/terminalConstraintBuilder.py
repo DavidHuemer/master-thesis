@@ -32,6 +32,6 @@ class TerminalConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     @staticmethod
     def evaluate_variable(variable_name: str, parameters: ConstraintParameters) -> ExprRef:
         if parameters.parameter_exists(variable_name):
-            return parameters.get_parameter_by_key(variable_name).value
+            return parameters.get_parameter_by_key(variable_name, use_old=False, use_this=False).value
         else:
             raise Exception(f"Variable {variable_name} not found in parameters")

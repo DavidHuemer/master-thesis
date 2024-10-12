@@ -19,4 +19,4 @@ class RangeInfixHandler(BaseNodeHandler[RangeDto]):
                                                 right=lambda: t.constraint_builder.evaluate(
                                                     t.copy_with_other_node(expression.right)),
                                                 is_smt=True,
-                                                csp_parameters=t.parameters.csp_parameters)
+                                                csp_parameters=t.get_range_parameters().csp_parameters)

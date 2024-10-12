@@ -5,8 +5,7 @@ from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 jml_code = ("//@ requires true;\n"
-            "//@ ensures \\result == a;\n"
-            "//@ signals (IllegalArgumentException e) a > 10;")
+            "//@ ensures \\result == b1 && b2;")
 
 
 def main():
@@ -14,7 +13,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\exceptionTest\\ExceptionTest.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\Conjunction.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

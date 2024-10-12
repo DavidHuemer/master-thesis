@@ -15,5 +15,5 @@ class LocalResultParameters(BaseParameters):
     def parameter_exists(self, key: str) -> bool:
         return key in self.parameters
 
-    def get_parameter_by_key(self, key: str):
+    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool):
         return self.parameters[key]
