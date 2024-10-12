@@ -1,9 +1,9 @@
 from nodes.baseNodeRunner import BaseNodeRunner
+from nodes.handlers.baseArrayIndexConstraintBuilder import BaseArrayIndexConstraintBuilder
+from nodes.handlers.basePrefixConstraintBuilder import BasePrefixConstraintBuilder
+from nodes.handlers.baseQuestionMarkConstraintBuilder import BaseQuestionMarkConstraintBuilder
 from parser.simplifier.quantifier_simplifier.quantifierRangeExecutino import QuantifierRangeExecution
-from verification.resultVerification.range.arrayIndexRangeHandler import ArrayIndexRangeHandler
 from verification.resultVerification.range.lengthRangeHandler import LengthRangeHandler
-from verification.resultVerification.range.prefixRangeHandler import PrefixRangeHandler
-from verification.resultVerification.range.questionMarkRangeHandler import QuestionMarkRangeHandler
 from verification.resultVerification.range.rangeDto import RangeDto
 from verification.resultVerification.range.rangeInfixHandler import RangeInfixHandler
 from verification.resultVerification.terminalExecution import TerminalExecution
@@ -12,8 +12,9 @@ from verification.resultVerification.terminalExecution import TerminalExecution
 class RangeBuilder(BaseNodeRunner[RangeDto]):
     def __init__(self, terminal_execution=TerminalExecution(), infix_range_execution=RangeInfixHandler(),
                  quantifier_range_execution=QuantifierRangeExecution(),
-                 question_mark_handler=QuestionMarkRangeHandler(), prefix_handler=PrefixRangeHandler(),
-                 array_index_handler=ArrayIndexRangeHandler(), length_handler=LengthRangeHandler()):
+                 question_mark_handler=BaseQuestionMarkConstraintBuilder(),
+                 prefix_handler=BasePrefixConstraintBuilder(),
+                 array_index_handler=BaseArrayIndexConstraintBuilder(), length_handler=LengthRangeHandler()):
         super().__init__(
             terminal_handler=terminal_execution,
             length_handler=length_handler,

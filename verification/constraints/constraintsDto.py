@@ -1,12 +1,16 @@
+from definitions.evaluations.BaseDto import BaseDto
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.constraintParameters import ConstraintParameters
+from nodes.baseNodeRunner import BaseNodeRunner
 
 
-class ConstraintsDto:
+class ConstraintsDto(BaseDto):
     def __init__(self, node,
                  jml_problem: JMLProblem,
                  constraint_parameters: ConstraintParameters,
-                 constraint_builder):
+                 constraint_builder: BaseNodeRunner):
+        super().__init__(node=node, runner=constraint_builder)
+
         from verification.constraints.expressionConstraintBuilder import ExpressionConstraintBuilder
 
         self.node = node

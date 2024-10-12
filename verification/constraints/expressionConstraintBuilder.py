@@ -1,24 +1,25 @@
 from nodes.baseNodeRunner import BaseNodeRunner
-from verification.constraints.arrayIndexConstraintBuilder import ArrayIndexConstraintBuilder
+from nodes.handlers.baseArrayIndexConstraintBuilder import BaseArrayIndexConstraintBuilder
+from nodes.handlers.basePrefixConstraintBuilder import BasePrefixConstraintBuilder
+from nodes.handlers.baseQuestionMarkConstraintBuilder import BaseQuestionMarkConstraintBuilder
 from verification.constraints.arrayLengthConstraintBuilder import ArrayLengthConstraintBuilder
 from verification.constraints.constraintsDto import ConstraintsDto
 from verification.constraints.infixConstraintBuilder import InfixConstraintBuilder
 from verification.constraints.methodCallHandler import MethodCallHandler
-from verification.constraints.prefixConstraintBuilder import PrefixConstraintBuilder
 from verification.constraints.quantifierConstraintBuilder import QuantifierConstraintBuilder
-from verification.constraints.questionMarkConstraintBuilder import QuestionMarkConstraintBuilder
 from verification.constraints.terminalConstraintBuilder import TerminalConstraintBuilder
 
 
 class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto]):
     def __init__(self, terminal_constraint_builder=TerminalConstraintBuilder(),
                  quantifier_constraint_builder=QuantifierConstraintBuilder(),
-                 question_mark_constraint_builder=QuestionMarkConstraintBuilder(),
-                 prefix_constraint_builder=PrefixConstraintBuilder(),
+                 question_mark_constraint_builder=BaseQuestionMarkConstraintBuilder(),
+                 prefix_constraint_builder=BasePrefixConstraintBuilder(),
                  infix_constraint_builder=InfixConstraintBuilder(),
-                 array_index_constraint_builder=ArrayIndexConstraintBuilder(),
+                 array_index_constraint_builder=BaseArrayIndexConstraintBuilder(),
                  array_length_constraint_builder=ArrayLengthConstraintBuilder(),
                  method_call_handler=MethodCallHandler()):
+        # noinspection PyTypeChecker
         super().__init__(
             terminal_handler=terminal_constraint_builder,
             quantifier_handler=quantifier_constraint_builder,

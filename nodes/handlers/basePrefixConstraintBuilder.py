@@ -1,18 +1,16 @@
-from z3 import Not
-
 from definitions.ast.prefixNode import PrefixNode
+from definitions.evaluations.BaseDto import BaseDto
 from nodes.baseNodeHandler import BaseNodeHandler
-from verification.constraints.constraintsDto import ConstraintsDto
 
 
-class PrefixConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
-    def is_node(self, t: ConstraintsDto):
+class BasePrefixConstraintBuilder(BaseNodeHandler[BaseDto]):
+    def is_node(self, t: BaseDto):
         return isinstance(t.node, PrefixNode)
 
-    def handle(self, t: ConstraintsDto):
+    def handle(self, t: BaseDto):
         prefix_expression: PrefixNode = t.node
 
-        expr = self.get_expr(prefix_expression, t)
+        expr = t.evaluate_with_other_node(prefix_expression.prefix)
 
         if prefix_expression.prefix == '++':
             return expr + 1
@@ -26,7 +24,3 @@ class PrefixConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
             return -expr
         elif prefix_expression.prefix == '~':
             return ~expr
-
-    @staticmethod
-    def get_expr(prefix_expression: PrefixNode, t: ConstraintsDto):
-        return t.constraint_builder.evaluate(t.copy_with_other_node(prefix_expression.expr))
