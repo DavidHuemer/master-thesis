@@ -4,8 +4,8 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@ requires true;\n"
-            "//@ ensures \\result == b1 && b2;")
+jml_code = ("//@ requires s != null;\n"
+            "//@ ensures \\result == s.length();")
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\Conjunction.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\compute\\StringLength.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

@@ -1,3 +1,4 @@
+from codeExecution.runtime.javaRuntimeTypeParser import JavaRuntimeTypeParser
 from definitions.codeExecution.runtime.javaRuntimeParameter import JavaRuntimeParameter
 
 
@@ -14,11 +15,8 @@ class JavaRuntimeMethod:
         self.method = method
         self.method_name = str(method.getName())
         self.modifiers = method.getModifiers()
-        self.return_type = method.getReturnType().getName()
+        self.return_type = JavaRuntimeTypeParser.get_correct_type(method.getReturnType().getName())
         self.parameters = [JavaRuntimeParameter(param) for param in method.getParameterTypes()]
-
-        if self.return_type == '[I':  # TODO: Add support for other array types
-            self.return_type = 'int[]'
 
     def __str__(self):
         return f'{self.return_type} {self.method_name} ({", ".join([str(param) for param in self.parameters])})'

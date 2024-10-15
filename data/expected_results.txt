@@ -22,3 +22,7 @@ data/code/find/BubbleSort.java;bubbleSort;true
 data/code/find/BubbleSortDesc.java;bubbleSort;true
 data/code/find/BubbleSortIncorrect.java;bubbleSort;false
 data/code/comparison/Conjunction.java;conjunctOf;true
+data/code/comparison/XOR.java;xor;true
+data/code/compute/Temperatures.java;convertTemperature;true
+data/code/compute/SetZero.java;setZero;true
+data/code/compute/StringLength.java;length;true

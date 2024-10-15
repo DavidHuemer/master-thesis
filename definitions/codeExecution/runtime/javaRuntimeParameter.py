@@ -1,3 +1,6 @@
+from codeExecution.runtime.javaRuntimeTypeParser import JavaRuntimeTypeParser
+
+
 class JavaRuntimeParameter:
     """
     Represents a java method parameter
@@ -10,11 +13,7 @@ class JavaRuntimeParameter:
         """
         self.param = param
 
-        param_name = str(param.getName())
-        if param_name == '[I':  # TODO: Add support for other array types
-            param_name = 'int[]'
-
-        self.parameter_name = param_name
+        self.parameter_name = JavaRuntimeTypeParser.get_correct_type(str(param.getName()))
 
     def __str__(self):
         return self.parameter_name

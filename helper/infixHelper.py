@@ -1,6 +1,6 @@
 from typing import Callable
 
-from z3 import And, Or, Not, ArrayRef, BoolRef
+from z3 import And, Or, Not, ArrayRef, BoolRef, SeqRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
@@ -14,11 +14,11 @@ class InfixHelper:
 
         if is_smt:
             right_expr = right()
-            if isinstance(left_expr, ArrayRef) and isinstance(right_expr, BoolRef):
+            if (isinstance(left_expr, ArrayRef) or isinstance(left_expr, SeqRef)) and isinstance(right_expr, BoolRef):
                 # left_expr = get_param(is_null_name).value
                 left_expr = csp_parameters.get_helper(str(left_expr), CSPParamHelperType.IS_NULL).value
 
-            if isinstance(right_expr, ArrayRef) and isinstance(left_expr, BoolRef):
+            if (isinstance(right_expr, ArrayRef) or isinstance(right_expr, SeqRef)) and isinstance(left_expr, BoolRef):
                 # is_null_name = f"{str(right_expr)}_is_null"
                 right_expr = csp_parameters.get_helper(str(right_expr), CSPParamHelperType.IS_NULL).value
         else:

@@ -34,7 +34,8 @@ expression:
 	| method_call
 	| quantifier_expression
 	| expr = expression LEFT_SQUARE_BRACKET index_expr = expression RIGHT_SQUARE_BRACKET
-	| expression '.' LENGTH
+	| expr = expression '.' method = method_call
+	| expr = expression '.' ident = IDENTIFIER
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expr = expression
 	| <assoc = left> left = expression op = (MULTIPLY | DIVIDE) right = expression
 	| <assoc = left> left = expression op = (PLUS | MINUS) right = expression
@@ -72,6 +73,7 @@ arguments: '(' expressions = expressionList? ')';
 
 atomic_value:
 	INTEGER
+	| DOUBLE
 	| BOOL_LITERAL
 	| RESULT
 	| NULL
@@ -101,9 +103,9 @@ range_expression_value:
 	primary
 	| old_expression
 	| this_expression
-	| method_call
+	| expr = range_expression_value '.' method = method_call
 	| range_expression_value '[' range_expression_value ']'
-	| range_expression_value '.' LENGTH
+	| expr = range_expression_value '.' ident = IDENTIFIER
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | NOT) range_expression_value
 	| <assoc = left> left = range_expression_value op = (
 		MULTIPLY
@@ -194,8 +196,6 @@ LESS_EQUAL: '<=';
 GREATER: '>';
 GREATER_EQUAL: '>=';
 
-LENGTH: 'length';
-
 // JML keywords
 
 REQUIRES: 'requires';
@@ -226,5 +226,6 @@ AT: '@' -> skip;
 IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 
 INTEGER: [0-9]+;
+DOUBLE: [0-9]+ ('.' [0-9]+);
 WS: [\t\r\n ]+ -> skip;
 COMMENT: '//' -> skip;

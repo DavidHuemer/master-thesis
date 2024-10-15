@@ -15,6 +15,8 @@ class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
             return t.result
         elif terminal.name == "INTEGER":
             return int(terminal.value)
+        elif terminal.name == "DOUBLE":
+            return float(terminal.value)
         elif terminal.name == "IDENTIFIER":
             if t.parameters.parameter_exists(terminal.value):
                 return t.parameters.get_parameter_by_key(key=terminal.value,

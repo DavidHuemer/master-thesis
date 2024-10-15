@@ -1,4 +1,4 @@
-from z3 import ModelRef, ArrayRef, QuantifierRef, BoolRef
+from z3 import ModelRef, ArrayRef, QuantifierRef, BoolRef, SeqRef
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
@@ -35,6 +35,8 @@ class TestCaseBuilder:
                     method_call_parameters[parameter_key] = array_values
                 elif isinstance(solution_param, BoolRef):
                     method_call_parameters[parameter_key] = str(solution_param).lower() == 'true'
+                elif isinstance(solution_param, SeqRef):
+                    method_call_parameters[parameter_key] = str(solution_param)
                 else:
                     raise Exception(f"Unsupported parameter type: {type(solution_param)}")
             else:

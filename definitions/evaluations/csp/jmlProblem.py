@@ -1,4 +1,4 @@
-from z3 import Or, ArithRef, sat, ModelRef, ArrayRef, BoolRef
+from z3 import Or, ArithRef, sat, ModelRef, ArrayRef, BoolRef, SeqRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
@@ -50,6 +50,10 @@ class JMLProblem:
             or_expressions = [param[i] != solution.evaluate(param[i]).as_long() for i in range(length)]
 
             return Or(*or_expressions)
+        elif isinstance(param, BoolRef):
+            return param != solution[param]
+        elif isinstance(param, SeqRef):
+            return param != solution[param]
 
     def is_satisfiable(self):
         """
