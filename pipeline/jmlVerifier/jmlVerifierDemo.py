@@ -4,8 +4,8 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@ requires amount >= 0;\n"
-            "//@ ensures balance == \\old(balance) + amount;")
+jml_code = ("//@ requires n >= 0;\n"
+            "//@ ensures \\result == (n == 0 ? 0 : (n == 1 ? 1 : (\\sum int i; 2 <= i && i <= n+1; (\\sum int j; 0 <= j && j < i-1; 1))));")
 
 
 def main():
@@ -13,11 +13,13 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\compute\\CreditCard.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\compute\\Fibonacci.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 
-        result = JmlVerifier().verify(test_cases[0], jml_code)
+        jml_verifier = JmlVerifier()
+        jml_verifier.setup()
+        result = jml_verifier.verify(test_cases[0], jml_code)
 
         if result.consistent is None:
             LoggingHelper.log_error(result)

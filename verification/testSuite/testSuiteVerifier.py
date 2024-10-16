@@ -14,14 +14,14 @@ class TestSuiteVerifier:
         self.java_compilation_runner = java_compilation_runner
         self.test_suite_verification_runner = test_suite_verification_runner
 
-    def run(self, test_suite: TestSuite) -> VerificationResult:
-        LoggingHelper.log_info("Running Test Suite")
-        # Steps to run the test suite:
-        # 1. Check the environment java compiler, ...
+    def setup(self):
         self.environment_checker.check_environment()
 
-        # 2. Compile the Java source code
+    def run(self, test_suite: TestSuite) -> VerificationResult:
+        LoggingHelper.log_info("Running Test Suite")
+
+        # 1. Compile the Java source code
         self.java_compilation_runner.compile(test_suite.consistency_test_case.java_code)
 
-        # 3. Run the java code and check the results
+        # 2. Run the java code and check the results
         return self.test_suite_verification_runner.run(test_suite)

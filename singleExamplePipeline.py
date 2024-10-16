@@ -34,4 +34,4 @@ class SingleExamplePipeline:
 
 
 if __name__ == '__main__':
-    SingleExamplePipeline().run("CreditCard.charge")
+    SingleExamplePipeline().run("Fibonacci.fibonacci")

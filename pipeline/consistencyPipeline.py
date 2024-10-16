@@ -103,6 +103,7 @@ class ConsistencyPipeline:
     def setup(self):
         LoggingHelper.log_info("Setting up consistency pipeline")
         self.jml_generator.setup()
+        self.jml_verifier.setup()
 
     def condition_exception_occurred(self, e: PreConditionException, consistency_test):
         LoggingHelper.log_warning(f"Condition exception occurred: {e.message}")

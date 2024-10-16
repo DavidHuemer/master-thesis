@@ -15,6 +15,9 @@ class JmlVerifier:
         self.test_suite_builder = test_suite_builder
         self.test_suite_verifier = test_suite_verifier
 
+    def setup(self):
+        self.test_suite_verifier.setup()
+
     def verify(self, test_case: ConsistencyTestCase, jml_code: str) -> VerificationResult:
         """
         Verify JML annotations in Java source code.
