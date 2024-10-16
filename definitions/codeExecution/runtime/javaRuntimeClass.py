@@ -29,3 +29,10 @@ class JavaRuntimeClass:
         """
         return [JavaRuntimeMethod(method) for method in
                 self.clazz.class_.getMethods()]
+
+    def get_fields(self):
+        """
+        Returns all fields of the class
+        :return: The fields of the class
+        """
+        return self.clazz.class_.getFields()

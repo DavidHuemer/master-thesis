@@ -10,3 +10,6 @@ class InstanceVariables(BaseParameters):
 
     def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool):
         return self.parameters[key]
+
+    def add_parameter(self, key: str, value):
+        self.parameters[key] = value

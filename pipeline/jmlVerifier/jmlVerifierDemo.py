@@ -4,9 +4,8 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@ requires a != null;\n"
-            "//@ ensures a.length == 0 ==> \\result == -1;\n"
-            "//@ ensures a.length > 0 ==> (0 <= \\result < a.length && (\\forall int i; 0 <= i && i < a.length; a[i] <= a[\\result]));")
+jml_code = ("//@ requires amount >= 0;\n"
+            "//@ ensures balance == \\old(balance) + amount;")
 
 
 def main():
@@ -14,7 +13,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\max\\BiggestIndex.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\compute\\CreditCard.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

@@ -47,5 +47,8 @@ class ReferenceSimplifier(BaseNodeHandler[SimplificationDto]):
         Sets the old flag for all children of the expression
         :param expr: The node to set the old flag for
         """
+
+        expr.use_old = True
+
         for child in expr.children:
             self.set_old(child)
