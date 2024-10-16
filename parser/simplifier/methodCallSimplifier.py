@@ -10,8 +10,8 @@ class MethodCallSimplifier(BaseNodeHandler[SimplificationDto]):
 
     def is_node(self, t: SimplificationDto):
         return (isinstance(t.node, JMLParser.JMLParser.Method_callContext)
-                and not ObjectHelper.check_has_child(t.node, "ident")
-                and not ObjectHelper.check_has_child(t.node, "args"))
+                and ObjectHelper.check_has_child(t.node, "ident")
+                and ObjectHelper.check_has_child(t.node, "args"))
 
     def handle(self, t: SimplificationDto):
         ident = t.node.ident.text

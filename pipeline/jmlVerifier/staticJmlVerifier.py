@@ -1,4 +1,5 @@
 import re
+import time
 
 from codeExecution.vm.VMHelper import VMHelper
 from codeLoading.codeReader.javaCodeReader import JavaCodeReader
@@ -82,14 +83,16 @@ def run_jml(jml_with_result: str, test_case):
 
 def run_verification(test_case: ConsistencyTestCase, jml: str, expected_result: bool):
     LoggingHelper.log_debug(f"Running verification with JML:\n {jml}", show_level=False)
+    start_time = time.time()
     result = jml_verifier.verify(test_case, jml)
+    end_time = time.time()
     if result.consistent is None:
         LoggingHelper.log_error(result)
     else:
         if result.consistent == expected_result:
-            LoggingHelper.log_info("Verification successful")
+            LoggingHelper.log_info(f"Verification successful in {end_time - start_time} seconds")
         else:
-            LoggingHelper.log_error("Verification failed")
+            LoggingHelper.log_error(f"Verification failed in {end_time - start_time} seconds")
 
 
 def split(content, symbol):

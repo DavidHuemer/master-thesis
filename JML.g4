@@ -37,9 +37,9 @@ expression:
 	| expr = expression '.' method = method_call
 	| expr = expression '.' ident = IDENTIFIER
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expr = expression
+	| <assoc = left> left = expression op = MUDULO right = expression
 	| <assoc = left> left = expression op = (MULTIPLY | DIVIDE) right = expression
 	| <assoc = left> left = expression op = (PLUS | MINUS) right = expression
-	| <assoc = left> left =expression op = MUDULO right = expression
 	| <assoc = left> left = expression op = (
 		LESS
 		| LESS_EQUAL
@@ -75,6 +75,8 @@ arguments: '(' expressions = expressionList? ')';
 atomic_value:
 	INTEGER
 	| DOUBLE
+	| STRING
+	| CHAR
 	| BOOL_LITERAL
 	| RESULT
 	| NULL
@@ -229,5 +231,7 @@ IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
 
 INTEGER: [0-9]+;
 DOUBLE: [0-9]+ ('.' [0-9]+);
+STRING: '"' (~["\r\n])* '"';
+CHAR: '\'' ~['\r\n] '\'';
 WS: [\t\r\n ]+ -> skip;
 COMMENT: '//' -> skip;

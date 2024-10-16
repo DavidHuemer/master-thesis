@@ -1,9 +1,11 @@
 import os
+import time
 
 from definitions import compilationConfig
 from definitions.codeExecution.compilation.CompilationException import CompilationException
 from definitions.javaCode import JavaCode
 from helper.files.fileHelper import FileHelper
+from helper.logs.loggingHelper import LoggingHelper
 from helper.processHelper import ProcessHelper
 
 
@@ -13,6 +15,8 @@ class JavaCompilationRunner:
         self.process_helper = process_helper
 
     def compile(self, java_code: JavaCode):
+        start_time = time.time()
+
         # Steps to compile the Java source code:
 
         # 1. Check the dist folder
@@ -26,6 +30,10 @@ class JavaCompilationRunner:
 
         # 4. Check if the compilation is successful
         self.check_verification(java_code)
+
+        # Log compilation success (and compilation time)
+        end_time = time.time()
+        LoggingHelper.log_info(f"Compilation successful in {end_time - start_time} seconds")
 
     def check_java_file(self, java_code: JavaCode):
         if not self.file_helper.exists(java_code.file_path):

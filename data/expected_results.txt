@@ -33,5 +33,5 @@ data/code/compute/CreditCard.java;charge;true
 data/code/find/FindFirstZero.java;findFirstZero;true
 data/code/comparison/DistinctArray.java;isDistinct;true
 data/code/compute/GenerateString.java;generateString;true
-data/code/compute/GenerateStringIncorrectLength.java;generateString;true
+data/code/compute/GenerateStringIncorrectLength.java;generateString;false
 data/code/comparison/IsCommonFactor.java;isCommonFactor;true

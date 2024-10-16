@@ -29,7 +29,7 @@ class TestCaseRunner:
             test_case: TestCase, consistency_test_case: ConsistencyTestCase, csp_parameters: CSPParameters,
             behavior: BehaviorNode, expected_exception=None) -> bool:
         # Steps to run a test case:
-        # 1. Get instance of the testing class
+        # 1. Get instance of the testing class (Constructor has already been checked
         test_instance = self.java_class_instantiation.instantiate(test_class)
 
         # 2. Get the current parameters list of the class instance before the execution

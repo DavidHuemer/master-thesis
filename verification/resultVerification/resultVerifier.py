@@ -43,7 +43,9 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
             # Run through all post conditions and check if they are satisfied
             for post_condition in behavior_node.post_conditions:
 
-                result_dto = ResultDto(node=post_condition, result=result.result, result_parameters=result_parameters,
+                result_dto = ResultDto(node=post_condition,
+                                       result=result.result,
+                                       result_parameters=result_parameters,
                                        result_verifier=self)
                 if not self.evaluate(result_dto):
                     return False
@@ -55,57 +57,3 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
 
     def evaluate(self, t: ResultDto):
         return super().evaluate(t)
-
-    # def evaluate(self, result: ExecutionResult, expression: AstTreeNode, parameters: JmlParameters):
-    #     # Evaluate expression
-    #
-    #     if isinstance(expression, QuestionMarkNode):
-    #         expr_result = self.evaluate(result, expression.expr)
-    #         if expr_result:
-    #             return self.evaluate(result, expression.true_expr)
-    #         else:
-    #             return self.evaluate(result, expression.false_expr)
-    #
-    #     if isinstance(expression, InfixExpression) and hasattr(expression, "left") and hasattr(expression, "right"):
-    #         return self.infix_helper.evaluate_infix(infix_operator=expression.name,
-    #                                                 left=lambda: self.evaluate(result, expression.left),
-    #                                                 right=lambda: self.evaluate(result, expression.right),
-    #                                                 is_smt=False, parameters=parameters)
-    #
-    #     if isinstance(expression, TerminalNode):
-    #         return self.evaluate_terminal_node(result, expression)
-    #
-    #     if isinstance(expression, BoolQuantifierTreeNode):
-    #         return self.bool_quantifier_execution.evaluate_bool_quantifier(result=result, expression=expression,
-    #                                                                        result_verifier=self)
-    #
-    #     if isinstance(expression, NumQuantifierTreeNode):
-    #         return self.num_quantifier_execution.evaluate_num_quantifier(result, expression, self)
-    #
-    #     if isinstance(expression, ArrayIndexNode):
-    #         arr = self.evaluate(result, expression.arr_expression)
-    #         index = self.evaluate(result, expression.index_expression)
-    #         return arr[index]
-    #
-    #     if isinstance(expression, ArrayLengthNode):
-    #         arr = self.evaluate(result, expression.arr_expr)
-    #         return len(arr)
-    #
-    #     if isinstance(expression, PrefixNode):
-    #         if expression.prefix == '++':
-    #             return self.evaluate(result, expression.expr) + 1
-    #         if expression.prefix == '--':
-    #             return self.evaluate(result, expression.expr) - 1
-    #         if expression.prefix == '!':
-    #             return not self.evaluate(result, expression.expr)
-    #         if expression.prefix == '-':
-    #             return -self.evaluate(result, expression.expr)
-    #         if expression.prefix == '+':
-    #             return self.evaluate(result, expression.expr)
-    #         if expression.prefix == '~':
-    #             return ~self.evaluate(result, expression.expr)
-    #
-    #     for child in expression.children:
-    #         return self.evaluate(result, child)
-    #
-    #     return True

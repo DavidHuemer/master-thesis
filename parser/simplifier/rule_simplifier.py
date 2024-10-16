@@ -54,7 +54,7 @@ class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
         if self.exception_simplifier.is_node(t):
             return self.exception_simplifier.handle(t)
 
-        if self.reference_simplifier.simplify_old(t):
+        if self.reference_simplifier.is_node(t):
             return self.reference_simplifier.handle(t)
 
         raise Exception("No simplification option found for rule: " + str(t.node))

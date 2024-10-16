@@ -1,3 +1,5 @@
+from jpype import JChar
+
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.baseExecutinoDto import BaseExecutionDto
 from nodes.baseNodeHandler import BaseNodeHandler
@@ -26,5 +28,10 @@ class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
                 return None
         elif terminal.name == "BOOL_LITERAL":
             return terminal.value == "true"
+        elif terminal.name == "STRING":
+            # Return terminal.value without the first and last character (the quotes)
+            return terminal.value[1:-1]
+        elif terminal.name == "CHAR":
+            return JChar(terminal.value[1:-1])
         else:
             return None

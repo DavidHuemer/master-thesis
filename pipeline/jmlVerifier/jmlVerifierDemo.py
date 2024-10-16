@@ -4,8 +4,10 @@ from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
-jml_code = ("//@ requires n >= 0;\n"
-            "//@ ensures \\result == (n == 0 ? 0 : (n == 1 ? 1 : (\\sum int i; 2 <= i && i <= n+1; (\\sum int j; 0 <= j && j < i-1; 1))));")
+jml_code = ("//@ requires length >= 0;\n"
+            "//@ ensures \\result.length() == length;\n"
+            "//@ ensures (\\forall int i; 0 <= i && i < length; 'a' <= \\result.charAt(i) && \\result.charAt(i) <= 'z');\n"
+            "//@ ensures (\\forall int i; 0 <= i && i < length; \\result.charAt(i) == 'a' + i % 26);")
 
 
 def main():
@@ -13,7 +15,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\compute\\Fibonacci.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\compute\\GenerateString.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

@@ -1,5 +1,6 @@
 from typing import Callable
 
+from jpype import java, JChar
 from z3 import And, Or, Not, ArrayRef, BoolRef, SeqRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
