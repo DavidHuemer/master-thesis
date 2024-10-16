@@ -34,4 +34,12 @@ class InfixSimplifier(BaseNodeHandler[SimplificationDto]):
         left = t.evaluate_with_other_node(t.node.left)
         right = t.evaluate_with_other_node(t.node.right)
 
+        if self.is_relational(t.node.op.text):
+            if isinstance(left, InfixExpression) and self.is_relational(left.name):
+                return InfixExpression("&&", left, InfixExpression(t.node.op.text, left.right, right))
+
         return InfixExpression(t.node.op.text, left, right)
+
+    @staticmethod
+    def is_relational(op: str):
+        return op in ["<", ">", "<=", ">="]

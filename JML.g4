@@ -39,6 +39,7 @@ expression:
 	| prefix = (PLUS | MINUS | '++' | '--' | '~' | '!') expr = expression
 	| <assoc = left> left = expression op = (MULTIPLY | DIVIDE) right = expression
 	| <assoc = left> left = expression op = (PLUS | MINUS) right = expression
+	| <assoc = left> left =expression op = MUDULO right = expression
 	| <assoc = left> left = expression op = (
 		LESS
 		| LESS_EQUAL
@@ -183,6 +184,7 @@ PLUS: '+';
 MINUS: '-';
 MULTIPLY: '*';
 DIVIDE: '/';
+MUDULO: '%';
 
 QUESTION_MARK: '?';
 COLON: ':';

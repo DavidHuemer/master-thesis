@@ -47,6 +47,8 @@ class InfixHelper:
             return left_expr * right_expr
         elif infix_operator == "/":
             return left_expr / right_expr
+        elif infix_operator == "%":
+            return left_expr % right_expr
         elif infix_operator == "&&":
             return And(left_expr, right_expr) if is_smt else left_expr and right()
         elif infix_operator == "||":
