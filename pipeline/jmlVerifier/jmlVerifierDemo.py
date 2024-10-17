@@ -5,7 +5,8 @@ from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
 from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 jml_code = ("//@ requires arr != null;\n"
-            "//@ ensures (\\forall int i, j; 0 <= i && i < j && j < arr.length; arr[i] != arr[j]);")
+            "//@ ensures (\\exists int i; 0 <= i && i < arr.length; arr[i] == 0) ==> (0 <= \\result && \\result < arr.length && arr[\\result] == 0);\n"
+            "//@ ensures (\\forall int i; 0 <= i && i < arr.length; arr[i] != 0) ==> \\result == -1;")
 
 
 def main():
@@ -13,7 +14,7 @@ def main():
     try:
         vm_helper.start()
 
-        code = JavaCodeReader().get_java_from_file("data\\code\\comparison\\DistinctArray.java")
+        code = JavaCodeReader().get_java_from_file("data\\code\\find\\FindFirstZero.java")
         builder = ConsistencyTestCaseBuilder()
         test_cases = builder.build_test_cases([], [code])
 

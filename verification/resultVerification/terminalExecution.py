@@ -1,4 +1,4 @@
-from jpype import JChar
+from jpype import JChar, JDouble
 
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.baseExecutinoDto import BaseExecutionDto
@@ -18,7 +18,7 @@ class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
         elif terminal.name == "INTEGER":
             return int(terminal.value)
         elif terminal.name == "DOUBLE":
-            return float(terminal.value)
+            return JDouble(terminal.value)
         elif terminal.name == "IDENTIFIER":
             if t.parameters.parameter_exists(terminal.value):
                 return t.parameters.get_parameter_by_key(key=terminal.value,

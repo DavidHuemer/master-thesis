@@ -1,6 +1,6 @@
 from typing import Callable
 
-from jpype import java, JChar
+from jpype import java, JChar, JDouble
 from z3 import And, Or, Not, ArrayRef, BoolRef, SeqRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
@@ -8,8 +8,7 @@ from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
 
 
 class InfixHelper:
-    @staticmethod
-    def evaluate_infix(infix_operator: str, csp_parameters: CSPParameters | None, left: Callable, right: Callable,
+    def evaluate_infix(self, infix_operator: str, csp_parameters: CSPParameters | None, left: Callable, right: Callable,
                        is_smt: bool):
         left_expr = left()
 
@@ -54,13 +53,21 @@ class InfixHelper:
             return And(left_expr, right_expr) if is_smt else left_expr and right()
         elif infix_operator == "||":
             return And(left_expr, right_expr) if is_smt else left_expr or right()
-        elif infix_operator == "==":
+        elif infix_operator == "==" or infix_operator == "<==>":
+            if is_smt:
+                return left_expr == right_expr
+
+            if self.is_float(left_expr) or self.is_float(right_expr):
+                return self.evaluate_float(left_expr, right_expr)
+
             return left_expr == right_expr
-        elif infix_operator == "<==>":
-            return left_expr == right_expr
-        elif infix_operator == "!=":
-            return left_expr != right_expr
-        elif infix_operator == "<=!=>":
+        elif infix_operator == "!=" or infix_operator == "<=!=>":
+            if is_smt:
+                return left_expr != right_expr
+
+            if self.is_float(left_expr) or self.is_float(right_expr):
+                return not self.evaluate_float(left_expr, right_expr)
+
             return left_expr != right_expr
         elif infix_operator == "==>":
             return Or(Not(left_expr), right_expr) if is_smt else (not left_expr) or right()
@@ -74,3 +81,11 @@ class InfixHelper:
             return left_expr >= right_expr
 
         raise Exception("Infix expression not supported")
+
+    @staticmethod
+    def is_float(expr):
+        return isinstance(expr, float) or isinstance(expr, JDouble)
+
+    @staticmethod
+    def evaluate_float(left, right):
+        return abs(left - right) < 0.000001
