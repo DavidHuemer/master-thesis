@@ -60,7 +60,6 @@ class JmlSimplifier:
         simplification_dto = SimplificationDto(condition.children[1], self.rule_simplifier, parser_result)
 
         if isinstance(condition, JMLParser.JMLParser.Signals_only_conditionContext):
-            # TODO: Add allowed signals to behavior node
             allowed_signals = self.allowed_signals_simplifier.simplify(condition)
             self.current_behavior.add_allowed_signals(allowed_signals)
             return

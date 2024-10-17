@@ -5,8 +5,6 @@ from definitions.evaluations.csp.parameters.instanceVariables import InstanceVar
 class JavaVariableExtractor:
     @staticmethod
     def get_parameters(instance, test_class: JavaRuntimeClass) -> InstanceVariables:
-        # TODO: Get the parameters of the instance
-
         variables = InstanceVariables()
 
         for field in test_class.get_fields():
@@ -14,7 +12,5 @@ class JavaVariableExtractor:
             key = field.getName()
             value = field.get(instance)
             variables.add_parameter(key, value)
-
-        # for field in MyClass.class_.getDeclaredFields():
 
         return variables

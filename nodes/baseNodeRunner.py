@@ -45,6 +45,4 @@ class BaseNodeRunner[T]:
         elif self.method_call_handler.is_node(t):
             return self.method_call_handler.handle(t)
 
-        # TODO: Add additional handlers here, method calls, etc.
-
         return None
