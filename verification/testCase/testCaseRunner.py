@@ -10,10 +10,11 @@ from definitions.evaluations.csp.parameters.resultParameters import ResultParame
 from definitions.verification.testCase import TestCase
 from verification.resultVerification.executionVerifier import ExecutionVerifier
 from verification.testCase.testCaseExecution import TestCaseExecution
+from helper.timeout.timeoutHelper import TimeoutHelper
 
 
 class TestCaseRunner:
-    def __init__(self, java_class_instantiation=JavaClassInstantiation(),
+    def __init__(self, timeout_helper=TimeoutHelper(), java_class_instantiation=JavaClassInstantiation(),
                  java_duplication_helper=JavaDuplicationHelper(),
                  test_case_execution=TestCaseExecution(),
                  execution_verifier=ExecutionVerifier(),
@@ -23,6 +24,7 @@ class TestCaseRunner:
         self.test_case_execution = test_case_execution
         self.execution_verifier = execution_verifier
         self.java_variable_extractor = java_variable_extractor
+        self.timeout_helper = timeout_helper
 
     # TODO: Return more than just a boolean (e.g. why the test failed)
     def run(self, test_class: JavaRuntimeClass,
@@ -49,10 +51,11 @@ class TestCaseRunner:
 
         result_instances = ResultInstances(old=old_duplicate, new=test_instance)
 
-        return self.execution_verifier.verify(execution_result=execution_result,
-                                              result_parameters=result_parameters,
-                                              behavior=behavior,
-                                              expected_exception=expected_exception,
-                                              consistency_test_case=consistency_test_case,
-                                              test_case=test_case,
-                                              result_instances=result_instances)
+        return self.timeout_helper.run_with_timeout(
+            method=lambda: self.execution_verifier.verify(execution_result=execution_result,
+                                                          result_parameters=result_parameters,
+                                                          behavior=behavior,
+                                                          expected_exception=expected_exception,
+                                                          consistency_test_case=consistency_test_case,
+                                                          test_case=test_case,
+                                                          result_instances=result_instances), timeout=30)

@@ -26,7 +26,7 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
         # TODO: Add here all the range variables
 
         for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
-            evaluation_result = t.result_verifier.evaluate(t.copy_with_other_node(expression.expression))
+            evaluation_result = t.evaluate_with_other_node(expression.expression)
             if not evaluation_result:
                 for var_name in expression.variable_names:
                     t.get_result_parameters().local_parameters.pop(var_name[1])
