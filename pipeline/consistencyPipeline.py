@@ -4,6 +4,7 @@ from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.exceptions.preConditionException import PreConditionException
 from definitions.evaluations.tests.exceptions.noTestCasesException import NoTestCasesException
 from definitions.parser.parserException import ParserException
+from definitions.timeoutException import TimeoutException
 from definitions.verification.verificationResult import VerificationResult
 from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlGenerator.jmlGenerator import JmlGenerator
@@ -77,6 +78,8 @@ class ConsistencyPipeline:
             return self.no_test_cases_exception_occurred(e, consistency_test)
         except PreConditionException as e:
             return self.condition_exception_occurred(e, consistency_test)
+        except TimeoutException as e:
+            return VerificationResultFactory.by_exception(consistency_test, e)
         except Exception as e:
             return self.exception_occurred(e, consistency_test)
 
@@ -97,6 +100,15 @@ class ConsistencyPipeline:
             return self.get_best_result(VerificationResultFactory.by_exception(consistency_test, exception))
 
         new_jml = self.jml_generator.get_from_no_test_cases()
+        self.retries += 1
+        return self.get_result_by_jml(consistency_test, new_jml)
+
+    def timeout_exception_occurred(self, exception, consistency_test: ConsistencyTestCase):
+        LoggingHelper.log_warning(f"Timeout exception occurred")
+        if self.retries >= config.MAX_PIPELINE_TRIES:
+            return self.get_best_result(VerificationResultFactory.by_exception(consistency_test, exception))
+
+        new_jml = self.jml_generator.get_from_text("Timeout exception occurred")
         self.retries += 1
         return self.get_result_by_jml(consistency_test, new_jml)
 

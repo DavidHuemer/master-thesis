@@ -9,8 +9,14 @@ public class IsCommonFactor {
      * 
      * @return True when the factor is the common factor of the two numbers, false
      *         otherwise.
+     * 
+     * @throws IllegalArgumentException when the factor is less than 1
      */
     public boolean isCommonFactor(int a, int b, int factor) {
+        if (factor < 1) {
+            throw new IllegalArgumentException("The factor must be greater than 0.");
+        }
+
         return a % factor == 0 && b % factor == 0;
     }
 }

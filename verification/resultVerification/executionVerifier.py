@@ -1,3 +1,6 @@
+import threading
+import time
+
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
@@ -25,7 +28,8 @@ class ExecutionVerifier:
                result_parameters: ResultParameters,
                consistency_test_case: ConsistencyTestCase,
                behavior: BehaviorNode, expected_exception, test_case: TestCase,
-               result_instances: ResultInstances):
+               result_instances: ResultInstances, stop_event: threading.Event):
+
         try:
             if execution_result.exception is not None:
                 # Validate exception
@@ -34,13 +38,14 @@ class ExecutionVerifier:
                                                             behavior=behavior,
                                                             expected_exception=expected_exception,
                                                             signal_conditions=behavior.signals_conditions,
-                                                            result_parameters=result_parameters)
+                                                            result_parameters=result_parameters,
+                                                            stop_event=stop_event)
             else:
                 # Validate result
                 result = execution_result.result
                 verification_result = self.verify_result(execution_result=execution_result,
                                                          behavior=behavior,
-                                                         result_parameters=result_parameters)
+                                                         result_parameters=result_parameters, stop_event=stop_event)
 
             self.log_result(consistency_test_case, test_case, result, verification_result)
             return verification_result
@@ -49,20 +54,22 @@ class ExecutionVerifier:
             raise e
 
     def verify_exception(self, exception: ExecutionException, behavior: BehaviorNode, expected_exception,
-                         signal_conditions: list[ExceptionExpression], result_parameters: ResultParameters):
+                         signal_conditions: list[ExceptionExpression], result_parameters: ResultParameters,
+                         stop_event: threading.Event):
 
         return self.signal_execution_verifier.verify_signal(exception=exception,
                                                             behavior=behavior,
                                                             expected_exception=expected_exception,
                                                             signals=signal_conditions,
-                                                            result_parameters=result_parameters)
+                                                            result_parameters=result_parameters,
+                                                            stop_event=stop_event)
 
     def verify_result(self, execution_result: ExecutionResult, behavior: BehaviorNode,
-                      result_parameters: ResultParameters):
+                      result_parameters: ResultParameters, stop_event: threading.Event):
         if behavior.behavior_type == BehaviorType.EXCEPTIONAL_BEHAVIOR:
             return False
 
-        return self.result_verifier.verify(execution_result, behavior, result_parameters)
+        return self.result_verifier.verify(execution_result, behavior, result_parameters, stop_event)
 
     @staticmethod
     def log_result(consistency_test_case: ConsistencyTestCase, test_case: TestCase,

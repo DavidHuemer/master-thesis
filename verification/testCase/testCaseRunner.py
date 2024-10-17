@@ -52,10 +52,11 @@ class TestCaseRunner:
         result_instances = ResultInstances(old=old_duplicate, new=test_instance)
 
         return self.timeout_helper.run_with_timeout(
-            method=lambda: self.execution_verifier.verify(execution_result=execution_result,
-                                                          result_parameters=result_parameters,
-                                                          behavior=behavior,
-                                                          expected_exception=expected_exception,
-                                                          consistency_test_case=consistency_test_case,
-                                                          test_case=test_case,
-                                                          result_instances=result_instances), timeout=30)
+            method=lambda stop_event: self.execution_verifier.verify(execution_result=execution_result,
+                                                                     result_parameters=result_parameters,
+                                                                     behavior=behavior,
+                                                                     expected_exception=expected_exception,
+                                                                     consistency_test_case=consistency_test_case,
+                                                                     test_case=test_case,
+                                                                     result_instances=result_instances,
+                                                                     stop_event=stop_event), timeout=5)

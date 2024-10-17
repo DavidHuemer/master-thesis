@@ -27,7 +27,7 @@ class JmlBot:
 
     def get_from_parser_exception(self, parser_errors: list[ParserError]):
         prompt = ("There was an error parsing the code. The following error(s) occurred:\n"
-                  f"{[str(x) for x in parser_errors]}\n"
+                  f"{"\n".join([str(x) for x in parser_errors])}\n"
                   "Provide a new JML for the method.\n"
                   "Again, only generate the JML and nothing else, as the result is being parsed.")
 

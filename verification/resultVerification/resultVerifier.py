@@ -1,3 +1,5 @@
+import threading
+
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
@@ -38,7 +40,8 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
         self.num_quantifier_execution = num_quantifier_execution
         self.infix_helper = infix_helper
 
-    def verify(self, result: ExecutionResult, behavior_node: BehaviorNode, result_parameters: ResultParameters):
+    def verify(self, result: ExecutionResult, behavior_node: BehaviorNode, result_parameters: ResultParameters,
+               stop_event: threading.Event):
         try:
             # Run through all post conditions and check if they are satisfied
             for post_condition in behavior_node.post_conditions:
@@ -46,7 +49,8 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
                 result_dto = ResultDto(node=post_condition,
                                        result=result.result,
                                        result_parameters=result_parameters,
-                                       result_verifier=self)
+                                       result_verifier=self,
+                                       stop_event=stop_event)
                 if not self.evaluate(result_dto):
                     return False
 

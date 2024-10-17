@@ -1,3 +1,5 @@
+import time
+
 from z3 import sat, Or, ArrayRef
 
 from definitions.ast.astTreeNode import AstTreeNode
@@ -55,7 +57,9 @@ class RangeExecution:
 
         solutions = []
 
-        while range_problem.check() == sat:
+        start_time = time.time()
+
+        while range_problem.check() == sat and not t.stop_event.is_set():
             model = range_problem.get_model()
             solution = dict()
             constraints = []

@@ -1,3 +1,5 @@
+import threading
+
 import jpype
 
 from definitions.ast.behavior.behaviorNode import BehaviorNode
@@ -17,7 +19,7 @@ class SignalExecutionVerifier:
                       behavior: BehaviorNode,
                       expected_exception: str | None,
                       signals: list[ExceptionExpression],
-                      result_parameters: ResultParameters):
+                      result_parameters: ResultParameters, stop_event: threading.Event):
         if behavior.behavior_type == BehaviorType.NORMAL_BEHAVIOR:
             return False
 
@@ -28,7 +30,7 @@ class SignalExecutionVerifier:
             return self.verify_exception_subclass(exception, expected_exception)
 
         # Check if other signals matches
-        return self.verify_signals(exception, signals, result_parameters)
+        return self.verify_signals(exception, signals, result_parameters, stop_event=stop_event)
 
     @staticmethod
     def verify_exception_subclass(exception: ExecutionException, expected_exception: str):
@@ -38,10 +40,10 @@ class SignalExecutionVerifier:
         return issubclass(thrown_exception_instance, expected_exception_instance)
 
     def verify_signals(self, exception: ExecutionException, signals: list[ExceptionExpression],
-                       result_parameters: ResultParameters):
+                       result_parameters: ResultParameters, stop_event: threading.Event):
         for signal_condition in signals:
             t = ResultDto(node=signal_condition.expression, result_verifier=self.result_verifier,
-                          result_parameters=result_parameters, result=None)
+                          result_parameters=result_parameters, result=None, stop_event=stop_event)
 
             if (self.verify_exception_subclass(exception, signal_condition.exception_type) and
                     self.result_verifier.evaluate(t)):
