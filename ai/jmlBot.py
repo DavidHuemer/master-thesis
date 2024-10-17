@@ -3,6 +3,7 @@ from ai.openAIClient import OpenAIClient
 from ai.promts.initialPromptGenerator import InitialPromptGenerator
 from definitions import config
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.parser.parserError import ParserError
 
 
 class JmlBot:
@@ -24,14 +25,11 @@ class JmlBot:
         response = self.chat_bot.chat(prompt)
         return response
 
-    def get_from_parser_exception(self, node):
-        if node is None:
-            prompt = ("There was an error parsing the code. Please provide a new JML for the method.\n"
-                      "Again, only generate the JML and nothing else, as the result is being parsed.")
-        else:
-            prompt = (f"There was an error parsing the code at the following node:\n{node}\n"
-                      f"Please provide a new JML for the method.\n"
-                      f"Again, only generate the JML and nothing else, as the result is being parsed.")
+    def get_from_parser_exception(self, parser_errors: list[ParserError]):
+        prompt = ("There was an error parsing the code. The following error(s) occurred:\n"
+                  f"{[x.message for x in parser_errors]}\n"
+                  "Provide a new JML for the method.\n"
+                  "Again, only generate the JML and nothing else, as the result is being parsed.")
 
         response = self.chat_bot.chat(prompt)
         return response

@@ -2,6 +2,7 @@ from ai.OpenAIClientGenerator import OpenAIClientGenerator
 from ai.jmlBot import JmlBot
 from ai.openAIClient import OpenAIClient
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.parser.parserError import ParserError
 
 
 class JmlAiGenerator:
@@ -38,8 +39,8 @@ class JmlAiGenerator:
         if self.jmlBot is not None:
             self.jmlBot.reset()
 
-    def get_from_parser_exception(self, node):
-        return self.jmlBot.get_from_parser_exception(node)
+    def get_from_parser_exception(self, parser_errors: list[ParserError]):
+        return self.jmlBot.get_from_parser_exception(parser_errors)
 
     def get_from_no_test_cases(self):
         return self.jmlBot.get_from_no_test_cases()

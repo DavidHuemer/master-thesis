@@ -1,4 +1,7 @@
+from definitions.parser.parserError import ParserError
+
+
 class ParserException(Exception):
-    def __init__(self, message, error_node=None):
-        super().__init__(message)
-        self.error_node = error_node
+    def __init__(self, parser_errors: list[ParserError]):
+        super().__init__("Parser exception occurred")
+        self.parser_errors = parser_errors

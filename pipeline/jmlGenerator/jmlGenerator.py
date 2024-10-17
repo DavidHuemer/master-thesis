@@ -22,7 +22,7 @@ class JmlGenerator:
         self.jml_ai_generator.reset()
 
     def get_from_parser_exception(self, parser_exception: ParserException):
-        return self.jml_ai_generator.get_from_parser_exception(node=parser_exception.error_node)
+        return self.jml_ai_generator.get_from_parser_exception(parser_errors=parser_exception.parser_errors)
 
     def get_from_failing_verification(self, result: VerificationResult):
         return self.jml_ai_generator.get_from_failing_verification(result.parameters)
