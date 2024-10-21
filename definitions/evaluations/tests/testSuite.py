@@ -13,5 +13,5 @@ class TestSuite:
     def get_java(self):
         return self.consistency_test_case.java_code
 
-    def get_test_cases_count(self):
+    def __len__(self):
         return sum([behavior_test.get_test_cases_count() for behavior_test in self.behavior_tests])

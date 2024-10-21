@@ -11,11 +11,11 @@ class TestTimeoutHelper(TestCase):
     def test_run_with_timeout(self):
         # Check that the method raises a TimeoutException
         with self.assertRaises(TimeoutException):
-            self.timeout_helper.run_with_timeout(self.sleep_example, args=(50,), timeout=1)
+            self.timeout_helper.run_with_timeout(method=lambda stop_event: self.sleep_example(1), timeout=.5)
 
     def test_get_result_works(self):
         # Check that the method returns the expected result
-        self.timeout_helper.run_with_timeout(self.sleep_example, args=(.1,), timeout=1)
+        self.timeout_helper.run_with_timeout(method=lambda stop_event: self.sleep_example(.1), timeout=.5)
 
     @staticmethod
     def sleep_example(time_sleep: float):

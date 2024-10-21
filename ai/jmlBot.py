@@ -4,13 +4,16 @@ from ai.promts.initialPromptGenerator import InitialPromptGenerator
 from definitions import config
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.parser.parserError import ParserError
+from ai.promts.aiTemplateGenerator import AiTemplateGenerator
 
 
 class JmlBot:
-    def __init__(self, client: OpenAIClient, chat_bot=None, initial_prompt_generator=InitialPromptGenerator()):
+    def __init__(self, client: OpenAIClient, chat_bot=None, initial_prompt_generator=InitialPromptGenerator(),
+                 ai_template_generator=AiTemplateGenerator()):
         self.client = client
         self.chat_bot = ChatBot(client, config.JML_CONTEXT) if chat_bot is None else chat_bot
         self.initial_prompt_generator = initial_prompt_generator
+        self.ai_template_generator = ai_template_generator
 
     def get_jml(self, test_case: ConsistencyTestCase) -> str:
         initial_prompt = self.initial_prompt_generator.get_initial_prompt(test_case)
@@ -42,12 +45,8 @@ class JmlBot:
         response = self.chat_bot.chat(prompt)
         return response
 
-    def get_from_text(self, text: str):
-        prompt = ("The following exception occurred:\n"
-                  f"{text}\n"
-                  "Please provide a new JML for the method.\n"
-                  "Again, only generate the JML and nothing else, as the result is being parsed.")
-
+    def get_from_exception(self, e: Exception):
+        prompt = self.ai_template_generator.generate_by_exception(str(e))
         response = self.chat_bot.chat(prompt)
         return response
 

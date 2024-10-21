@@ -3,5 +3,7 @@ from definitions.parser.parserError import ParserError
 
 class ParserException(Exception):
     def __init__(self, parser_errors: list[ParserError]):
-        super().__init__("Parser exception occurred")
-        self.parser_errors = parser_errors
+        parser_str = "Parser exception occurred"
+        if len(parser_errors) > 0:
+            parser_str += f":\n{'\n'.join([str(x) for x in parser_errors])}"
+        super().__init__(parser_str)

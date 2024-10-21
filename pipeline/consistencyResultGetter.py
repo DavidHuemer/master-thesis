@@ -39,7 +39,6 @@ class ConsistencyResultGetter:
                 return VerificationResultFactory.by_exception(consistency_test, e)
 
             LoggingHelper.log_info("Generating new JML")
-            # TODO: Get from exception
-            new_jml_code = self.jml_generator.get_from_text(str(e))
+            new_jml_code = self.jml_generator.get_by_exception(e)
             self.retries += 1
             return self.get_result_by_jml(consistency_test, new_jml_code)

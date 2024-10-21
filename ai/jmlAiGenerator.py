@@ -32,18 +32,9 @@ class JmlAiGenerator:
         """
         return self.jmlBot.get_jml(test_case)
 
-    def get_from_failing_verification(self, parameters):
-        return self.jmlBot.get_from_failing_verification(parameters)
-
     def reset(self):
         if self.jmlBot is not None:
             self.jmlBot.reset()
 
-    def get_from_parser_exception(self, parser_errors: list[ParserError]):
-        return self.jmlBot.get_from_parser_exception(parser_errors)
-
-    def get_from_no_test_cases(self):
-        return self.jmlBot.get_from_no_test_cases()
-
-    def get_from_text(self, text: str):
-        return self.jmlBot.get_from_text(text)
+    def get_by_exception(self, e: Exception):
+        return self.jmlBot.get_from_exception(e)

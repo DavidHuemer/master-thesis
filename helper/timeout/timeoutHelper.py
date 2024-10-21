@@ -7,7 +7,7 @@ from definitions.timeoutException import TimeoutException
 
 class TimeoutHelper:
     @staticmethod
-    def run_with_timeout(method: Callable[[threading.Event], Any], timeout: int):
+    def run_with_timeout(method: Callable[[threading.Event], Any], timeout: float):
         # Funktion, die in einem Thread ausgeführt wird
         ergebnis = [None]
         stop_event = threading.Event()

@@ -1,7 +1,5 @@
 from ai.jmlAiGenerator import JmlAiGenerator
 from definitions.consistencyTestCase import ConsistencyTestCase
-from definitions.parser.parserException import ParserException
-from definitions.verification.verificationResult import VerificationResult
 
 
 class JmlGenerator:
@@ -21,14 +19,5 @@ class JmlGenerator:
     def reset(self):
         self.jml_ai_generator.reset()
 
-    def get_from_parser_exception(self, parser_exception: ParserException):
-        return self.jml_ai_generator.get_from_parser_exception(parser_errors=parser_exception.parser_errors)
-
-    def get_from_failing_verification(self, result: VerificationResult):
-        return self.jml_ai_generator.get_from_failing_verification(result.parameters)
-
-    def get_from_no_test_cases(self):
-        return self.jml_ai_generator.get_from_no_test_cases()
-
-    def get_from_text(self, text: str):
-        return self.jml_ai_generator.get_from_text(text)
+    def get_by_exception(self, e: Exception):
+        return self.jml_ai_generator.get_by_exception(e)

@@ -29,7 +29,7 @@ class JmlVerifier:
         test_suite = self.test_suite_builder.get_test_suite(test_case, test_case.method_info, jml_code)
         LoggingHelper.log_info("Test Suite created")
 
-        if test_suite.get_test_cases_count() <= 0:
+        if len(test_suite) <= 0:
             raise NoTestCasesException()
 
         # 2. Run the test cases (Run the method with the different parameters)
