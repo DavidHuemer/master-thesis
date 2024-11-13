@@ -1,1 +1,1 @@
-afa
+// @requires true
