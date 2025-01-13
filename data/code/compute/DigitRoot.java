@@ -1,21 +1,28 @@
 public class DigitRoot {
     /**
-     * Calculates the digit root of a given positive number. The number root is the result
-     * the repeated calculation of the cross sum of a number until the result is
-     * only one digit.
-     * 
-     * @param num The number
-     * @return The digit root of the number
+     * Calculates the digit root of a given number. The digit root is the result of
+     * repeatedly summing the digits of a number until a single-digit value is obtained.
+     *
+     * @param number The input number for which to calculate the digit root. Must be a non-negative integer.
+     * @return The single-digit result of the digit root calculation.
+     * @throws IllegalArgumentException if the input number is negative.
+     *
+     * <p>Example usage:</p>
+     * <pre>
+     *     DigitRootCalculator.calculateDigitRoot(987); // Returns 6
+     * </pre>
      */
-    public int digitRoot(int num) {
-        while (num >= 10) {
-            int sum = 0;
-            while (num > 0) {
-                sum += num % 10;
-                num /= 10;
-            }
-            num = sum;
+    public int digitRoot(int number) {
+        if (number < 0) {
+            throw new IllegalArgumentException("Number must be non-negative.");
         }
-        return num;
+
+        // Optimized calculation using modulo 9
+        if (number == 0) {
+            return 0;
+        }
+
+        int digitRoot = number % 9;
+        return (digitRoot == 0) ? 9 : digitRoot;
     }
 }

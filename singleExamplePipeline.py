@@ -34,4 +34,4 @@ class SingleExamplePipeline:
 
 
 if __name__ == '__main__':
-    SingleExamplePipeline().run("Fibonacci.fibonacci")
+    SingleExamplePipeline().run("DigitRoot.digitRoot")

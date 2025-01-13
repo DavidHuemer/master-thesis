@@ -20,6 +20,7 @@ class NumericTestConstraintsGenerator:
 
     @staticmethod
     def get_test_constraints(parameter: CSPParameter):
+        # TODO: Test with other values
         yield parameter.value < -100
         yield parameter.value < -20
         yield parameter.value < -10

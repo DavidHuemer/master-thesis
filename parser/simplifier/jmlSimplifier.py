@@ -29,16 +29,13 @@ class JmlSimplifier:
 
         jml_items = [jml_item for jml_item in jml.jml_item()]
 
-        self.behavior_nodes = []
         self.current_behavior = BehaviorNode()
-        self.behavior_nodes.append(self.current_behavior)
+        self.behavior_nodes = [self.current_behavior]
 
         for jml_item in jml_items:
             self.handle_jml_item(jml_item, parser_result)
 
-        jml_node = JmlTreeNode(behavior_nodes=self.behavior_nodes)
-
-        return jml_node
+        return JmlTreeNode(behavior_nodes=self.behavior_nodes)
 
     def handle_jml_item(self, jml_item: JMLParser.JMLParser.Jml_itemContext, parser_result: ParserResult):
         if self.is_behavior_node(jml_item):
