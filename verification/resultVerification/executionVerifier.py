@@ -1,5 +1,6 @@
 import threading
-import time
+
+from codetiming import Timer
 
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
@@ -10,9 +11,11 @@ from definitions.codeExecution.result.resultInstances import ResultInstances
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_debug
 from verification.resultVerification.resultVerifier import ResultVerifier
 from verification.resultVerification.signalExecutionVerifier import SignalExecutionVerifier
+
+execution_verifier_timer = Timer(name="execution_verifier", logger=None)
 
 
 class ExecutionVerifier:
@@ -24,6 +27,7 @@ class ExecutionVerifier:
         self.result_verifier = result_verifier
         self.signal_execution_verifier = signal_execution_verifier
 
+    @execution_verifier_timer
     def verify(self, execution_result: ExecutionResult,
                result_parameters: ResultParameters,
                consistency_test_case: ConsistencyTestCase,
@@ -74,6 +78,6 @@ class ExecutionVerifier:
     @staticmethod
     def log_result(consistency_test_case: ConsistencyTestCase, test_case: TestCase,
                    result, consistency_result: bool):
-        LoggingHelper.log_debug(f'Verified {consistency_test_case.method_info.name} with {test_case.parameters}. '
-                                f'Result: {result}.'
-                                f'Consistency result: {consistency_result}')
+        log_debug(f'Verified {consistency_test_case.method_info.name} with {test_case.parameters}. '
+                  f'Result: {result}.'
+                  f'Consistency result: {consistency_result}')

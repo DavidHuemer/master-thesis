@@ -4,7 +4,7 @@ from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from helper.infixHelper import InfixHelper
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_error
 from nodes.baseNodeRunner import BaseNodeRunner
 from verification.resultVerification.arrayIndexExecution import ArrayIndexExecution
 from verification.resultVerification.boolQuantifierExecution import BoolQuantifierExecution
@@ -56,7 +56,7 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
 
             return True
         except Exception as e:
-            LoggingHelper.log_error(f"Error while verifying result: {e}")
+            log_error(f"Error while verifying result: {e}")
             raise e
 
     def evaluate(self, t: ResultDto):

@@ -4,16 +4,28 @@ from definitions.ai.openAIMessage import OpenAIMessage
 
 
 class ChatBot:
-    def __init__(self, client: OpenAIClient, context: str):
+    """
+    Chatbot class that is responsible for chatting with the OpenAI API.
+    """
+
+    def __init__(self, client: OpenAIClient):
         """
         Initialize the chatbot.
         :param client: The OpenAI client.
-        :param context: The initial context (The description of the chatbot)
         """
         self.client = client
-        self.messages: list[OpenAIMessage] = [
-            OpenAIMessage(Role.SYSTEM, context)
-        ]
+        self.messages: list[OpenAIMessage] = []
+
+    def set_context(self, context: str):
+        """
+        Set the context of the chatbot.
+        :param context: The context.
+        """
+
+        if len(self.messages) == 0:
+            self.messages.append(OpenAIMessage(Role.SYSTEM, context))
+        else:
+            self.messages[0] = OpenAIMessage(Role.SYSTEM, context)
 
     def chat(self, message):
         """

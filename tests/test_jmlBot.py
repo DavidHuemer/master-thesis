@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 from parameterized import parameterized
 
-from ai.jmlBot import JmlBot
+from jml.jmlGeneration.jmlBot import JmlBot
 from definitions.parser.parserError import ParserError
 from definitions.parser.parserException import ParserException
 

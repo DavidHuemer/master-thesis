@@ -3,7 +3,7 @@ from unittest import TestCase
 from examples.expectedResultExamples import get_expected_result_example
 from examples.javaClassExamples import get_java_code_example
 from examples.methodExamples import get_method_example
-from testCases.expectedResultFinder import ExpectedResultFinder
+from consistencyTestCaseLoading.expectedResultFinder import ExpectedResultFinder
 
 
 class TestExpectedResultFinder(TestCase):

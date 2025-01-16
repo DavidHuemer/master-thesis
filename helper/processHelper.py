@@ -1,6 +1,18 @@
 import subprocess
 
 
+def run_command(commands: list[str]):
+    """
+    Run a command in the terminal
+    :param commands: The commands to run
+    :return: The output of the command
+    """
+
+    result = subprocess.run(
+        commands, check=True)
+    return result
+
+
 class ProcessHelper:
     """
     Helper class for process related operations

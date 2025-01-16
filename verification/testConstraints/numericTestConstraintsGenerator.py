@@ -1,7 +1,8 @@
 from definitions.evaluations.csp.cspParameter import CSPParameter
+from verification.testConstraints.baseTestContraintsGenerator import BaseTestConstraintsGenerator
 
 
-class NumericTestConstraintsGenerator:
+class NumericTestConstraintsGenerator(BaseTestConstraintsGenerator):
     """
     Helper class to generate numeric constraints for the parameters of a CSP.
     """

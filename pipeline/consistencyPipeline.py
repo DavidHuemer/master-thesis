@@ -1,32 +1,31 @@
-from codeExecution.vm.VMHelper import VMHelper
+import sys
+
+from dependency_injector.wiring import inject, Provide
+
+from codeExecution.compilation.javaCompilationRunner import compile_java_files
+from codeExecution.vm.javaVm import start_java_vm, stop_java_vm
 from definitions.consistencyTestCase import ConsistencyTestCase
-from definitions.verification.verificationResult import VerificationResult
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_info
 from pipeline.consistencyResultGetter import ConsistencyResultGetter
+from pipeline.containers import PipelineContainer
 
 
-class ConsistencyPipeline:
-    """
-    Class that is responsible for running the pipeline that finds inconsistencies in the java doc.
-    """
+@inject
+def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase],
+                             consistency_result_getter: ConsistencyResultGetter = Provide[
+                                 PipelineContainer.consistency_result_getter]):
+    log_info("Starting consistency pipeline")
 
-    def __init__(self, vm_helper=VMHelper(), consistency_result_getter=ConsistencyResultGetter()):
-        self.vm_helper = vm_helper
-        self.retries = 0
-        self.verification_results: list[VerificationResult] = []
-        self.consistency_result_getter = consistency_result_getter
+    try:
+        start_java_vm()
 
-    def setup(self):
-        LoggingHelper.log_info("Setting up consistency pipeline")
-        self.consistency_result_getter.setup()
+        # Run compilation
+        compile_java_files([c.java_code.file_path for c in consistency_tests])
 
-    def get_results(self, consistency_tests: list[ConsistencyTestCase]) -> list[VerificationResult]:
-        try:
-            LoggingHelper.log_info("Starting consistency pipeline")
-            self.vm_helper.start()
-            return [self.consistency_result_getter.get_result(test_case) for test_case in consistency_tests]
-        except Exception as e:
-            # Only to close the VM even if an exception occurs
-            raise e
-        finally:
-            self.vm_helper.close()
+        size = sys.getsizeof(consistency_tests)
+
+        return [consistency_result_getter.get_result(c) for c in consistency_tests]
+    except Exception as e:
+        raise e
+    finally:
+        stop_java_vm()

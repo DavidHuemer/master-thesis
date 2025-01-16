@@ -1,13 +1,8 @@
 import re
 import time
 
-from codeExecution.vm.VMHelper import VMHelper
-from codeLoading.codeReader.javaCodeReader import JavaCodeReader
 from definitions.consistencyTestCase import ConsistencyTestCase
 from helper.files.fileReader import FileReader
-from helper.logs.loggingHelper import LoggingHelper
-from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
-from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 
 def main():

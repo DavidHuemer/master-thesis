@@ -1,36 +1,26 @@
+from codetiming import Timer
+
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.tests.exceptions.noTestCasesException import NoTestCasesException
-from definitions.verification.verificationResult import VerificationResult
-from helper.logs.loggingHelper import LoggingHelper
-from verification.testSuite.testSuiteBuilder import TestSuiteBuilder
-from verification.testSuite.testSuiteVerifier import TestSuiteVerifier
+from helper.logs.loggingHelper import log_info
+from testGeneration.testSuiteBuilder import get_test_suite
+from verification.testSuite.testSuiteVerifier import run_test_suite
+
+verify_jml_timer = Timer(name="verify_jml", logger=None)
 
 
-class JmlVerifier:
+@verify_jml_timer
+def verify_jml(consistency_test: ConsistencyTestCase, jml_code: str):
     """
-    Class to verify JML annotations in Java source code.
+    Verify JML annotations in Java source code.
     """
+    log_info("Starting JML Verification")
 
-    def __init__(self, test_suite_builder=TestSuiteBuilder(), test_suite_verifier=TestSuiteVerifier()):
-        self.test_suite_builder = test_suite_builder
-        self.test_suite_verifier = test_suite_verifier
+    # 1. Get the test suite
+    test_suite = get_test_suite(consistency_test, jml_code)
+    log_info("Test Suite created")
 
-    def setup(self):
-        self.test_suite_verifier.setup()
+    if len(test_suite) <= 0:
+        raise NoTestCasesException()
 
-    def verify(self, test_case: ConsistencyTestCase, jml_code: str) -> VerificationResult:
-        """
-        Verify JML annotations in Java source code.
-        """
-        LoggingHelper.log_info("Starting JML Verification")
-
-        # Steps:
-        # 1. Get the test cases (different parameters for the testing method)
-        test_suite = self.test_suite_builder.get_test_suite(test_case, test_case.method_info, jml_code)
-        LoggingHelper.log_info("Test Suite created")
-
-        if len(test_suite) <= 0:
-            raise NoTestCasesException()
-
-        # 2. Run the test cases (Run the method with the different parameters)
-        return self.test_suite_verifier.run(test_suite)
+    return run_test_suite(test_suite)

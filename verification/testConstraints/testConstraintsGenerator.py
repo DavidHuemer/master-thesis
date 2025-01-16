@@ -12,6 +12,7 @@ class TestConstraintsGenerator:
     The constraints are not extracted from the JML code, but are generated to increase the test coverage.
     """
 
+    # TODO: Move into own service
     def __init__(self, numeric_test_constraint_generator=NumericTestConstraintsGenerator(),
                  boolean_test_constraint_generator=BooleanTestConstraintGenerator(),
                  array_test_constraints_generator=ArrayTestConstraintsGenerator(),

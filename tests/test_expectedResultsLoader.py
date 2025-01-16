@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from definitions.evaluations.expectedResult import ExpectedResult
-from evaluation.expectedResultsLoader import ExpectedResultsLoader
+from consistencyTestCaseLoading.expectedResultsLoader import ExpectedResultsLoader
 
 
 class TestExpectedResultsLoader(TestCase):

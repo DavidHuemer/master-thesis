@@ -4,99 +4,82 @@ from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
-from verification.csp.cspParamNameGenerator import CspParamNameGenerator
+from verification.csp.cspParamNameGenerator import find_csp_name
 
 
-class CSPParameterBuilder:
-    """
-    Class that is used for building parameters that are needed for the solver
-    """
+def build_csp_parameters(parameters: list[ParameterExtractionInfo]) -> CSPParameters:
+    csp_parameters = CSPParameters()
 
-    def __init__(self, csp_param_name_generator=CspParamNameGenerator()):
-        self.csp_param_name_generator = csp_param_name_generator
+    for param in parameters:
+        csp_parameters.add_csp_parameter(get_csp_param_for_param(param))
 
-    def build_csp_parameters(self, parameters: list[ParameterExtractionInfo]) -> CSPParameters:
-        csp_parameters = CSPParameters()
+    build_special_parameters(csp_parameters)
+    build_helper_parameters(csp_parameters, parameters)
 
-        # Add normal parameters
-        for param in parameters:
-            csp_parameters.add_csp_parameter(self.get_csp_param_for_param(param))
+    return csp_parameters
 
-        # Add special parameters
-        self.build_special_parameters(csp_parameters)
 
-        # Add helper parameters
-        self.build_helper_parameters(csp_parameters, parameters)
-        return csp_parameters
+def get_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
+    param_type_map = {
+        "byte": Int,
+        "short": Int,
+        "int": Int,
+        "long": Int,
+        "float": Real,
+        "double": Real,
+        "boolean": Bool,
+        "char": String,
+        "String": String
+    }
 
-    def build_special_parameters(self, csp_parameters: CSPParameters):
-        # Add is_null parameter
-        is_null_name = self.csp_param_name_generator.find_name(csp_parameters, "is_null")
+    if '[]' in param.parameter_type:
+        return get_array_csp_param_for_param(param)
+
+    if param.parameter_type in param_type_map:
+        return CSPParameter(param.name, param_type_map[param.parameter_type](param.name), param.parameter_type)
+
+    raise Exception(f"Parameter type {param.parameter_type} is not supported")
+
+
+def get_array_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
+    array_param_type_map = {
+        "byte[]": IntSort,
+        "short[]": IntSort,
+        "int[]": IntSort,
+        "long[]": IntSort,
+        "float[]": RealSort,
+        "double[]": RealSort,
+        "boolean[]": BoolSort,
+        "char[]": StringSort,
+        "String[]": StringSort
+    }
+
+    if param.parameter_type in array_param_type_map:
+        return CSPParameter(param.name, Array(param.name, IntSort(), array_param_type_map[param.parameter_type]()),
+                            param.parameter_type)
+
+    raise Exception(f"Parameter type {param.parameter_type} is not supported")
+
+
+def build_special_parameters(csp_parameters: CSPParameters):
+    # Add is_null parameter
+    is_null_name = find_csp_name(csp_parameters, "is_null")
+    is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
+
+    csp_parameters.add_csp_parameter(is_null_param)
+    csp_parameters.is_null_helper_param = is_null_param
+
+
+def build_helper_parameters(csp_parameters: CSPParameters, parameters: list[ParameterExtractionInfo]):
+    # Build helper parameters for each parameter
+    for param in parameters:
+        # Add is null
+        is_null_name = find_csp_name(csp_parameters, f"{param.name}_is_null")
         is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
+        csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.IS_NULL, is_null_param)
 
-        csp_parameters.add_csp_parameter(is_null_param)
-        csp_parameters.is_null_helper_param = is_null_param
-
-    def build_helper_parameters(self, csp_parameters: CSPParameters, parameters: list[ParameterExtractionInfo]):
-        # Build helper parameters for each parameter
-        for param in parameters:
-            # Add is null
-            is_null_name = self.csp_param_name_generator.find_name(csp_parameters, f"{param.name}_is_null")
-            is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
-            csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.IS_NULL, is_null_param)
-
-            # Add length for array parameters
-            if "[]" in param.parameter_type:
-                length_name = self.csp_param_name_generator.find_name(csp_parameters, f"{param.name}_length")
-                length_param = CSPParameter(length_name, Int(length_name), "int", helper=True)
-                csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.LENGTH, length_param)
-
-    # for param in parameters:
-
-    def get_csp_param_for_param(self, param: ParameterExtractionInfo) -> CSPParameter:
-        if '[]' in param.parameter_type:
-            return self.get_array_csp_param_for_param(param)
-
-        if param.parameter_type == "byte":
-            return CSPParameter(param.name, Int(param.name), param.parameter_type)
-        elif param.parameter_type == "short":
-            return CSPParameter(param.name, Int(param.name), param.parameter_type)
-        elif param.parameter_type == "int":
-            return CSPParameter(param.name, Int(param.name), param.parameter_type)
-        elif param.parameter_type == "long":
-            return CSPParameter(param.name, Int(param.name), param.parameter_type)
-        elif param.parameter_type == "float":
-            return CSPParameter(param.name, Real(param.name), param.parameter_type)
-        elif param.parameter_type == "double":
-            return CSPParameter(param.name, Real(param.name), param.parameter_type)
-        elif param.parameter_type == "boolean":
-            return CSPParameter(param.name, Bool(param.name), param.parameter_type)
-        elif param.parameter_type == "char":
-            return CSPParameter(param.name, String(param.name), param.parameter_type)
-        elif param.parameter_type == "String":
-            return CSPParameter(param.name, String(param.name), param.parameter_type)
-
-        raise Exception(f"Parameter type {param.parameter_type} is not supported")
-
-    @staticmethod
-    def get_array_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
-        if param.parameter_type == "byte[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
-        elif param.parameter_type == "short[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
-        elif param.parameter_type == "int[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
-        elif param.parameter_type == "long[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), IntSort()), param.parameter_type)
-        elif param.parameter_type == "float[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), RealSort()), param.parameter_type)
-        elif param.parameter_type == "double[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), RealSort()), param.parameter_type)
-        elif param.parameter_type == "boolean[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), BoolSort()), param.parameter_type)
-        elif param.parameter_type == "char[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), StringSort()), param.parameter_type)
-        elif param.parameter_type == "String[]":
-            return CSPParameter(param.name, Array(param.name, IntSort(), StringSort()), param.parameter_type)
-
-        raise Exception(f"Parameter type {param.parameter_type} is not supported")
+        # Add length for array parameters
+        if "[]" in param.parameter_type:
+            length_name = find_csp_name(csp_parameters, f"{param.name}_length")
+            length_param = CSPParameter(length_name, Int(length_name), "int", helper=True)
+            csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.LENGTH, length_param)

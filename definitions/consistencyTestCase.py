@@ -36,7 +36,7 @@ class ConsistencyTestCase:
                 f'{self.get_expected_result_str()}')
 
     def get_name(self):
-        return f'{self.java_code.class_info.class_name}.{self.method_info.name}'
+        return f'{self.java_code.class_name}.{self.method_info.name}'
 
     def get_expected_result_str(self):
         return self.expected_result.expected_result if self.expected_result is not None else 'No expected result'

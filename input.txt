@@ -1,1 +1,9 @@
-//@ ensures (\forall int i, j; 0 <= i && i <= j && j < arr.length; arr[i] <= arr[j]);
+1 + 2
+
+
+
+x > 5 && y < x
+
+x = 6, y = 4
+x = 10, y = 2
+x = 12, y = 1

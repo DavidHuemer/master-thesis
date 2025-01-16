@@ -7,7 +7,6 @@ API_KEY_PATH = 'secrets/API_KEY.txt'
 MAX_PIPELINE_TRIES = 5
 JML_TRANSFORMATIONS_EXAMPLES_FILE_PATH = 'data/examples/jml_transformations_examples.txt'
 JML_TRANSFORMATIONS_EXAMPLES_COUNT = 5
-JML_CONTEXT = 'You are a JML (Java Modeling Language) expert. I will give you a JavaDoc comment and you will generate the JML specification for the method.'
 OPEN_AI_MODEL = 'gpt-4o'
 ANTLR_JAR_PATH = 'C:\\FH\\Master\\Masterarbeit\\tools\\antlr-4.13.2-complete.jar'
 ANTLR_COMMAND = 'org.antlr.v4.Tool'

@@ -1,7 +1,7 @@
 from helper.logs.loggingHelper import LoggingHelper
 from pipeline.consistencyPipeline import ConsistencyPipeline
 from statistics.statisticsWriter import StatisticsWriter
-from testCases.consistencyTestCaseLoader import ConsistencyTestCaseLoader
+from consistencyTestCaseLoading.consistencyTestCaseLoader import ConsistencyTestCaseLoader
 
 
 class SingleExamplePipeline:

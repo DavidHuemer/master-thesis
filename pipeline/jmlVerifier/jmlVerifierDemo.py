@@ -2,7 +2,7 @@ from codeExecution.vm.VMHelper import VMHelper
 from codeLoading.codeReader.javaCodeReader import JavaCodeReader
 from helper.logs.loggingHelper import LoggingHelper
 from pipeline.jmlVerifier.jmlVerifier import JmlVerifier
-from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
+from consistencyTestCaseLoading.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 jml_code = ("//@ requires num > 0;\n"
             "//@ ensures (\\result >= 0 && \\result < 10) && (\\exists int k; k >= 0; num == \\result + 9 * k);")

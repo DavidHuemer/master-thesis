@@ -6,7 +6,7 @@ from definitions.ast.astTreeNode import AstTreeNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.rangeParameters import RangeParameters
-from verification.csp.cspParamBuilder import CSPParameterBuilder
+from verification.csp.cspParamBuilder import build_csp_parameters
 from verification.resultVerification.range.rangeBuilder import RangeBuilder
 from verification.resultVerification.range.rangeDto import RangeDto
 from verification.resultVerification.range.rangeProblem import RangeProblem
@@ -14,15 +14,14 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class RangeExecution:
-    def __init__(self, csp_param_builder=CSPParameterBuilder(), range_builder=RangeBuilder()):
-        self.csp_param_builder = csp_param_builder
+    def __init__(self, range_builder=RangeBuilder()):
         self.range_builder = range_builder
 
     def execute_range(self, range_: AstTreeNode, variables: list, t: ResultDto):
         range_problem = RangeProblem()
         variable_infos = [ParameterExtractionInfo(variable[0], variable[1]) for variable in variables]
 
-        quantifier_csp_parameters = self.csp_param_builder.build_csp_parameters(variable_infos)
+        quantifier_csp_parameters = build_csp_parameters(variable_infos)
 
         for csp_param in t.get_result_parameters().csp_parameters.get_actual_parameters():
             if quantifier_csp_parameters.parameter_exists(csp_param.name):

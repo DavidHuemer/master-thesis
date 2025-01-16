@@ -1,3 +1,5 @@
+from z3 import Not
+
 from definitions.ast.prefixNode import PrefixNode
 from definitions.evaluations.BaseDto import BaseDto
 from nodes.baseNodeHandler import BaseNodeHandler

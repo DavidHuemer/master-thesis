@@ -3,12 +3,13 @@ from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 
 
 class JavaMethod:
-    def __init__(self, method_info: MethodExtractionInfo, parameters: list[ParameterExtractionInfo]):
-        self.return_type = method_info.method_return_type
-        self.name = method_info.method_name
-        self.comment = method_info.comment
-        self.parameters = method_info.method_parameters
-        self.parameters_list = parameters
+    def __init__(self, name: str, method_protection: str, return_type: str, comment: str,
+                 parameters: list[ParameterExtractionInfo]):
+        self.name = name
+        self.method_protection = method_protection
+        self.return_type = return_type
+        self.comment = comment
+        self.parameters = parameters
 
     def __eq__(self, other):
         return (self.return_type == other.return_type

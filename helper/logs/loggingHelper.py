@@ -1,38 +1,26 @@
-import logging
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
-from definitions import config
-from helper.logs.coloredFormatter import ColoredFormatter
+
+def log_info(message):
+    print(bcolors.OKBLUE + message + bcolors.ENDC)
 
 
-class LoggingHelper:
-    @staticmethod
-    def log_info(message, show_level: bool = True):
-        LoggingHelper.get_logger(show_level=show_level).info(message)
+def log_warning(message):
+    print(bcolors.WARNING + message + bcolors.ENDC)
 
-    @staticmethod
-    def log_debug(message, show_level: bool = True):
-        LoggingHelper.get_logger(show_level=show_level).debug(message)
 
-    @staticmethod
-    def log_warning(message):
-        LoggingHelper.get_logger().warning(message)
+def log_error(message):
+    print(bcolors.FAIL + message + bcolors.ENDC)
 
-    @staticmethod
-    def log_error(message, show_level: bool = True):
-        LoggingHelper.get_logger(show_level=show_level).error(message)
 
-    @staticmethod
-    def get_logger(name: str = config.LOGGER_NAME, show_level: bool = True):
-        logger = logging.getLogger(name)
-        if not show_level:
-            logger = logging.getLogger(config.LOGGER_WITHOUT_LEVEL_NAME)
-
-        if not logger.hasHandlers():
-            handler = logging.StreamHandler()
-            formatter = ColoredFormatter('[%(levelname)s]: %(message)s') if show_level else (
-                ColoredFormatter('%(message)s'))
-            handler.setFormatter(formatter)
-            logger.addHandler(handler)
-            logger.setLevel(logging.DEBUG)
-
-        return logger
+def log_debug(message):
+    print(bcolors.OKCYAN + message + bcolors.ENDC)

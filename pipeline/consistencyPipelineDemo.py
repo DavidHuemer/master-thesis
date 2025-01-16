@@ -1,7 +1,7 @@
 from codeLoading.codeReader.javaCodeReader import JavaCodeReader
 from helper.logs.loggingHelper import LoggingHelper
 from pipeline.consistencyPipeline import ConsistencyPipeline
-from testCases.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
+from consistencyTestCaseLoading.consistencyTestCaseBuilder import ConsistencyTestCaseBuilder
 
 
 def main():

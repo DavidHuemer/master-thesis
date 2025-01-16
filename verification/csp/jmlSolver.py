@@ -1,6 +1,10 @@
+from codetiming import Timer
 from z3 import Solver, sat
 
 from verification.csp.cspProblem import CSPProblem
+
+add_constraint_timer = Timer(name="add_constraint", logger=None)
+solution_generation_timer = Timer(name="solution_generation", logger=None)
 
 
 class JmlSolver(CSPProblem):
@@ -15,10 +19,12 @@ class JmlSolver(CSPProblem):
         super().__init__()
         self.solver = Solver()
 
+    @add_constraint_timer
     def add_constraint(self, constraint):
         super().add_constraint(constraint)
         self.solver.add(constraint)
 
+    @solution_generation_timer
     def get_solution(self):
         if self.solver.check() != sat:
             return None

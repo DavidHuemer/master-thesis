@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from examples.consistencyTestCaseExamples import get_consistency_test_case_example
 from examples.expectedResultExamples import get_expected_result_example
 from examples.javaClassExamples import get_java_code_example
-from testCases.consistencyTestCaseLoader import ConsistencyTestCaseLoader
+from consistencyTestCaseLoading.consistencyTestCaseLoader import ConsistencyTestCaseLoader
 
 
 class TestConsistencyTestCaseLoader(TestCase):
