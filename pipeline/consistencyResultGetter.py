@@ -5,11 +5,12 @@ from helper.logs.loggingHelper import log_info, log_debug, log_error
 from jml.jmlGeneration.jmlProvider import JmlProvider
 from jml.jmlGeneration.jmlStorage import store_jml_for_test_case
 from pipeline.jmlVerifier.jmlVerifier import verify_jml
+from util.Singleton import Singleton
 from verification.result.verificationResultFactory import VerificationResultFactory
 
 
-class ConsistencyResultGetter:
-    def __init__(self, jml_provider: JmlProvider):
+class ConsistencyResultGetter(Singleton):
+    def __init__(self, jml_provider: JmlProvider = JmlProvider()):
         self.jml_provider = jml_provider
         self.retries = 0
 

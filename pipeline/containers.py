@@ -6,7 +6,7 @@ from pipeline.consistencyResultGetter import ConsistencyResultGetter
 class PipelineContainer(containers.DeclarativeContainer):
     jml_provider = providers.Dependency()
 
-    consistency_result_getter = providers.Factory(
+    consistency_result_getter = providers.ThreadSafeSingleton(
         ConsistencyResultGetter,
         jml_provider=jml_provider
     )

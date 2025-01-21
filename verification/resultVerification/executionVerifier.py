@@ -12,13 +12,14 @@ from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import log_debug
+from util.Singleton import Singleton
 from verification.resultVerification.resultVerifier import ResultVerifier
 from verification.resultVerification.signalExecutionVerifier import SignalExecutionVerifier
 
 execution_verifier_timer = Timer(name="execution_verifier", logger=None)
 
 
-class ExecutionVerifier:
+class ExecutionVerifier(Singleton):
     """
     This class is responsible for verifying the execution of a test case
     """

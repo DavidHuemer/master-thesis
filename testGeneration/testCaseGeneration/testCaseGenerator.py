@@ -1,14 +1,13 @@
-import time
+from itertools import product
 
 from codetiming import Timer
-from dependency_injector.wiring import Provide, inject
+from dependency_injector.wiring import inject
 from z3 import And
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.verification.testCase import TestCase
 from helper.logs.loggingHelper import log_info
 from testGeneration.testCaseGeneration.testCaseBuilder import build_test_case
-from testGeneration.testCaseGeneration.testCaseGenerationContainer import TestCaseGenerationContainer
 from verification.testConstraints.testConstraintsGenerator import TestConstraintsGenerator
 
 generate_for_parameter_timer = Timer(name="generate_for_parameter", logger=None)
@@ -23,33 +22,31 @@ def generate_solver_test_cases(jml_problem: JMLProblem) -> list[TestCase]:
     real_parameters = jml_problem.parameters.csp_parameters.get_actual_parameters()
     log_info("Generating for parameters")
 
-    start_time = time.time()
-    test_cases = generate_for_parameters(jml_problem, real_parameters, [])
-    end_time = time.time()
-    elapsed_time = end_time - start_time
-    log_info(f"Generated {len(test_cases)} test cases in {elapsed_time} seconds")
-    return test_cases
+    return [generate_for_parameter_constraints(jml_problem, constraint) for constraint in
+            get_constraints(jml_problem, real_parameters)]
+
+
+def test():
+    # context = Context()
+    return None
+
+
+# start_time = time.time()
+# test_cases = generate_for_parameters(jml_problem, real_parameters, [])
+# end_time = time.time()
+# elapsed_time = end_time - start_time
+# log_info(f"Generated {len(test_cases)} test cases in {elapsed_time} seconds")
+# return test_cases
+
+
+def get_combinations(parameters):
+    return product(*parameters)
 
 
 @inject
-def generate_for_parameters(jml_problem: JMLProblem, parameters, actions,
-                            test_constraint_generator: TestConstraintsGenerator = Provide[
-                                TestCaseGenerationContainer.test_constraint_generator]) -> list[TestCase]:
-    parameter = parameters[0]
-    test_cases: list[TestCase] = []
-
-    for param_constraint in test_constraint_generator.get_test_constraints(jml_problem, parameter):
-        working_actions = actions + [param_constraint]
-
-        if len(parameters) == 1:
-            test_case = generate_for_parameter_constraints(jml_problem, working_actions)
-            if test_case is not None:
-                test_cases.append(test_case)
-        else:
-            new_arr = generate_for_parameters(jml_problem, parameters[1:], working_actions)
-            test_cases.extend(new_arr)
-
-    return test_cases
+def get_constraints(jml_problem: JMLProblem, parameters):
+    new_params = [TestConstraintsGenerator().get_test_constraints(jml_problem, element) for element in parameters]
+    return get_combinations(new_params)
 
 
 @generate_for_parameter_timer

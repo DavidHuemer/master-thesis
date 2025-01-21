@@ -9,9 +9,10 @@ from helper.objectHelper import ObjectHelper
 from parser.simplificationDto import SimplificationDto
 from parser.simplifier.allowedSignalsSimplifier import AllowedSignalsSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
+from util.Singleton import Singleton
 
 
-class JmlSimplifier:
+class JmlSimplifier(Singleton):
     def __init__(self, rule_simplifier=RuleSimplifier(), allowed_signals_simplifier=AllowedSignalsSimplifier()):
         self.rule_simplifier = rule_simplifier
         self.allowed_signals_simplifier = allowed_signals_simplifier

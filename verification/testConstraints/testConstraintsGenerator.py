@@ -1,12 +1,13 @@
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.jmlProblem import JMLProblem
+from util.Singleton import Singleton
 from verification.testConstraints.arrayTestConstraintGenerator import ArrayTestConstraintsGenerator
 from verification.testConstraints.booleanTestConstraintGenerator import BooleanTestConstraintGenerator
 from verification.testConstraints.numericTestConstraintsGenerator import NumericTestConstraintsGenerator
 from verification.testConstraints.stringTestConstraintGenerator import StringTestConstraintGenerator
 
 
-class TestConstraintsGenerator:
+class TestConstraintsGenerator(Singleton):
     """
     Helper class to build constraints for test case generation.
     The constraints are not extracted from the JML code, but are generated to increase the test coverage.

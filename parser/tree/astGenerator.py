@@ -22,10 +22,10 @@ ast_generator_timer = Timer(name="ast_generator", logger=None)
 
 
 @ast_generator_timer
-@inject
-def get_ast_by_jml(jml: str, jml_simplifier: JmlSimplifier = Provide[ParserContainer.simplifier]):
+def get_ast_by_jml(jml: str):
     log_info("Getting AST from JML")
     parser_result = parse(jml)
+    jml_simplifier = JmlSimplifier()
     log_info("JML parsed successfully - Simplifying AST")
     ast = jml_simplifier.simplify(parser_result.tree, parser_result.parser_result)
     log_info("AST simplified successfully")

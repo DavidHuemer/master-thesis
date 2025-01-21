@@ -1,10 +1,8 @@
-import sys
-
 from definitions.ast.expressionNode import ExpressionNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.tests.testCollection import TestCollection
-from testGeneration.testCollections.jmlProblemBuilder import build_jml_problem
 from testGeneration.testCaseGeneration.testCaseGenerator import generate_test_cases
+from testGeneration.testCollections.jmlProblemBuilder import build_jml_problem
 
 
 def build_test_collection(parameters: list[ParameterExtractionInfo], expressions: list[ExpressionNode]):
@@ -16,8 +14,6 @@ def build_test_collection(parameters: list[ParameterExtractionInfo], expressions
     """
     # First get the JMLProblem
     jml_problem = build_jml_problem(parameters, expressions)
-
-    jml_problem_size = sys.getsizeof(jml_problem)
 
     # Then generate the test cases out of the JMLProblem
 

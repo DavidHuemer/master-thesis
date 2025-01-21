@@ -4,9 +4,6 @@ from nodes.baseNodeHandler import BaseNodeHandler
 
 
 class BaseArrayIndexConstraintBuilder(BaseNodeHandler[BaseDto]):
-    def __init__(self):
-        pass
-
     def is_node(self, t: BaseDto):
         return isinstance(t.node, ArrayIndexNode)
 

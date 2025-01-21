@@ -12,10 +12,11 @@ class JmlBot:
     Chats with the OpenAI API to generate JML (Java Modelling Language)
     """
 
-    def __init__(self, chat_bot: ChatBot, prompt_generator: JmlPromptGenerator):
+    def __init__(self, chat_bot: ChatBot = ChatBot(), prompt_generator: JmlPromptGenerator = JmlPromptGenerator()):
         self.chat_bot = chat_bot
         self.prompt_generator = prompt_generator
-        self.chat_bot.set_context(FileReader.read(os.getenv("AI_CONTEXT_FILE")))
+        self.chat_bot.set_context("")
+        # self.chat_bot.set_context(FileReader.read(os.getenv("AI_CONTEXT_FILE")))
 
         # self.chat_bot = ChatBot(client, config.JML_CONTEXT) if chat_bot is None else chat_bot
         # self.initial_prompt_generator = initial_prompt_generator

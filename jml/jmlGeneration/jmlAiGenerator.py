@@ -7,7 +7,7 @@ class JmlAiGenerator:
     Class that is responsible for generating JML using AI.
     """
 
-    def __init__(self, jml_bot: JmlBot):
+    def __init__(self, jml_bot: JmlBot = JmlBot()):
         self.jml_bot = jml_bot
 
     def get_from_test_case(self, test_case: ConsistencyTestCase) -> str:

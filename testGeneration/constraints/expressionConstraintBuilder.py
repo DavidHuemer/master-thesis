@@ -8,9 +8,10 @@ from testGeneration.constraints.infixConstraintBuilder import InfixConstraintBui
 from testGeneration.constraints.methodCallHandler import MethodCallHandler
 from testGeneration.constraints.quantifierConstraintBuilder import QuantifierConstraintBuilder
 from testGeneration.constraints.terminalConstraintBuilder import TerminalConstraintBuilder
+from util.Singleton import Singleton
 
 
-class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto]):
+class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto], Singleton):
     def __init__(self, terminal_constraint_builder=TerminalConstraintBuilder(),
                  quantifier_constraint_builder=QuantifierConstraintBuilder(),
                  question_mark_constraint_builder=BaseQuestionMarkConstraintBuilder(),

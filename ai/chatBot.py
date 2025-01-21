@@ -8,11 +8,12 @@ class ChatBot:
     Chatbot class that is responsible for chatting with the OpenAI API.
     """
 
-    def __init__(self, client: OpenAIClient):
+    def __init__(self, client: OpenAIClient = OpenAIClient()):
         """
         Initialize the chatbot.
         :param client: The OpenAI client.
         """
+
         self.client = client
         self.messages: list[OpenAIMessage] = []
 

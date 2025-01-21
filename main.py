@@ -9,7 +9,7 @@ from consistencyTestCaseLoading.consistencyTestCaseLoading import get_test_cases
 from definitions.evaluations.csp.jmlProblem import add_solution_constraint_timer
 from helper.logs.loggingHelper import log_info
 from parser.tree.astGenerator import ast_generator_timer
-from pipeline.consistencyPipeline import run_consistency_pipeline
+from pipeline.consistencyPipeline import run_consistency_pipeline, inconsistency_pipeline_timer
 from pipeline.jmlVerifier.jmlVerifier import verify_jml_timer
 from testGeneration.testCaseGeneration.testCaseGenerator import generate_for_parameter_timer
 from testGeneration.testCollections.testCollectionsBuilder import test_collections_build_timer
@@ -27,24 +27,27 @@ def main():
     run_consistency_pipeline(test_cases)
 
     log_info(f"Getting test cases took: {get_test_cases_timer.timers['get_test_cases']:.6f} seconds")
-    log_info(f"Verifying jml took: {verify_jml_timer.timers['verify_jml']:.6f} seconds")
-    log_info(f"Generation of test suites took: {test_suite_generation_timer.timers['get_test_suite']:.6f} seconds")
-    log_info(f"Generation AST took: {ast_generator_timer.timers['ast_generator']:.6f} seconds")
-    log_info(
-        f"Generation of test collections took: {test_collections_build_timer.timers['build_test_collections']:.6f} seconds")
-    log_info(
-        f"Generation of test cases by parameter constraints took: {generate_for_parameter_timer.timers['generate_for_parameter']:.6f} seconds")
-    log_info(f"Generation of solutions took: {solution_generation_timer.timers['solution_generation']:.6f} seconds")
-    log_info(
-        f"Adding solution constraint took: {add_solution_constraint_timer.timers['add_solution_constraint']:.6f} seconds")
+    log_info(f"Inconsistency pipeline took: {inconsistency_pipeline_timer.timers['run_consistency_pipeline']:.6f} seconds")
 
-    log_info(f"Adding constraints took: {add_constraint_timer.timers['add_constraint']:.6f} seconds")
-    log_info(f"Compilation took: {compilation_timer.timers['compilation']:.6f} seconds")
 
-    log_info(f"Running behaviors took: {behavior_runner_timer.timers['run_behaviors']:.6f} seconds")
+    # log_info(f"Verifying jml took: {verify_jml_timer.timers['verify_jml']:.6f} seconds")
+    # log_info(f"Generation of test suites took: {test_suite_generation_timer.timers['get_test_suite']:.6f} seconds")
+    # log_info(f"Generation AST took: {ast_generator_timer.timers['ast_generator']:.6f} seconds")
+    # log_info(
+    #     f"Generation of test collections took: {test_collections_build_timer.timers['build_test_collections']:.6f} seconds")
+    # log_info(
+    #     f"Generation of test cases by parameter constraints took: {generate_for_parameter_timer.timers['generate_for_parameter']:.6f} seconds")
+    # log_info(f"Generation of solutions took: {solution_generation_timer.timers['solution_generation']:.6f} seconds")
+    # log_info(
+    #     f"Adding solution constraint took: {add_solution_constraint_timer.timers['add_solution_constraint']:.6f} seconds")
+    #
+    # log_info(f"Adding constraints took: {add_constraint_timer.timers['add_constraint']:.6f} seconds")
+    # log_info(f"Compilation took: {compilation_timer.timers['compilation']:.6f} seconds")
+    #
+    # log_info(f"Running behaviors took: {behavior_runner_timer.timers['run_behaviors']:.6f} seconds")
 
-    log_info(f"Running the code took: {code_execution_timer.timers['code_execution']:.6f} seconds")
-    log_info(f"Verifying the execution took: {execution_verifier_timer.timers['execution_verifier']:.6f} seconds")
+    #log_info(f"Running the code took: {code_execution_timer.timers['code_execution']:.6f} seconds")
+    #log_info(f"Verifying the execution took: {execution_verifier_timer.timers['execution_verifier']:.6f} seconds")
 
 
 if __name__ == "__main__":
@@ -61,5 +64,6 @@ if __name__ == "__main__":
     app.parser().wire(modules=["parser.tree.astGenerator"])
     app.constraints().wire(modules=["testGeneration.constraints.constraintsBuilder"])
     app.test_case_generation().wire(modules=["testGeneration.testCaseGeneration.testCaseGenerator"])
+    app.result_verification().wire(modules=["verification.resultVerification.testCaseRunner"])
 
     main()

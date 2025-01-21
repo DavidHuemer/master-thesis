@@ -7,7 +7,7 @@ class JmlGenerator:
     Class that is responsible for generating JML (Java Modelling Language)
     """
 
-    def __init__(self, jml_ai_generator: JmlAiGenerator):
+    def __init__(self, jml_ai_generator: JmlAiGenerator = JmlAiGenerator()):
         self.jml_ai_generator = jml_ai_generator
 
     def get_from_test_case(self, test_case: ConsistencyTestCase) -> str:

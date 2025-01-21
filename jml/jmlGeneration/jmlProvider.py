@@ -3,10 +3,11 @@ import os
 from definitions.consistencyTestCase import ConsistencyTestCase
 from jml.jmlGeneration.jmlStorage import get_stored_jml_for_test_case
 from jml.jmlGeneration.jmlGenerator import JmlGenerator
+from util.Singleton import Singleton
 
 
-class JmlProvider:
-    def __init__(self, jml_generator: JmlGenerator):
+class JmlProvider(Singleton):
+    def __init__(self, jml_generator: JmlGenerator = JmlGenerator()):
         self.jml_generator = jml_generator
         self.jml_file_path = os.getenv("JML_FILE")
 
