@@ -30,7 +30,8 @@ def get_test_cases() -> list[ConsistencyTestCase]:
 def build_test_cases(expected_results, java_code) -> list[ConsistencyTestCase]:
     return [build_test_case(java_code, method, expected_results)
             for java_code in java_code
-            for method in java_code.methods]
+            for method in java_code.methods
+            if method.comment is not None and method.method_protection == 'public']
 
 
 def build_test_case(java_code, method, expected_results: list[ExpectedResult]) -> ConsistencyTestCase:

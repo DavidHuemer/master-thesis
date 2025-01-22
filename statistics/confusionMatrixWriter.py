@@ -1,53 +1,65 @@
+from typing import List, Optional
 from prettytable import PrettyTable
-
 from definitions.verification.verificationResult import VerificationResult
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_info
 
 
-class ConfusionMatrixWriter:
-    def __init__(self):
-        pass
+def write_confusion_matrix(verification_results: List[VerificationResult]):
+    results_with_expected_result = filter_results_by_condition(
+        verification_results,
+        lambda x: x.consistency_test_case.expected_result is not None
+    )
 
-    def write_confusion_matrix(self, test_results: list[VerificationResult]):
-        results = self.get_results_with_expected_result(test_results)
-        expected_consistencies = self.filter_by_expected_result(True, results)
-        expected_inconsistencies = self.filter_by_expected_result(False, results)
+    expected_consistencies = filter_results_by_condition(
+        results_with_expected_result,
+        lambda x: x.consistency_test_case.expected_result.expected_result is True
+    )
+    expected_inconsistencies = filter_results_by_condition(
+        results_with_expected_result,
+        lambda x: x.consistency_test_case.expected_result.expected_result is False
+    )
 
-        true_consistent = self.get_confusion_data(True, True, results)
-        false_not_consistent = self.get_confusion_data(False, True, results)
+    confusion_data = {
+        "true_positive": count_results(expected_consistencies, True),
+        "false_negative": count_results(expected_consistencies, False),
+        "false_positive": count_results(expected_inconsistencies, True),
+        "true_negative": count_results(expected_inconsistencies, False),
+        "expected_consistent_got_unknown": count_results(expected_consistencies, None),
+        "expected_inconsistent_got_unknown": count_results(expected_inconsistencies, None),
+    }
 
-        false_consistent = self.get_confusion_data(False, True, results)
-        true_not_consistent = self.get_confusion_data(False, False, results)
+    table = PrettyTable()
+    table.field_names = [
+        "",
+        f"Expected consistent ({len(expected_consistencies)})",
+        f"Expected not consistent ({len(expected_inconsistencies)})"
+    ]
 
-        expected_consistent_got_unknown = self.get_confusion_data(True, None, results)
-        expected_inconsistent_got_unknown = self.get_confusion_data(False, None, results)
+    table.add_row([
+        "Got consistent",
+        confusion_data["true_positive"],
+        confusion_data["false_positive"]
+    ])
+    table.add_row([
+        "Got not consistent",
+        confusion_data["false_negative"],
+        confusion_data["true_negative"]
+    ])
+    table.add_row([
+        "Got unknown",
+        confusion_data["expected_consistent_got_unknown"],
+        confusion_data["expected_inconsistent_got_unknown"]
+    ])
 
-        table = PrettyTable()
-        table.field_names = ['',
-                             f'Expected consistent ({len(expected_consistencies)})',
-                             f'Expected not consistent ({len(expected_inconsistencies)})']
+    log_info("Confusion matrix:")
+    log_info(table.get_string())
 
-        table.add_row(['Got consistent', true_consistent, false_consistent])
-        table.add_row(['Got not consistent', false_not_consistent, true_not_consistent])
 
-        table.add_row(['Got unknown', expected_consistent_got_unknown, expected_inconsistent_got_unknown])
+def filter_results_by_condition(results: List[VerificationResult], condition) -> List[VerificationResult]:
+    """Filter a list of results based on a given condition."""
+    return list(filter(condition, results))
 
-        table_str = table.get_string()
-        LoggingHelper.log_info("Confusion matrix:", show_level=False)
-        LoggingHelper.log_info(table_str, show_level=False)
 
-    @staticmethod
-    def get_results_with_expected_result(results: list[VerificationResult]):
-        return list(filter(lambda x: x.consistency_test_case.expected_result is not None, results))
-
-    @staticmethod
-    def filter_by_expected_result(predicate, results: list[VerificationResult]):
-        return list(filter(lambda x: x.consistency_test_case.expected_result.expected_result is predicate, results))
-
-    @staticmethod
-    def get_confusion_data(expected_result, result, results):
-        return len(list(
-            filter(lambda x:
-                   x.consistent is result
-                   and x.consistency_test_case.expected_result.expected_result is expected_result,
-                   results)))
+def count_results(results: List[VerificationResult], expected_result: Optional[bool]) -> int:
+    """Count results where the actual result matches the expected result."""
+    return len([result for result in results if result.consistent is expected_result])

@@ -40,21 +40,32 @@ def get_java_code_from_content(java_file: str, java_content: str) -> JavaCode:
 
 def get_method_info(method: MethodDeclaration) -> JavaMethod:
     return JavaMethod(name=method.name if hasattr(method, 'name') else None,
-                      method_protection='public',
+                      method_protection=get_protection(method),
                       return_type=get_return_type(method),
                       parameters=get_parameters(method),
                       comment=method.documentation if hasattr(method, 'documentation') else None
                       )
 
 
+def get_protection(method: MethodDeclaration) -> str:
+    if hasattr(method, 'modifiers'):
+        for modifier in method.modifiers:
+            if modifier == 'public':
+                return 'public'
+            elif modifier == 'private':
+                return 'private'
+            elif modifier == 'protected':
+                return 'protected'
+
+    return 'private'
+
+
 def get_return_type(method: MethodDeclaration):
     if hasattr(method, 'return_type'):
-        return_name = method.return_type.name if hasattr(method.return_type, 'name') else None
-
-        if return_name is not None and hasattr(method.return_type, 'dimensions'):
-            return_name += '[]' * len(method.return_type.dimensions)
-
-        return return_name
+        return_name = getattr(method.return_type, 'name', None)
+        if return_name:
+            return_name += '[]' * len(getattr(method.return_type, 'dimensions', []))
+        return return_name or 'void'
 
     return 'void'
 

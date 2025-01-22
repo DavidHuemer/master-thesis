@@ -22,21 +22,8 @@ def generate_solver_test_cases(jml_problem: JMLProblem) -> list[TestCase]:
     real_parameters = jml_problem.parameters.csp_parameters.get_actual_parameters()
     log_info("Generating for parameters")
 
-    return [generate_for_parameter_constraints(jml_problem, constraint) for constraint in
-            get_constraints(jml_problem, real_parameters)]
-
-
-def test():
-    # context = Context()
-    return None
-
-
-# start_time = time.time()
-# test_cases = generate_for_parameters(jml_problem, real_parameters, [])
-# end_time = time.time()
-# elapsed_time = end_time - start_time
-# log_info(f"Generated {len(test_cases)} test cases in {elapsed_time} seconds")
-# return test_cases
+    return [result for constraint in get_constraints(jml_problem, real_parameters)
+            if (result := generate_for_parameter_constraints(jml_problem, constraint)) is not None]
 
 
 def get_combinations(parameters):

@@ -1,9 +1,10 @@
 import concurrent.futures
+import os
 
 from codetiming import Timer
 
 from codeExecution.compilation.javaCompilationRunner import compile_java_files
-from codeExecution.vm.javaVm import start_java_vm, stop_java_vm
+from codeExecution.vm.javaVm import start_java_vm, stop_java_vm, is_java_vm_started
 from definitions.consistencyTestCase import ConsistencyTestCase
 from helper.logs.loggingHelper import log_info
 from pipeline.consistencyResultGetter import ConsistencyResultGetter
@@ -27,8 +28,13 @@ def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]):
 
         results = []
 
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            for result in executor.map(task, ordered_consistency_tests):
+        # crete dict of environment variables
+        env_dict = dict(os.environ)
+
+        with concurrent.futures.ProcessPoolExecutor(initializer=initialize_consistency_process,
+                                                    initargs=(env_dict,)) as executor:
+
+            for result in executor.map(run_consistency_process, ordered_consistency_tests):
                 results.append(result)
 
         return results
@@ -49,7 +55,14 @@ def get_consistency_test_case_order(consistency_test: ConsistencyTestCase):
     return count
 
 
-def task(value):
-    start_java_vm()
+def initialize_consistency_process(env_dict: dict[str, str]):
+    for key, value in env_dict.items():
+        os.environ[key] = value
+
+
+def run_consistency_process(value):
+    if not is_java_vm_started():
+        start_java_vm()
+
     result = ConsistencyResultGetter().get_result(value)
     return result

@@ -11,6 +11,7 @@ from helper.logs.loggingHelper import log_info
 from parser.tree.astGenerator import ast_generator_timer
 from pipeline.consistencyPipeline import run_consistency_pipeline, inconsistency_pipeline_timer
 from pipeline.jmlVerifier.jmlVerifier import verify_jml_timer
+from statistics.statisticsWriter import write_statistics
 from testGeneration.testCaseGeneration.testCaseGenerator import generate_for_parameter_timer
 from testGeneration.testCollections.testCollectionsBuilder import test_collections_build_timer
 from testGeneration.testSuiteBuilder import test_suite_generation_timer
@@ -24,11 +25,13 @@ def main():
 
     log_info(f"Loaded {len(test_cases)} consistency test cases")
 
-    run_consistency_pipeline(test_cases)
+    results = run_consistency_pipeline(test_cases)
+
+    write_statistics(results)
 
     log_info(f"Getting test cases took: {get_test_cases_timer.timers['get_test_cases']:.6f} seconds")
-    log_info(f"Inconsistency pipeline took: {inconsistency_pipeline_timer.timers['run_consistency_pipeline']:.6f} seconds")
-
+    log_info(
+        f"Inconsistency pipeline took: {inconsistency_pipeline_timer.timers['run_consistency_pipeline']:.6f} seconds")
 
     # log_info(f"Verifying jml took: {verify_jml_timer.timers['verify_jml']:.6f} seconds")
     # log_info(f"Generation of test suites took: {test_suite_generation_timer.timers['get_test_suite']:.6f} seconds")
@@ -46,8 +49,8 @@ def main():
     #
     # log_info(f"Running behaviors took: {behavior_runner_timer.timers['run_behaviors']:.6f} seconds")
 
-    #log_info(f"Running the code took: {code_execution_timer.timers['code_execution']:.6f} seconds")
-    #log_info(f"Verifying the execution took: {execution_verifier_timer.timers['execution_verifier']:.6f} seconds")
+    # log_info(f"Running the code took: {code_execution_timer.timers['code_execution']:.6f} seconds")
+    # log_info(f"Verifying the execution took: {execution_verifier_timer.timers['execution_verifier']:.6f} seconds")
 
 
 if __name__ == "__main__":
