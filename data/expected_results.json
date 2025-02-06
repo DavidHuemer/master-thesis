@@ -1,0 +1,267 @@
+[
+  {
+    "path": "data/code/arithmetic/MultiplyCorrect.java",
+    "method": "multiply",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/MultiplyInCorrect.java",
+    "method": "multiply",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/AddCorrect.java",
+    "method": "add",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/AddIncorrect.java",
+    "method": "add",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/SubtractCorrect.java",
+    "method": "subtract",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/SubtractInvalidOrder.java",
+    "method": "subtract",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/IntSquare.java",
+    "method": "squareOf",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/IntSquareIncorrect.java",
+    "method": "squareOf",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/max/Biggest.java",
+    "method": "biggest",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/max/BiggestIncorrect.java",
+    "method": "biggest",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/max/BiggestFirstIncorrect.java",
+    "method": "biggest",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/max/BiggestIndex.java",
+    "method": "biggest",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/exceptionTest/ExceptionTest.java",
+    "method": "test",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/exceptionTest/ExceptionTestIncorrect.java",
+    "method": "test",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/abs/Abs.java",
+    "method": "abs",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/abs/AbsMinus.java",
+    "method": "abs",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/abs/AbsSameValue.java",
+    "method": "abs",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/find/IndexOf.java",
+    "method": "find",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/IndexOfIncorrect.java",
+    "method": "find",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/CompareArray.java",
+    "method": "compare",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/CompareArrayIncorrect.java",
+    "method": "compare",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/IsAscending.java",
+    "method": "isAscending",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/IsAscendingIncorrect.java",
+    "method": "isAscending",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/ComputeArea.java",
+    "method": "computeArea",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/ComputeAreaIncorrect.java",
+    "method": "computeArea",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/find/BubbleSort.java",
+    "method": "bubbleSort",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/BubbleSortDesc.java",
+    "method": "bubbleSort",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/BubbleSortIncorrect.java",
+    "method": "bubbleSort",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/Conjunction.java",
+    "method": "conjunctOf",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/ConjunctionIncorrect.java",
+    "method": "conjunctOf",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/XOR.java",
+    "method": "xor",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/XORIncorrect.java",
+    "method": "xor",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/Temperatures.java",
+    "method": "convertTemperature",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/TemperaturesIncorrect.java",
+    "method": "convertTemperature",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/SetZero.java",
+    "method": "setZero",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/SetZeroIncorrectLength.java",
+    "method": "setZero",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/StringLength.java",
+    "method": "length",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/StringLengthIncorrect.java",
+    "method": "length",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/DigitRoot.java",
+    "method": "digitRoot",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/ContainsDuplicate.java",
+    "method": "containsDuplicate",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/ContainsDuplicateIncorrect.java",
+    "method": "containsDuplicate",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/Disjunction.java",
+    "method": "disjunctOf",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/DisjunctionIncorrect.java",
+    "method": "disjunctOf",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/CreditCard.java",
+    "method": "charge",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/CreditCardIncorrect.java",
+    "method": "charge",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/find/FindFirstZero.java",
+    "method": "findFirstZero",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/FindFirstZeroIncorrect.java",
+    "method": "findFirstZero",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/DistinctArray.java",
+    "method": "isDistinct",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/DistinctArrayIncorrect.java",
+    "method": "isDistinct",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/GenerateString.java",
+    "method": "generateString",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/GenerateStringIncorrectLength.java",
+    "method": "generateString",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/IsCommonFactor.java",
+    "method": "isCommonFactor",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/IsCommonFactorIncorrect.java",
+    "method": "isCommonFactor",
+    "expectedResult": false
+  }
+]

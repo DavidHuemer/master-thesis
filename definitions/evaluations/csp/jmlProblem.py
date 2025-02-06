@@ -1,11 +1,8 @@
-from codetiming import Timer
-from z3 import Or, ArithRef, sat, ModelRef, ArrayRef, BoolRef, SeqRef
+from z3 import Or, sat, ArrayRef
 
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
+from testGeneration.parameterModel import ParameterModel
 from verification.csp.jmlSolver import JmlSolver
-
-add_solution_constraint_timer = Timer(name="add_solution_constraint", logger=None)
 
 
 class JMLProblem:
@@ -30,28 +27,21 @@ class JMLProblem:
         """
         self.solver.solver.push()
 
-    def get_solver_solution(self):
+    def get_solver_solution(self) -> ParameterModel | None:
         """
         Returns the solution of the current solver.
         :return: The solution of the current solver.
         """
-        return self.solver.get_solution()
+        model = self.solver.get_solution()
+        return ParameterModel(model, self.parameters.csp_parameters) if model is not None else None
 
-    def get_distinct_constraint(self, solution, param):
-        if isinstance(param, (ArithRef, BoolRef)):
-            return param != solution[param]
-        elif isinstance(param, ArrayRef):
-            # Get length parameter
-            length_param = self.parameters.csp_parameters.get_helper(str(param), CSPParamHelperType.LENGTH).value
-            length = solution[length_param].as_long()
-
-            if length == 0:
-                return None
-
-            or_expressions = [param[i] != solution.evaluate(param[i]).as_long() for i in range(length)]
+    @staticmethod
+    def get_distinct_constraints(csp_param, value):
+        if isinstance(csp_param, ArrayRef):
+            or_expressions = [csp_param[i] != value[i] for i in range(len(value))]
             return Or(*or_expressions)
-        elif isinstance(param, SeqRef):
-            return param != solution[param]
+
+        return csp_param != value
 
     def is_satisfiable(self):
         """
@@ -66,24 +56,25 @@ class JMLProblem:
         """
         self.solver.solver.pop()
 
-    @add_solution_constraint_timer
-    def add_solution_constraint(self, solution: ModelRef):
+    def add_solution_constraint(self, parameter_model: ParameterModel):
         """
         Adds an evaluated solution as a constraint to the problem.
-        :param solution: The solution to add as a constraint.
+        :param parameter_model: The solution to add as a constraint.
         """
 
-        if solution is None:
+        if parameter_model is None:
             return
 
-        solution_params = list(self.parameters.csp_parameters[str(var)].value for var in solution if
-                               self.parameters.csp_parameters.parameter_exists(str(var)))
+        distinct_constraints = [
+            self.get_distinct_constraints(self.parameters.csp_parameters[key].value,
+                                          parameter_model.parameter_dict[key])
+            for key in parameter_model.parameter_dict
+        ]
 
-        distinct_constraints = [self.get_distinct_constraint(solution, param) for param in solution_params]
         valid_constraints = [constraint for constraint in distinct_constraints if constraint is not None]
 
         if len(valid_constraints) == 0:
-            return solution
+            return
 
         or_constraint = Or(*valid_constraints)
         self.add_constraint(or_constraint)

@@ -12,11 +12,11 @@ def write_confusion_matrix(verification_results: List[VerificationResult]):
 
     expected_consistencies = filter_results_by_condition(
         results_with_expected_result,
-        lambda x: x.consistency_test_case.expected_result.expected_result is True
+        lambda x: x.consistency_test_case.expected_result is True
     )
     expected_inconsistencies = filter_results_by_condition(
         results_with_expected_result,
-        lambda x: x.consistency_test_case.expected_result.expected_result is False
+        lambda x: x.consistency_test_case.expected_result is False
     )
 
     confusion_data = {

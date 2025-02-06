@@ -24,15 +24,15 @@ class TestConstraintsGenerator(Singleton):
         self.string_test_constraints_generator = string_test_constraints_generator
 
     def get_test_constraints(self, jml_problem: JMLProblem, parameter: CSPParameter):
+        if parameter.is_array():
+            return self.array_test_constraints_generator.get_test_constraints(jml_problem, parameter)
+
         if self.numeric_test_constraint_generator.is_numeric(parameter):
             return self.numeric_test_constraint_generator.get_test_constraints(parameter)
 
         # TODO: Add support for char, string, and boolean types
         if self.boolean_test_constraint_generator.is_boolean(parameter):
             return self.boolean_test_constraint_generator.get_test_constraints(parameter)
-
-        if parameter.is_array():
-            return self.array_test_constraints_generator.get_test_constraints(jml_problem, parameter)
 
         if self.string_test_constraints_generator.is_string(parameter):
             return self.string_test_constraints_generator.get_test_constraints(parameter)

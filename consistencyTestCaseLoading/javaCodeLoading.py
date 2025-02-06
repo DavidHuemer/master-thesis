@@ -5,13 +5,16 @@ import javalang
 from javalang.tree import MethodDeclaration, FormalParameter
 
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
+from definitions.code.protectionModifier import ProtectionModifier
+from definitions.envKeys import JAVA_FILES
 from definitions.javaCode import JavaCode
 from definitions.javaMethod import JavaMethod
 from helper.files.fileReader import FileReader
 from helper.logs.loggingHelper import log_info
+from util.rattr import rgetattr
 
 
-def get_java_code_from_directory():
+def get_java_code_from_directory() -> list[JavaCode]:
     log_info("Getting Java code from directory")
     java_file_paths = get_java_file_paths()
 
@@ -23,8 +26,7 @@ def get_java_code_from_directory():
 
 
 def get_java_code_from_file(java_file) -> JavaCode:
-    java_content = FileReader.read(java_file)
-    return get_java_code_from_content(java_file, java_content)
+    return get_java_code_from_content(java_file, FileReader.read(java_file))
 
 
 def get_java_code_from_content(java_file: str, java_content: str) -> JavaCode:
@@ -32,32 +34,32 @@ def get_java_code_from_content(java_file: str, java_content: str) -> JavaCode:
 
     # Get class declaration
     class_declaration = tree.types[0]
-    methods: list[MethodDeclaration] = class_declaration.methods
+    methods: list[MethodDeclaration] = getattr(class_declaration, 'methods', [])
 
     method_infos = [get_method_info(m) for m in methods]
     return JavaCode(java_file, class_declaration.name, method_infos)
 
 
 def get_method_info(method: MethodDeclaration) -> JavaMethod:
-    return JavaMethod(name=method.name if hasattr(method, 'name') else None,
+    return JavaMethod(name=getattr(method, 'name', None),
                       method_protection=get_protection(method),
                       return_type=get_return_type(method),
                       parameters=get_parameters(method),
-                      comment=method.documentation if hasattr(method, 'documentation') else None
+                      documentation=method.documentation if hasattr(method, 'documentation') else None
                       )
 
 
-def get_protection(method: MethodDeclaration) -> str:
+def get_protection(method: MethodDeclaration) -> ProtectionModifier:
     if hasattr(method, 'modifiers'):
         for modifier in method.modifiers:
             if modifier == 'public':
-                return 'public'
+                return ProtectionModifier.PUBLIC
             elif modifier == 'private':
-                return 'private'
+                return ProtectionModifier.PRIVATE
             elif modifier == 'protected':
-                return 'protected'
+                return ProtectionModifier.PROTECTED
 
-    return 'private'
+    return ProtectionModifier.PRIVATE
 
 
 def get_return_type(method: MethodDeclaration):
@@ -71,27 +73,26 @@ def get_return_type(method: MethodDeclaration):
 
 
 def get_parameters(method: MethodDeclaration) -> list[ParameterExtractionInfo]:
-    parameters = method.parameters if hasattr(method, 'parameters') else []
+    parameters = getattr(method, 'parameters', [])
 
     return [
         ParameterExtractionInfo(
             name=p.name,
-            parameter_type=get_parameter_type(p)
+            parameter_type=get_parameter_type(p),
+            dimension=len(rgetattr(p, 'type.dimensions', []))
         )
         for p in parameters
     ]
 
 
 def get_parameter_type(p: FormalParameter):
-    param_type = p.type if hasattr(p, 'type') else None
-
-    param_name = param_type.name if hasattr(param_type, 'name') else None
-
-    if param_name is not None and hasattr(param_type, 'dimensions'):
-        param_name += '[]' * len(param_type.dimensions)
-
-    return param_name
+    return rgetattr(p, 'type.name', None)
 
 
 def get_java_file_paths():
-    return [y for x in os.walk('data/code') for y in glob(os.path.join(x[0], '*.java'))]
+    path = os.getenv(JAVA_FILES)
+    # Check if path is a single file
+    if os.path.isfile(path):
+        return [path]
+
+    return [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.java'))]

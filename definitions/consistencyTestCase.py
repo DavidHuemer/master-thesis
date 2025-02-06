@@ -17,7 +17,7 @@ class ConsistencyTestCase:
         """
         self.java_code = java_code
         self.method_info = method_info
-        self.expected_result = expected_result
+        self.expected_result = expected_result.expected_result
 
     def get_comment(self):
         """
@@ -39,4 +39,4 @@ class ConsistencyTestCase:
         return f'{self.java_code.class_name}.{self.method_info.name}'
 
     def get_expected_result_str(self):
-        return self.expected_result.expected_result if self.expected_result is not None else 'No expected result'
+        return self.expected_result if self.expected_result is not None else 'No expected result'

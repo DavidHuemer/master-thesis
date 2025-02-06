@@ -1,7 +1,7 @@
 LOGGER_NAME = 'master-thesis-logger'
 LOGGER_WITHOUT_LEVEL_NAME = 'master-thesis-logger-without-level'
 
-EXPECTED_RESULTS_LOCATION = 'data/expected_results.txt'
+EXPECTED_RESULTS_LOCATION = 'data/expected_results.json'
 CODE_DIRECTORY = 'data/code'
 API_KEY_PATH = 'secrets/API_KEY.txt'
 MAX_PIPELINE_TRIES = 5

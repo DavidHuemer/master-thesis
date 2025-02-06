@@ -19,44 +19,25 @@ def build_csp_parameters(parameters: list[ParameterExtractionInfo]) -> CSPParame
     return csp_parameters
 
 
+param_type_map: dict[str, tuple[any, any]] = {
+    "byte": (Int, IntSort),
+    "short": (Int, IntSort),
+    "int": (Int, IntSort),
+    "long": (Int, IntSort),
+    "float": (Real, RealSort),
+    "double": (Real, RealSort),
+    "boolean": (Bool, BoolSort),
+    "char": (String, StringSort),
+    "String": (String, StringSort)
+}
+
+
 def get_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
-    param_type_map = {
-        "byte": Int,
-        "short": Int,
-        "int": Int,
-        "long": Int,
-        "float": Real,
-        "double": Real,
-        "boolean": Bool,
-        "char": String,
-        "String": String
-    }
-
-    if '[]' in param.parameter_type:
-        return get_array_csp_param_for_param(param)
-
     if param.parameter_type in param_type_map:
-        return CSPParameter(param.name, param_type_map[param.parameter_type](param.name), param.parameter_type)
-
-    raise Exception(f"Parameter type {param.parameter_type} is not supported")
-
-
-def get_array_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
-    array_param_type_map = {
-        "byte[]": IntSort,
-        "short[]": IntSort,
-        "int[]": IntSort,
-        "long[]": IntSort,
-        "float[]": RealSort,
-        "double[]": RealSort,
-        "boolean[]": BoolSort,
-        "char[]": StringSort,
-        "String[]": StringSort
-    }
-
-    if param.parameter_type in array_param_type_map:
-        return CSPParameter(param.name, Array(param.name, IntSort(), array_param_type_map[param.parameter_type]()),
-                            param.parameter_type)
+        single_type, array_type = param_type_map[param.parameter_type]
+        if param.is_array():
+            return CSPParameter(param.name, Array(param.name, IntSort(), array_type()), param.parameter_type)
+        return CSPParameter(param.name, single_type(param.name), param.parameter_type)
 
     raise Exception(f"Parameter type {param.parameter_type} is not supported")
 
@@ -79,7 +60,7 @@ def build_helper_parameters(csp_parameters: CSPParameters, parameters: list[Para
         csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.IS_NULL, is_null_param)
 
         # Add length for array parameters
-        if "[]" in param.parameter_type:
+        if param.is_array():
             length_name = find_csp_name(csp_parameters, f"{param.name}_length")
             length_param = CSPParameter(length_name, Int(length_name), "int", helper=True)
             csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.LENGTH, length_param)

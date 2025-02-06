@@ -1,6 +1,7 @@
 from codetiming import Timer
-from z3 import Solver, sat
+from z3 import Solver, sat, ModelRef
 
+from testGeneration.parameterModel import ParameterModel
 from verification.csp.cspProblem import CSPProblem
 
 add_constraint_timer = Timer(name="add_constraint", logger=None)
@@ -25,7 +26,7 @@ class JmlSolver(CSPProblem):
         self.solver.add(constraint)
 
     @solution_generation_timer
-    def get_solution(self):
+    def get_solution(self) -> ModelRef | None:
         if self.solver.check() != sat:
             return None
 

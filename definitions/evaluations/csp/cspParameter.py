@@ -1,5 +1,8 @@
+from z3 import ExprRef, ArrayRef
+
+
 class CSPParameter:
-    def __init__(self, name: str, value, param_type: str, helper: bool = False):
+    def __init__(self, name: str, value: ExprRef, param_type: str, helper: bool = False):
         self.name = name
         self.value = value
         self.param_type = param_type
@@ -9,4 +12,4 @@ class CSPParameter:
         return f"{self.param_type} {self.value}"
 
     def is_array(self):
-        return self.param_type.endswith("[]")
+        return isinstance(self.value, ArrayRef)

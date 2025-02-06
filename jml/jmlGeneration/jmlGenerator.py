@@ -1,8 +1,9 @@
 from jml.jmlGeneration.jmlAiGenerator import JmlAiGenerator
 from definitions.consistencyTestCase import ConsistencyTestCase
+from util.Singleton import Singleton
 
 
-class JmlGenerator:
+class JmlGenerator(Singleton):
     """
     Class that is responsible for generating JML (Java Modelling Language)
     """

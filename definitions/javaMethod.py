@@ -1,14 +1,14 @@
-from definitions.code.methodExtractionInfo import MethodExtractionInfo
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
+from definitions.code.protectionModifier import ProtectionModifier
 
 
 class JavaMethod:
-    def __init__(self, name: str, method_protection: str, return_type: str, comment: str,
+    def __init__(self, name: str, method_protection: ProtectionModifier, return_type: str, documentation: str,
                  parameters: list[ParameterExtractionInfo]):
         self.name = name
         self.method_protection = method_protection
         self.return_type = return_type
-        self.comment = comment
+        self.comment = documentation
         self.parameters = parameters
 
     def __eq__(self, other):

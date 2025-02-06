@@ -14,17 +14,17 @@ def build_type_constraint(jml_problem: JMLProblem, parameter: CSPParameter):
     :param parameter: The parameter that the constraints will be built for
     """
 
+    # Check if the parameter is an array
+    if parameter.is_array():
+        add_array_constraint(jml_problem, parameter)
+
     # Check if the parameter is a number
-    if parameter.param_type in javaTypes.PRIMARY_ARITHMETIC_TYPES:
+    elif parameter.param_type in javaTypes.PRIMARY_ARITHMETIC_TYPES:
         add_number_constraints(jml_problem, parameter)
 
     # Check if the parameter is a string
     elif parameter.param_type in javaTypes.PRIMARY_TEXT_TYPES:
         add_text_constraints(jml_problem, parameter)
-
-    # Check if the parameter is an array
-    if parameter.is_array():
-        add_array_constraint(jml_problem, parameter)
 
 
 def add_number_constraints(jml_problem, parameter: CSPParameter):

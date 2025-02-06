@@ -72,5 +72,5 @@ class ArrayTestConstraintsGenerator:
     @staticmethod
     def is_numeric(parameter: CSPParameter):
         # parameter type is e.g. int[]. So we need to remove the []
-        param_type = parameter.param_type[:-2]
+        param_type = parameter.param_type
         return param_type in ["int", "long", "float", "double"]

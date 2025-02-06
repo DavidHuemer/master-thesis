@@ -12,7 +12,7 @@ def add_array_constraint(jml_problem: JMLProblem, parameter: CSPParameter):
                         .get_helper(parameter.name, CSPParamHelperType.LENGTH).value)
     jml_problem.add_constraint(length_parameter >= 0)
 
-    array_type = parameter.param_type[:-2]
+    array_type = parameter.param_type
     if array_type in javaTypes.PRIMARY_ARITHMETIC_TYPES:
         add_number_array_constraints(jml_problem, parameter, array_type, length_parameter)
 

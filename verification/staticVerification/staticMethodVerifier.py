@@ -41,7 +41,7 @@ def is_method_correct(method: JavaRuntimeMethod, method_info: JavaMethod):
         return False
 
     for i in range(len(method.parameters)):
-        if not method.parameters[i].parameter_name == method_info.parameters[i].parameter_type:
+        if not method.parameters[i].parameter_name == method_info.parameters[i].full_parameter_type:
             return False
 
     return True
