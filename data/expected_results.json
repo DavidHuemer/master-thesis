@@ -363,5 +363,25 @@
     "path": "data/code/arithmetic/StringIndexOfIncorrect.java",
     "method": "indexOf",
     "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/SplitString.java",
+    "method": "split",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/SplitStringIncorrect.java",
+    "method": "split",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/StringConcat.java",
+    "method": "concat",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/StringConcatIncorrect.java",
+    "method": "concat",
+    "expectedResult": false
   }
 ]

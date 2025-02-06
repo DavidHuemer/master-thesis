@@ -1,4 +1,4 @@
-from z3 import Length
+from z3 import Length, InRe, Re, Range, Star
 
 from definitions import javaTypes
 from definitions.evaluations.csp.cspParameter import CSPParameter
@@ -36,3 +36,6 @@ def add_number_constraints(jml_problem, parameter: CSPParameter):
 def add_text_constraints(jml_problem, parameter: CSPParameter):
     if parameter.param_type == javaTypes.CHAR_TYPE:
         jml_problem.add_constraint(Length(parameter.value) == 1)
+
+    allowed_chars = Range('0', '9') + Range('A', 'Z') + Range('a', 'z')
+    jml_problem.add_constraint(InRe(parameter.value, Star(allowed_chars)))
