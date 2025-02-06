@@ -1,4 +1,4 @@
-public class AbsSameValue {
+public class AbsCorrect {
     /**
      * Returns the absolute value of a number.
      * 
@@ -6,6 +6,8 @@ public class AbsSameValue {
      * @return the absolute value of the number
      */
     public int abs(int a) {
+        if (a < 0)
+            return -a;
         return a;
     }
 }

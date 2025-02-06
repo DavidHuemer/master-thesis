@@ -1,16 +1,21 @@
+import concurrent
 import multiprocessing
 import os
+import time
+from concurrent import futures
 
 from codetiming import Timer
 
 from codeExecution.compilation.javaCompilationRunner import compile_java_files
 from codeExecution.vm.javaVm import is_java_vm_started, start_java_vm
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.envKeys import JML_FILE
 from helper.logs.loggingHelper import log_info
 from jml.jmlFileHelper import get_jml_file
 from pipeline.consistencyResultGetter import ConsistencyResultGetter
 from util import multiProcessUtil
 from util.envUtil import get_required_env_dict
+from verification.result.verificationResultFactory import VerificationResultFactory
 
 inconsistency_pipeline_timer = Timer(name="run_consistency_pipeline", logger=None)
 
@@ -25,24 +30,33 @@ def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]):
     ordered_consistency_tests = sorted(consistency_tests, key=lambda x: get_consistency_test_case_order(x),
                                        reverse=True)
 
-    jml_file_path = get_jml_file()
+    results = []
+    batch_size = 16
+    for i in range(0, len(ordered_consistency_tests), batch_size):
+        log_info(f"Running batch {i} to {i + batch_size}")
 
-    with multiprocessing.Pool(16, initializer=initialize_consistency_process,
-                              initargs=(env_dict, log_lock, jml_file_path)) as pool:  # 4 Prozesse wiederverwenden
-        results = pool.map(run_consistency_process, ordered_consistency_tests)
+        with concurrent.futures.ProcessPoolExecutor(initializer=initialize_consistency_process,
+                                                    initargs=(env_dict, log_lock, get_jml_file())) as executor:
+            for result in executor.map(run_consistency_process, ordered_consistency_tests[i:i + batch_size]):
+                results.append(result)
+
+        # time.sleep(1)
 
     return results
 
-    # initialize_consistency_process(env_dict, log_lock, jml_file_path)
-    # results = [run_consistency_process(v) for v in ordered_consistency_tests]
+    # only take 5 tests
+    # ordered_consistency_tests = ordered_consistency_tests[:14]
 
-    # results = []
-    # with futures.ProcessPoolExecutor(initializer=initialize_consistency_process,
-    #                                  initargs=(env_dict, log_lock)) as executor:
-    #     for result in executor.map(run_consistency_process, ordered_consistency_tests):
-    #         results.append(result)
+    jml_file_path = get_jml_file()
+
+    # with multiprocessing.Pool(16, initializer=initialize_consistency_process,
+    #                           initargs=(env_dict, log_lock, jml_file_path)) as pool:
+    #     results = pool.map(run_consistency_process, ordered_consistency_tests)
     #
     # return results
+
+    # initialize_consistency_process(env_dict, log_lock, jml_file_path)
+    # results = [run_consistency_process(v) for v in ordered_consistency_tests]
 
     # Run compilation
     # compile_java_files([c.java_code.file_path for c in consistency_tests])
@@ -55,15 +69,11 @@ def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]):
     # # crete dict of environment variables
     # env_dict = dict(os.environ)
     #
-    # log_lock = multiprocessing.Lock()
+    log_lock = multiprocessing.Lock()
     #
-    # with concurrent.futures.ProcessPoolExecutor(initializer=initialize_consistency_process,
-    #                                             initargs=(env_dict, log_lock)) as executor:
-    #
-    #     for result in executor.map(run_consistency_process, ordered_consistency_tests):
-    #         results.append(result)
-    #
-    # return results
+
+    results = []
+    return results
 
 
 def get_consistency_test_case_order(consistency_test: ConsistencyTestCase):
@@ -82,12 +92,12 @@ def initialize_consistency_process(env_dict: dict[str, str], log_lock: multiproc
     for key, value in env_dict.items():
         os.environ[key] = value
 
-    os.environ["JML_FILES"] = jml_files_path
+    os.environ[JML_FILE] = jml_files_path
+    log_info("Initialized consistency process")
 
 
 def run_consistency_process(value):
-    # with LOCK:
-    #     log_info(f"Running consistency process for {str(value)}")
+    log_info(f"Running consistency process for {str(value)}")
 
     if not is_java_vm_started():
         start_java_vm()

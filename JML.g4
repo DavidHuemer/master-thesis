@@ -96,7 +96,7 @@ exists_expression:
 	EXISTS expr = bool_quantifier_core_expression;
 
 bool_quantifier_core_expression:
-	types = type_declarations ';' ranges = expression ';' expr = expression;
+	types = type_declarations ';' ranges = expression (';' | '==>') expr = expression;
 
 type_declarations: type_declaration (',' type_declaration)*;
 

@@ -22,6 +22,10 @@ class TerminalConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
             return self.evaluate_variable(param_key, t.constraint_parameters)
         elif terminal_node.name == "BOOL_LITERAL":
             return terminal_node.value == "true"
+        elif terminal_node.name == "CHAR":
+            return str(terminal_node.value[1])
+        elif terminal_node.name == "STRING":
+            return str(terminal_node.value)
         elif terminal_node.name == "NULL":
             return t.constraint_parameters.csp_parameters.is_null_helper_param.value
         elif terminal_node.name == "RESULT":

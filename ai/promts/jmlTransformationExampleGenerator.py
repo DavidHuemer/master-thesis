@@ -1,29 +1,21 @@
 import random
 
 from ai.promts.jmlExamplesLoader import JmlExamplesLoader
+from util.Singleton import Singleton
 
 
-class JmlTransformationExampleGenerator(object):
+class JmlTransformationExampleGenerator(Singleton):
     """
     Class that is used to generate JavaDoc -> JML transformation examples.
     """
 
-    # Used for singleton pattern
-    instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls.instance is None:
-            cls.instance = super(JmlTransformationExampleGenerator, cls).__new__(cls)
-
-        return cls.instance
-
-    def __init__(self, examples_loader=JmlExamplesLoader()):
+    def __init__(self, examples_loader=None):
         """
         Instantiates a new JmlTransformationExampleGenerator
         :param examples_loader: The loader that is used to load the examples from a file.
         """
         self.examples = None
-        self.examples_loader = examples_loader
+        self.examples_loader = examples_loader or JmlExamplesLoader()
 
     def get_examples(self, examples_count):
         """

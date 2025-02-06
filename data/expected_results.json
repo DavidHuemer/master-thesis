@@ -50,16 +50,6 @@
     "expectedResult": false
   },
   {
-    "path": "data/code/max/BiggestFirstIncorrect.java",
-    "method": "biggest",
-    "expectedResult": false
-  },
-  {
-    "path": "data/code/max/BiggestIndex.java",
-    "method": "biggest",
-    "expectedResult": true
-  },
-  {
     "path": "data/code/exceptionTest/ExceptionTest.java",
     "method": "test",
     "expectedResult": true
@@ -70,17 +60,12 @@
     "expectedResult": false
   },
   {
-    "path": "data/code/abs/Abs.java",
+    "path": "data/code/abs/AbsCorrect.java",
     "method": "abs",
     "expectedResult": true
   },
   {
-    "path": "data/code/abs/AbsMinus.java",
-    "method": "abs",
-    "expectedResult": false
-  },
-  {
-    "path": "data/code/abs/AbsSameValue.java",
+    "path": "data/code/abs/AbsIncorrect.java",
     "method": "abs",
     "expectedResult": false
   },
@@ -126,11 +111,6 @@
   },
   {
     "path": "data/code/find/BubbleSort.java",
-    "method": "bubbleSort",
-    "expectedResult": true
-  },
-  {
-    "path": "data/code/find/BubbleSortDesc.java",
     "method": "bubbleSort",
     "expectedResult": true
   },
@@ -262,6 +242,56 @@
   {
     "path": "data/code/comparison/IsCommonFactorIncorrect.java",
     "method": "isCommonFactor",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/IsDescending.java",
+    "method": "isDescending",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/IsDescendingIncorrect.java",
+    "method": "isDescending",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/min/Smallest.java",
+    "method": "smallest",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/min/SmallestIncorrect.java",
+    "method": "smallest",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/find/LastIndexOf.java",
+    "method": "lastIndexOf",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/find/LastIndexOfIncorrect.java",
+    "method": "lastIndexOf",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/ParseBoolean.java",
+    "method": "parse",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/ParseBooleanIncorrect.java",
+    "method": "parse",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/Divide.java",
+    "method": "divide",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/DivideIncorrect.java",
+    "method": "divide",
     "expectedResult": false
   }
 ]

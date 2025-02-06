@@ -14,8 +14,8 @@ from verification.result.verificationResultFactory import VerificationResultFact
 
 
 class ConsistencyResultGetter(Singleton):
-    def __init__(self, jml_provider=JmlProvider()):
-        self.jml_provider = jml_provider
+    def __init__(self, jml_provider: JmlProvider | None = None):
+        self.jml_provider: JmlProvider = jml_provider or JmlProvider()
         self.retries = 0
         self.max_retries = int(os.getenv(MAX_RETRIES))
         self.jml_file_path = os.getenv(JML_FILE)
@@ -30,21 +30,18 @@ class ConsistencyResultGetter(Singleton):
 
     def get_result_by_jml(self, consistency_test: ConsistencyTestCase, jml_code: str):
         try:
-            with multiProcessUtil.lock:
-                log_debug("JMl code: \n" + jml_code.strip())
+            log_debug("JMl code: \n" + jml_code.strip())
             result = verify_jml(consistency_test, jml_code)
 
             if not self.jml_provider.static_jml_exists_for_test_case(consistency_test):
                 store_jml_for_test_case(self.jml_file_path, consistency_test, jml_code)
             return result
         except Exception as e:
-            with multiProcessUtil.lock:
-                print(traceback.format_exc())
-            if self.retries >= self.max_retries or self.jml_provider.static_jml_exists():
+            log_error(traceback.format_exc())
+            if self.retries >= self.max_retries or not self.jml_provider.fetch_from_server:
                 return VerificationResultFactory.by_exception(consistency_test, e)
 
-            with multiProcessUtil.lock:
-                log_info("Generating new JML")
+            log_info("Generating new JML")
             new_jml_code = self.jml_provider.get_by_exception(e)
             self.retries += 1
             return self.get_result_by_jml(consistency_test, new_jml_code)

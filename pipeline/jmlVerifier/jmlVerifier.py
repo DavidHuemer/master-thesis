@@ -8,6 +8,7 @@ def verify_jml(consistency_test: ConsistencyTestCase, jml_code: str):
     """
     Verify JML annotations in Java source code.
     """
+    # return VerificationResultFactory.consistent_result(consistency_test)
     test_suite = get_test_suite(consistency_test, jml_code)
     if len(test_suite) <= 0:
         raise NoTestCasesException()

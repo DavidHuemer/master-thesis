@@ -8,8 +8,8 @@ class JmlGenerator(Singleton):
     Class that is responsible for generating JML (Java Modelling Language)
     """
 
-    def __init__(self, jml_ai_generator: JmlAiGenerator = JmlAiGenerator()):
-        self.jml_ai_generator = jml_ai_generator
+    def __init__(self, jml_ai_generator: JmlAiGenerator | None = None):
+        self.jml_ai_generator: JmlAiGenerator = jml_ai_generator or JmlAiGenerator()
 
     def get_from_test_case(self, test_case: ConsistencyTestCase) -> str:
         return self.jml_ai_generator.get_from_test_case(test_case)

@@ -1,3 +1,6 @@
+data/code/compute/ParseBoolean.java
+----------
+```
 //@ requires inputString != null;
 //@ requires (inputString.length() == 4 && ((inputString.charAt(0) == 't' || inputString.charAt(0) == 'T') &&
 //         (inputString.charAt(1) == 'r' || inputString.charAt(1) == 'R') &&
@@ -10,3 +13,4 @@
 //         (inputString.charAt(4) == 'e' || inputString.charAt(4) == 'E')));
 //@ ensures (\result == true && inputString.equalsIgnoreCase("true")) ||
 //         (\result == false && inputString.equalsIgnoreCase("false"));
+```

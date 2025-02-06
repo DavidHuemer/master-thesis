@@ -1,7 +1,7 @@
 from typing import Callable
 
 from jpype import java, JChar, JDouble
-from z3 import And, Or, Not, ArrayRef, BoolRef, SeqRef
+from z3 import And, Or, Not, ArrayRef, BoolRef, SeqRef, CharVal, CharRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
@@ -46,15 +46,20 @@ class InfixHelper:
         elif infix_operator == "*":
             return left_expr * right_expr
         elif infix_operator == "/":
+            if isinstance(left_expr, int) and isinstance(right_expr, int):
+                return int(left_expr / right_expr)
             return left_expr / right_expr
         elif infix_operator == "%":
             return left_expr % right_expr
         elif infix_operator == "&&":
             return And(left_expr, right_expr) if is_smt else left_expr and right()
         elif infix_operator == "||":
-            return And(left_expr, right_expr) if is_smt else left_expr or right()
+            return Or(left_expr, right_expr) if is_smt else left_expr or right()
         elif infix_operator == "==" or infix_operator == "<==>":
             if is_smt:
+                if isinstance(left_expr, CharRef):
+                    return left_expr == CharVal(right_expr)
+
                 return left_expr == right_expr
 
             if self.is_float(left_expr) or self.is_float(right_expr):

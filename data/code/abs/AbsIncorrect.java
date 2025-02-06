@@ -1,4 +1,4 @@
-public class Abs {
+public class AbsIncorrect {
     /**
      * Returns the absolute value of a number.
      * 
@@ -6,8 +6,6 @@ public class Abs {
      * @return the absolute value of the number
      */
     public int abs(int a) {
-        if (a < 0)
-            return -a;
-        return a;
+        return -a;
     }
 }

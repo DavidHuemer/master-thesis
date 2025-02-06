@@ -52,4 +52,4 @@ class TestCaseRunner:
                                                                  consistency_test_case=consistency_test_case,
                                                                  test_case=test_case,
                                                                  result_instances=result_instances,
-                                                                 stop_event=stop_event), timeout=5)
+                                                                 stop_event=stop_event), timeout=500)

@@ -57,7 +57,7 @@ class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
         if self.reference_simplifier.is_node(t):
             return self.reference_simplifier.handle(t)
 
-        raise Exception("No simplification option found for rule: " + str(t.node))
+        raise Exception(f"No simplification option found for rule: {str(t.node)}")
 
     @staticmethod
     def can_simplify(t: SimplificationDto) -> AstTreeNode | None:

@@ -1,6 +1,7 @@
 import threading
 
 from codetiming import Timer
+from jpype import JInt, JString
 
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.ast.behavior.behaviorType import BehaviorType
@@ -35,6 +36,9 @@ class ExecutionVerifier(Singleton):
                behavior: BehaviorNode, expected_exception, test_case: TestCase,
                result_instances: ResultInstances, stop_event: threading.Event):
 
+        a = JString("a")
+        b = JString("b")
+        c = JString("c")
         try:
             if execution_result.exception is not None:
                 # Validate exception

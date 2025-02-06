@@ -6,7 +6,6 @@ from verification.testSuite.testSuiteVerificationRunner import run_test_suite_ve
 
 
 def run_test_suite(test_suite: TestSuite) -> VerificationResult:
-    with multiProcessUtil.lock:
-        log_info("Running Test Suite")
+    log_info("Running Test Suite")
 
     return run_test_suite_verification(test_suite)

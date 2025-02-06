@@ -1,4 +1,4 @@
-from jpype import JChar, JDouble
+from jpype import JChar, JDouble, JString, JInt, JBoolean
 
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.baseExecutinoDto import BaseExecutionDto
@@ -11,12 +11,26 @@ class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
         return isinstance(t.node, TerminalNode)
 
     def handle(self, t: BaseExecutionDto):
+        original = self.get_original_value(t)
+
+        if isinstance(original, str):
+            return JString(original)
+        elif isinstance(original, int):
+            return JInt(original)
+        elif isinstance(original, float):
+            return JDouble(original)
+        elif isinstance(original, bool):
+            return JBoolean(original)
+
+        return original
+
+    def get_original_value(self, t: BaseExecutionDto):
         terminal: TerminalNode = t.node
 
         if terminal.name == "RESULT":
             return t.result
         elif terminal.name == "INTEGER":
-            return int(terminal.value)
+            return JInt(terminal.value)
         elif terminal.name == "DOUBLE":
             return JDouble(terminal.value)
         elif terminal.name == "IDENTIFIER":
@@ -27,10 +41,10 @@ class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
             else:
                 return None
         elif terminal.name == "BOOL_LITERAL":
-            return terminal.value == "true"
+            return JBoolean(terminal.value == "true")
         elif terminal.name == "STRING":
             # Return terminal.value without the first and last character (the quotes)
-            return terminal.value[1:-1]
+            return JString(terminal.value[1:-1])
         elif terminal.name == "CHAR":
             return JChar(terminal.value[1:-1])
         else:

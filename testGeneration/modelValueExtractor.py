@@ -29,8 +29,10 @@ def get_wrapper_for_type(param_type):
         return lambda x: float(x.as_decimal(10))
     elif param_type == 'boolean':
         return lambda x: str(x) == 'True'
-    elif param_type == 'char' or param_type == 'String':
+    elif param_type == 'char':
         return lambda x: str(x)
+    elif param_type == 'String':
+        return lambda x: x.as_string()
     return lambda x: x
 
 

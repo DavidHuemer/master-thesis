@@ -1,6 +1,6 @@
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_info, log_error
 from parser.test.parserExampleLoader import ParserExampleLoader
-from parser.tree.astGenerator import AstGenerator
+from parser.tree.astGenerator import get_ast_by_jml
 
 
 class ParserTestRunner:
@@ -8,9 +8,8 @@ class ParserTestRunner:
     This class is used to run the parser tests.
     """
 
-    def __init__(self, parser_test_example_loader=ParserExampleLoader(), ast_generator=AstGenerator()):
+    def __init__(self, parser_test_example_loader=ParserExampleLoader()):
         self.parser_test_example_loader = parser_test_example_loader
-        self.ast_generator = ast_generator
 
     def run_tests(self):
         """
@@ -24,17 +23,17 @@ class ParserTestRunner:
         Run the tests that should be able to be parsed
         """
 
-        LoggingHelper.log_info("Running positive tests")
+        log_info("Running positive tests")
         examples = self.parser_test_example_loader.load_positive_tests()
 
         for example in examples:
             try:
-                ast = self.ast_generator.get_ast(example)
-                LoggingHelper.log_info(ast.get_tree_string())
-                LoggingHelper.log_info(f"Example parsed successfully")
+                ast = get_ast_by_jml(example)
+                log_info(ast.get_tree_string())
+                log_info(f"Example parsed successfully")
             except Exception as e:
-                LoggingHelper.log_error(f"Error parsing example:\n {example}")
-                LoggingHelper.log_error(e)
+                log_error(f"Error parsing example:\n {example}")
+                log_error(e)
 
     @staticmethod
     def run_negative_tests():
@@ -42,4 +41,4 @@ class ParserTestRunner:
         Run the tests that should not be able to be parsed
         """
 
-        LoggingHelper.log_info("Running negative tests")
+        log_info("Running negative tests")

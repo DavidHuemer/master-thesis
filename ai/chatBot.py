@@ -8,13 +8,13 @@ class ChatBot:
     Chatbot class that is responsible for chatting with the OpenAI API.
     """
 
-    def __init__(self, client: OpenAIClient = OpenAIClient()):
+    def __init__(self, client: OpenAIClient = None):
         """
         Initialize the chatbot.
         :param client: The OpenAI client.
         """
 
-        self.client = client
+        self.client = client or OpenAIClient()
         self.messages: list[OpenAIMessage] = []
 
     def set_context(self, context: str):
@@ -28,7 +28,7 @@ class ChatBot:
         else:
             self.messages[0] = OpenAIMessage(Role.SYSTEM, context)
 
-    def chat(self, message):
+    def chat(self, message: str) -> str:
         """
         Chat with the bot.
         :param message: The message to send.
