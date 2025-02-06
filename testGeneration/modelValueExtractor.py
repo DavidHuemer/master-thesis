@@ -1,3 +1,4 @@
+from jpype import JChar
 from z3 import ModelRef
 
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
@@ -30,7 +31,7 @@ def get_wrapper_for_type(param_type):
     elif param_type == 'boolean':
         return lambda x: str(x) == 'True'
     elif param_type == 'char':
-        return lambda x: str(x)
+        return lambda x: JChar(x.as_string())
     elif param_type == 'String':
         return lambda x: x.as_string()
     return lambda x: x

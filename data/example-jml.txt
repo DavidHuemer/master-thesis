@@ -1,16 +1,7 @@
-data/code/compute/ParseBoolean.java
+data/code/arithmetic/StringIndexOf.java
 ----------
-```
-//@ requires inputString != null;
-//@ requires (inputString.length() == 4 && ((inputString.charAt(0) == 't' || inputString.charAt(0) == 'T') &&
-//         (inputString.charAt(1) == 'r' || inputString.charAt(1) == 'R') &&
-//         (inputString.charAt(2) == 'u' || inputString.charAt(2) == 'U') &&
-//         (inputString.charAt(3) == 'e' || inputString.charAt(3) == 'E'))) ||
-//         (inputString.length() == 5 && ((inputString.charAt(0) == 'f' || inputString.charAt(0) == 'F') &&
-//         (inputString.charAt(1) == 'a' || inputString.charAt(1) == 'A') &&
-//         (inputString.charAt(2) == 'l' || inputString.charAt(2) == 'L') &&
-//         (inputString.charAt(3) == 's' || inputString.charAt(3) == 'S') &&
-//         (inputString.charAt(4) == 'e' || inputString.charAt(4) == 'E')));
-//@ ensures (\result == true && inputString.equalsIgnoreCase("true")) ||
-//         (\result == false && inputString.equalsIgnoreCase("false"));
+```java
+//@ requires s != null;
+//@ ensures (\exists int i; 0 <= i && i < s.length(); s.charAt(i) == sub) ==> \result == (\min int j; 0 <= j && j < s.length() && s.charAt(j) == sub; j);
+//@ ensures !(\exists int i; 0 <= i && i < s.length(); s.charAt(i) == sub) ==> \result == -1;
 ```

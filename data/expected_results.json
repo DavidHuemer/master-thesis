@@ -293,5 +293,75 @@
     "path": "data/code/arithmetic/DivideIncorrect.java",
     "method": "divide",
     "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/RangeCheck.java",
+    "method": "rangeCheck",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/RangeCheckIncorrect.java",
+    "method": "rangeCheck",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/CopyOfRange.java",
+    "method": "copyOfRange",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/CopyOfRangeIncorrect.java",
+    "method": "copyOfRange",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/RandomInt.java",
+    "method": "randomInt",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/RandomIntIncorrect.java",
+    "method": "randomInt",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/CombineArray.java",
+    "method": "combine",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/CombineArrayIncorrect.java",
+    "method": "combine",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/ReverseArray.java",
+    "method": "reverse",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/ReverseArrayIncorrect.java",
+    "method": "reverse",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/RemoveElements.java",
+    "method": "removeElement",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/RemoveElementsIncorrect.java",
+    "method": "removeElement",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/StringIndexOf.java",
+    "method": "indexOf",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/StringIndexOfIncorrect.java",
+    "method": "indexOf",
+    "expectedResult": false
   }
 ]

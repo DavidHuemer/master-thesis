@@ -1,5 +1,5 @@
 from jpype import java
-from z3 import ArrayRef
+from z3 import ArrayRef, SeqRef, Length
 
 from definitions.ast.arrayLengthNode import ArrayLengthNode
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
@@ -26,5 +26,8 @@ class LengthRangeHandler(BaseNodeHandler[RangeDto]):
         # Check if the expression is a java.lang.String
         if isinstance(expr, java.lang.String):
             return len(expr)
+
+        if isinstance(expr, SeqRef):
+            return Length(expr)
 
         raise Exception("Array length not found")

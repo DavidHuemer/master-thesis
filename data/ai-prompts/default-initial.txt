@@ -15,7 +15,8 @@ range predicate, no other predicate can be used
 So you can write "0 <= i && i < a.length" but not: "0 <= i && i < a.length && a[i] == true"
 
 It is important, that you do not use any method on the String datat ype other than .length(),
-so no equalsIgnoreCase, no toLowerCase, etc in the pre-conditions. In the post-conditions (ensures) they are allowed.
+so no equalsIgnoreCase, no toLowerCase, etc in the pre-conditions. The same is true for signals. In the post-conditions
+(ensures) they are allowed.
 
 Here are some examples of JavaDoc to JML transformations:
 {examples}

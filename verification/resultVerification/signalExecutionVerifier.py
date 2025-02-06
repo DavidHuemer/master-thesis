@@ -27,7 +27,10 @@ class SignalExecutionVerifier:
             return False
 
         if expected_exception is not None:
-            return self.verify_exception_subclass(exception, expected_exception)
+            result = self.verify_exception_subclass(exception, expected_exception)
+            if not result:
+                return self.verify_signals(exception, signals, result_parameters, stop_event=stop_event)
+            return result
 
         # Check if other signals matches
         return self.verify_signals(exception, signals, result_parameters, stop_event=stop_event)

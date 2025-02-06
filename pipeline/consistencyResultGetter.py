@@ -33,8 +33,7 @@ class ConsistencyResultGetter(Singleton):
             log_debug("JMl code: \n" + jml_code.strip())
             result = verify_jml(consistency_test, jml_code)
 
-            if not self.jml_provider.static_jml_exists_for_test_case(consistency_test):
-                store_jml_for_test_case(self.jml_file_path, consistency_test, jml_code)
+            store_jml_for_test_case(self.jml_file_path, consistency_test, jml_code)
             return result
         except Exception as e:
             log_error(traceback.format_exc())

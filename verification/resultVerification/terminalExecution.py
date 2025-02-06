@@ -3,6 +3,7 @@ from jpype import JChar, JDouble, JString, JInt, JBoolean
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.baseExecutinoDto import BaseExecutionDto
 from nodes.baseNodeHandler import BaseNodeHandler
+from verification.resultVerification.jpypeValueTransformation import transform_to_jpype_value
 
 
 class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
@@ -12,17 +13,7 @@ class TerminalExecution(BaseNodeHandler[BaseExecutionDto]):
 
     def handle(self, t: BaseExecutionDto):
         original = self.get_original_value(t)
-
-        if isinstance(original, str):
-            return JString(original)
-        elif isinstance(original, int):
-            return JInt(original)
-        elif isinstance(original, float):
-            return JDouble(original)
-        elif isinstance(original, bool):
-            return JBoolean(original)
-
-        return original
+        return transform_to_jpype_value(original)
 
     def get_original_value(self, t: BaseExecutionDto):
         terminal: TerminalNode = t.node

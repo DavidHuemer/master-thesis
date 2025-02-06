@@ -12,7 +12,7 @@ class BasePrefixConstraintBuilder(BaseNodeHandler[BaseDto]):
     def handle(self, t: BaseDto):
         prefix_expression: PrefixNode = t.node
 
-        expr = t.evaluate_with_other_node(prefix_expression.prefix)
+        expr = t.evaluate_with_other_node(prefix_expression.expr)
 
         if prefix_expression.prefix == '++':
             return expr + 1

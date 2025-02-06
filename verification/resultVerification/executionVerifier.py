@@ -56,10 +56,10 @@ class ExecutionVerifier(Singleton):
                                                          behavior=behavior,
                                                          result_parameters=result_parameters, stop_event=stop_event)
 
-            # self.log_result(consistency_test_case, test_case, result, verification_result)
+            self.log_result(consistency_test_case, test_case, result, verification_result)
             return verification_result
         except Exception as e:
-            # self.log_result(consistency_test_case, test_case, execution_result.result, False)
+            self.log_result(consistency_test_case, test_case, execution_result.result, False)
             raise e
 
     def verify_exception(self, exception: ExecutionException, behavior: BehaviorNode, expected_exception,
