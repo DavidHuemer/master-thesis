@@ -1,9 +1,9 @@
 import os
-import sys
+import time
 import traceback
 
 from definitions.consistencyTestCase import ConsistencyTestCase
-from definitions.envKeys import MAX_RETRIES, JML_FILE
+from definitions.envKeys import MAX_RETRIES, JML_FILE, PARALLEL
 from helper.logs.loggingHelper import log_debug, log_error, log_info
 from jml.jmlGeneration.jmlProvider import JmlProvider
 from jml.jmlGeneration.jmlStorage import store_jml_for_test_case
@@ -19,12 +19,17 @@ class ConsistencyResultGetter(Singleton):
         self.retries = 0
         self.max_retries = int(os.getenv(MAX_RETRIES))
         self.jml_file_path = os.getenv(JML_FILE)
+        self.parallel = os.getenv(PARALLEL) == "true"
 
     def get_result(self, consistency_test: ConsistencyTestCase):
         try:
             self.jml_provider.reset()
             jml_code = self.jml_provider.get_jml(consistency_test)
             return self.get_result_by_jml(consistency_test, jml_code)
+        except Exception as e:
+            error = getattr(e, "message", str(e))
+            log_error(f"An error occurred when getting a consistency result: {error}")
+            return VerificationResultFactory.by_exception(consistency_test, e)
         finally:
             self.retries = 0
 
@@ -33,7 +38,12 @@ class ConsistencyResultGetter(Singleton):
             log_debug("JMl code: \n" + jml_code.strip())
             result = verify_jml(consistency_test, jml_code)
 
-            store_jml_for_test_case(self.jml_file_path, consistency_test, jml_code)
+            if self.parallel:
+                with multiProcessUtil.lock:
+                    store_jml_for_test_case(self.jml_file_path, consistency_test, jml_code)
+            else:
+                store_jml_for_test_case(self.jml_file_path, consistency_test, jml_code)
+
             return result
         except Exception as e:
             log_error(traceback.format_exc())

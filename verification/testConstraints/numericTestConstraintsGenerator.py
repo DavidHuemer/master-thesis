@@ -25,7 +25,9 @@ class NumericTestConstraintsGenerator(BaseTestConstraintsGenerator):
         yield parameter.value < -100
         yield parameter.value < -20
         yield parameter.value < -10
+        yield parameter.value < 0
         yield parameter.value == 0
+        yield parameter.value > 0
         yield parameter.value > 10
         yield parameter.value > 20
         yield parameter.value > 100

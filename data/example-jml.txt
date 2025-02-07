@@ -1,7 +1,8 @@
-data/code/arithmetic/StringIndexOf.java
+data/code/arithmetic/Pow.java
 ----------
 ```java
-//@ requires s != null;
-//@ ensures (\exists int i; 0 <= i && i < s.length(); s.charAt(i) == sub) ==> \result == (\min int j; 0 <= j && j < s.length() && s.charAt(j) == sub; j);
-//@ ensures !(\exists int i; 0 <= i && i < s.length(); s.charAt(i) == sub) ==> \result == -1;
+//@ requires a > 0 && b >= 0;
+//@ requires a <= 10 && b <= 10;
+//@ ensures \result == (b == 0 ? 1 : (\product int i; 0 <= i && i < b; a));
+//@ signals (IllegalArgumentException e) a <= 0 || b < 0 || a > 10 || b > 10;
 ```

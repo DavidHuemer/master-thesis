@@ -11,7 +11,10 @@ def get_value_of_param(csp_parameters: CSPParameters, param, model: ModelRef):
         return get_array_value(csp_parameters, csp_parameter, param, model)
 
     wrapper = get_wrapper_for_type(csp_parameter.param_type)
-    return wrapper(model[csp_parameter.value])
+    try:
+        return wrapper(model.evaluate(csp_parameter.value))
+    except Exception as e:
+        return None
 
 
 def get_array_value(csp_parameters: CSPParameters, csp_parameter, param, model):
@@ -27,7 +30,7 @@ def get_wrapper_for_type(param_type):
     if param_type == 'int' or param_type == 'long' or param_type == 'short' or param_type == 'byte':
         return arithmetic_arr_value
     elif param_type == 'float' or param_type == 'double':
-        return lambda x: float(x.as_decimal(10))
+        return lambda x: get_decimal(param=x)
     elif param_type == 'boolean':
         return lambda x: str(x) == 'True'
     elif param_type == 'char':
@@ -39,3 +42,10 @@ def get_wrapper_for_type(param_type):
 
 def arithmetic_arr_value(value):
     return value.as_long()
+
+
+def get_decimal(param):
+    if hasattr(param, 'as_decimal'):
+        return float(param.as_decimal(10))
+
+    return float(param)

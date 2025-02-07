@@ -22,7 +22,6 @@ public class CopyOfRange {
      * @throws ArrayIndexOutOfBoundsException if {@code from < 0}
      *                                        or {@code from > original.length}
      * @throws IllegalArgumentException       if {@code from > to}
-     * @throws NullPointerException           if {@code original} is null
      * @since 1.6
      */
     public static int[] copyOfRange(int[] original, int from, int to) {

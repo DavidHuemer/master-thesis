@@ -1,4 +1,4 @@
-from z3 import Length
+from z3 import Length, ForAll, Range, InRe
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
 
@@ -14,3 +14,7 @@ class StringTestConstraintGenerator:
         yield Length(parameter.value) > 0
         yield Length(parameter.value) > 5
         yield Length(parameter.value) > 10
+
+        allowed_chars = Range('A', 'A')
+        yield InRe(parameter.value, allowed_chars)
+        # jml_problem.add_constraint(InRe(parameter.value, Star(allowed_chars)))

@@ -35,4 +35,5 @@ class OpenAIClient:
         return self.client.chat.completions.create(
             messages=[message.get_json() for message in messages],
             model=self.model,
+            timeout=None
         )

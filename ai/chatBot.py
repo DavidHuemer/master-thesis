@@ -1,6 +1,9 @@
+import openai
+
 from ai.Role import Role
 from ai.openAIClient import OpenAIClient
 from definitions.ai.openAIMessage import OpenAIMessage
+from helper.logs.loggingHelper import log_error
 
 
 class ChatBot:
@@ -34,11 +37,20 @@ class ChatBot:
         :param message: The message to send.
         :return: The response content.
         """
-        self.add_message(Role.USER, message)
-        response = self.client.get_response(messages=self.messages)
-        response_content = response.choices[0].message.content
-        self.add_message(Role.ASSISTANT, response_content)
-        return response_content
+
+        try:
+            self.add_message(Role.USER, message)
+
+            response = self.client.get_response(messages=self.messages)
+            response_content = response.choices[0].message.content
+            self.add_message(Role.ASSISTANT, response_content)
+            return response_content
+        except openai.RateLimitError as e:
+            if isinstance(e.body, dict):
+                raise Exception(e.body['message'] or str(e))
+            raise Exception(str(e))
+        except Exception as e:
+            raise Exception("Error while chatting with the chatbot")
 
     def add_message(self, role: Role, content: str):
         """

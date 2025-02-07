@@ -58,6 +58,9 @@ class InfixHelper:
         elif infix_operator == "==" or infix_operator == "<==>":
             if is_smt:
                 if isinstance(left_expr, CharRef):
+                    if isinstance(right_expr, SeqRef):
+                        return left_expr == right_expr[0]
+
                     return left_expr == CharVal(right_expr)
 
                 return left_expr == right_expr
@@ -68,6 +71,12 @@ class InfixHelper:
             return left_expr == right_expr
         elif infix_operator == "!=" or infix_operator == "<=!=>":
             if is_smt:
+                if isinstance(left_expr, CharRef):
+                    if isinstance(right_expr, SeqRef):
+                        return left_expr != right_expr[0]
+
+                    return left_expr != CharVal(right_expr)
+
                 return left_expr != right_expr
 
             if self.is_float(left_expr) or self.is_float(right_expr):

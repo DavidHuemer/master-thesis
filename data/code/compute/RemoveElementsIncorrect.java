@@ -1,10 +1,12 @@
 public class RemoveElementsIncorrect {
     /**
-     * Removes all occurrences of an element from an array.
-     * 
-     * @param arr the array to remove elements from
+     * Returns a new array with all occurrences of an element removed.
+     * The original array is not modified.
+     * The new array may be shorter than the original array.
+     *
+     * @param arr the array from which the returning array is built (without the element to remove)
      * @param b   the element to remove
-     * @return the array with the element removed (may be shorter than the original array)
+     * @return the new array with the element removed (may be shorter than the original array)
      */
     public int[] removeElement(int[] arr, int b) {
         int count = 0;

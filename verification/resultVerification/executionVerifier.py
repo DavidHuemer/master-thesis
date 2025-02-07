@@ -51,6 +51,9 @@ class ExecutionVerifier(Singleton):
                                                             stop_event=stop_event)
             else:
                 # Validate result
+                if expected_exception is not None:
+                    return False
+
                 result = execution_result.result
                 verification_result = self.verify_result(execution_result=execution_result,
                                                          behavior=behavior,

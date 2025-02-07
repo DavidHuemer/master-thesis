@@ -383,5 +383,75 @@
     "path": "data/code/compute/StringConcatIncorrect.java",
     "method": "concat",
     "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/PrimeCheck.java",
+    "method": "isPrime",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/PrimeCheckIncorrect.java",
+    "method": "isPrime",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/PrimeNumberGenerator.java",
+    "method": "generatePrimes",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/PrimeNumberGeneratorIncorrect.java",
+    "method": "generatePrimes",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/LeapYear.java",
+    "method": "isLeapYear",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/LeapYearIncorrect.java",
+    "method": "isLeapYear",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/Withdraw.java",
+    "method": "withdraw",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/WithdrawIncorrect.java",
+    "method": "withdraw",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/AddWithMax.java",
+    "method": "addWithMax",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/AddWithMaxIncorrect.java",
+    "method": "addWithMax",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/arithmetic/Pow.java",
+    "method": "pow",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/arithmetic/PowIncorrect.java",
+    "method": "pow",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/Dart.java",
+    "method": "calculateScore",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/DartIncorrect.java",
+    "method": "calculateScore",
+    "expectedResult": false
   }
 ]
