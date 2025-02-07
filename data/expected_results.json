@@ -453,5 +453,55 @@
     "path": "data/code/compute/DartIncorrect.java",
     "method": "calculateScore",
     "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/Factorial.java",
+    "method": "factorial",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/FactorialIncorrect.java",
+    "method": "factorial",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/ReverseString.java",
+    "method": "reverse",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/ReverseStringIncorrect.java",
+    "method": "reverse",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/Palindrom.java",
+    "method": "isPalindrom",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/PalindromIncorrect.java",
+    "method": "isPalindrom",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/compute/Substring.java",
+    "method": "substring",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/compute/SubstringIncorrect.java",
+    "method": "substring",
+    "expectedResult": false
+  },
+  {
+    "path": "data/code/comparison/CompareInt.java",
+    "method": "compareInt",
+    "expectedResult": true
+  },
+  {
+    "path": "data/code/comparison/CompareIntIncorrect.java",
+    "method": "compareInt",
+    "expectedResult": false
   }
 ]

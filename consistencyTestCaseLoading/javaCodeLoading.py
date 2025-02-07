@@ -10,7 +10,7 @@ from definitions.envKeys import JAVA_FILES
 from definitions.javaCode import JavaCode
 from definitions.javaMethod import JavaMethod
 from helper.files.fileReader import FileReader
-from helper.logs.loggingHelper import log_info
+from helper.logs.loggingHelper import log_info, log_error
 from util.rattr import rgetattr
 
 
@@ -22,22 +22,26 @@ def get_java_code_from_directory() -> list[JavaCode]:
     #     results = list(executor.map(get_java_code_from_file, java_file_paths))
     # return results
 
-    return [get_java_code_from_file(java_file) for java_file in java_file_paths]
+    return [code for java_file in java_file_paths if (code := get_java_code_from_file(java_file)) is not None]
 
 
-def get_java_code_from_file(java_file) -> JavaCode:
+def get_java_code_from_file(java_file) -> JavaCode | None:
     return get_java_code_from_content(java_file, FileReader.read(java_file))
 
 
-def get_java_code_from_content(java_file: str, java_content: str) -> JavaCode:
-    tree = javalang.parse.parse(java_content)
+def get_java_code_from_content(java_file: str, java_content: str) -> JavaCode | None:
+    try:
+        tree = javalang.parse.parse(java_content)
 
-    # Get class declaration
-    class_declaration = tree.types[0]
-    methods: list[MethodDeclaration] = getattr(class_declaration, 'methods', [])
+        # Get class declaration
+        class_declaration = tree.types[0]
+        methods: list[MethodDeclaration] = getattr(class_declaration, 'methods', [])
 
-    method_infos = [get_method_info(m) for m in methods]
-    return JavaCode(java_file, class_declaration.name, method_infos)
+        method_infos = [get_method_info(m) for m in methods]
+        return JavaCode(java_file, class_declaration.name, method_infos)
+    except Exception as e:
+        log_error(f"Error parsing file {java_file}: {e}")
+        return None
 
 
 def get_method_info(method: MethodDeclaration) -> JavaMethod:

@@ -46,6 +46,8 @@ def arithmetic_arr_value(value):
 
 def get_decimal(param):
     if hasattr(param, 'as_decimal'):
-        return float(param.as_decimal(10))
+        decimal_str = param.as_decimal(10)
+        decimal_str = decimal_str.replace('?', '')
+        return float(decimal_str)
 
     return float(param)

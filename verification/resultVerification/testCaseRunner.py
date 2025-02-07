@@ -13,6 +13,9 @@ from definitions.verification.testCase import TestCase
 from helper.timeout.timeoutHelper import TimeoutHelper
 from testGeneration.testCaseGeneration.testCaseExecution import execute_method
 from verification.resultVerification.executionVerifier import ExecutionVerifier
+import jpype.imports
+
+
 
 
 class TestCaseRunner:
@@ -34,7 +37,6 @@ class TestCaseRunner:
 
         # 3. execute the method with the parameters
         execution_result = execute_method(test_instance, test_case, consistency_test_case)
-
         new_variables = get_parameters(test_instance, test_class)
 
         result_parameters = ResultParameters(method_call_parameters=execution_result.parameters,

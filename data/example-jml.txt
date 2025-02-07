@@ -1,8 +1,37 @@
-data/code/arithmetic/Pow.java
+data/code/compute/ParseBoolean.java
 ----------
 ```java
-//@ requires a > 0 && b >= 0;
-//@ requires a <= 10 && b <= 10;
-//@ ensures \result == (b == 0 ? 1 : (\product int i; 0 <= i && i < b; a));
-//@ signals (IllegalArgumentException e) a <= 0 || b < 0 || a > 10 || b > 10;
+//@ requires inputString != null;
+//@ requires inputString.length() == 4 || inputString.length() == 5;
+//@ requires (inputString.length() == 4 ==> ((inputString.charAt(0) == 't' || inputString.charAt(0) == 'T') &&
+//@                                          (inputString.charAt(1) == 'r' || inputString.charAt(1) == 'R') &&
+//@                                          (inputString.charAt(2) == 'u' || inputString.charAt(2) == 'U') &&
+//@                                          (inputString.charAt(3) == 'e' || inputString.charAt(3) == 'E'))) ||
+//@           (inputString.length() == 5 ==> ((inputString.charAt(0) == 'f' || inputString.charAt(0) == 'F') &&
+//@                                          (inputString.charAt(1) == 'a' || inputString.charAt(1) == 'A') &&
+//@                                          (inputString.charAt(2) == 'l' || inputString.charAt(2) == 'L') &&
+//@                                          (inputString.charAt(3) == 's' || inputString.charAt(3) == 'S') &&
+//@                                          (inputString.charAt(4) == 'e' || inputString.charAt(4) == 'E')));
+//@ ensures (\result.booleanValue() == true) == (inputString.length() == 4 &&
+//@                                             (inputString.charAt(0) == 't' || inputString.charAt(0) == 'T') &&
+//@                                             (inputString.charAt(1) == 'r' || inputString.charAt(1) == 'R') &&
+//@                                             (inputString.charAt(2) == 'u' || inputString.charAt(2) == 'U') &&
+//@                                             (inputString.charAt(3) == 'e' || inputString.charAt(3) == 'E'));
+//@ ensures (\result.booleanValue() == false) == (inputString.length() == 5 &&
+//@                                               (inputString.charAt(0) == 'f' || inputString.charAt(0) == 'F') &&
+//@                                               (inputString.charAt(1) == 'a' || inputString.charAt(1) == 'A') &&
+//@                                               (inputString.charAt(2) == 'l' || inputString.charAt(2) == 'L') &&
+//@                                               (inputString.charAt(3) == 's' || inputString.charAt(3) == 'S') &&
+//@                                               (inputString.charAt(4) == 'e' || inputString.charAt(4) == 'E'));
+//@ signals (IllegalArgumentException e) inputString == null ||
+//@          (inputString.length() != 4 && inputString.length() != 5) ||
+//@          ((inputString.length() == 4 && !((inputString.charAt(0) == 't' || inputString.charAt(0) == 'T') &&
+//@                                           (inputString.charAt(1) == 'r' || inputString.charAt(1) == 'R') &&
+//@                                           (inputString.charAt(2) == 'u' || inputString.charAt(2) == 'U') &&
+//@                                           (inputString.charAt(3) == 'e' || inputString.charAt(3) == 'E'))) ||
+//@           (inputString.length() == 5 && !((inputString.charAt(0) == 'f' || inputString.charAt(0) == 'F') &&
+//@                                           (inputString.charAt(1) == 'a' || inputString.charAt(1) == 'A') &&
+//@                                           (inputString.charAt(2) == 'l' || inputString.charAt(2) == 'L') &&
+//@                                           (inputString.charAt(3) == 's' || inputString.charAt(3) == 'S') &&
+//@                                           (inputString.charAt(4) == 'e' || inputString.charAt(4) == 'E'))));
 ```

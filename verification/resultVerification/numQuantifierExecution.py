@@ -35,6 +35,12 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         return self.evaluate_list(expression, values)
 
     def evaluate_list(self, expression: NumQuantifierTreeNode, values: list):
+        if expression.quantifier_type == NumericQuantifierType.SUM:
+            return sum(values)
+
+        if expression.quantifier_type == NumericQuantifierType.PRODUCT:
+            return self.get_product(values)
+
         if len(values) == 0:
             return None
 
@@ -43,12 +49,6 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
 
         if expression.quantifier_type == NumericQuantifierType.MIN:
             return min(values)
-
-        if expression.quantifier_type == NumericQuantifierType.SUM:
-            return sum(values)
-
-        if expression.quantifier_type == NumericQuantifierType.PRODUCT:
-            return self.get_product(values)
 
         raise Exception("Numeric quantifier expression type not supported")
 

@@ -22,8 +22,11 @@ class SignalExecutionVerifier:
                       result_parameters: ResultParameters, stop_event: threading.Event):
         if behavior.behavior_type == BehaviorType.NORMAL_BEHAVIOR:
             return False
+        # TODO: Check subclass
 
-        if len(behavior.allowed_signals) > 0 and exception.name not in behavior.allowed_signals:
+        exception_class = jpype.JClass(exception.full_name)
+        allowed_exceptions = [jpype.JClass(f'java.lang.{exception}') for exception in behavior.allowed_signals]
+        if len(allowed_exceptions) > 0 and not any([issubclass(exception_class, allowed_exception) for allowed_exception in allowed_exceptions]):
             return False
 
         if expected_exception is not None:
