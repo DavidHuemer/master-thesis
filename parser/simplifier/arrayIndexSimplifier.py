@@ -27,7 +27,7 @@ class ArrayIndexSimplifier(BaseNodeHandler[SimplificationDto]):
                 and ObjectHelper.check_child_text(t.node.getChild(2), 0, "charAt"))
 
     def handle(self, t: SimplificationDto):
-        expr = t.evaluate_with_other_node(t.node.expr)
+        expr = self.evaluate_with_runner(t, t.node.expr)
 
         if self.is_array_node(t):
             index_expr = t.evaluate_with_other_node(t.node.index_expr)

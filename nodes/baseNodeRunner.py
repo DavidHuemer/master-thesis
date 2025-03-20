@@ -23,6 +23,11 @@ class BaseNodeRunner[T]:
         self.length_handler = length_handler
         self.method_call_handler = method_call_handler
 
+        handlers = locals()
+        for name, handler in handlers.items():
+            if isinstance(handler, BaseNodeHandler):
+                handler.set_runner(self)
+
     def evaluate(self, t: T):
         """
         Evaluate the node

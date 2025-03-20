@@ -13,7 +13,7 @@ from util.Singleton import Singleton
 from verification.result.verificationResultFactory import VerificationResultFactory
 
 
-class ConsistencyResultGetter(Singleton):
+class ConsistencyResultRunner(Singleton):
     def __init__(self, jml_provider: JmlProvider | None = None):
         self.jml_provider: JmlProvider = jml_provider or JmlProvider()
         self.retries = 0

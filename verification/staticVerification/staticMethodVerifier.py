@@ -37,11 +37,11 @@ def is_method_correct(method: JavaRuntimeMethod, method_info: JavaMethod):
         return False
 
     # Check if the method has the correct return type
-    if method_info.return_type not in method.return_type:
+    if method_info.return_type != method.return_type:
         return False
 
     for i in range(len(method.parameters)):
-        if not method.parameters[i].parameter_name == method_info.parameters[i].full_parameter_type:
+        if not method.parameters[i].parameter_name == method_info.parameters[i].full_variable_type:
             return False
 
     return True

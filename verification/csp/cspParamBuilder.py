@@ -33,13 +33,13 @@ param_type_map: dict[str, tuple[any, any]] = {
 
 
 def get_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
-    if param.parameter_type in param_type_map:
-        single_type, array_type = param_type_map[param.parameter_type]
+    if param.variable_type in param_type_map:
+        single_type, array_type = param_type_map[param.variable_type]
         if param.is_array():
-            return CSPParameter(param.name, Array(param.name, IntSort(), array_type()), param.parameter_type)
-        return CSPParameter(param.name, single_type(param.name), param.parameter_type)
+            return CSPParameter(param.name, Array(param.name, IntSort(), array_type()), param.variable_type)
+        return CSPParameter(param.name, single_type(param.name), param.variable_type)
 
-    raise Exception(f"Parameter type {param.parameter_type} is not supported")
+    raise Exception(f"Parameter type {param.variable_type} is not supported")
 
 
 def build_special_parameters(csp_parameters: CSPParameters):

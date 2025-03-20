@@ -11,7 +11,7 @@ from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.envKeys import JML_FILE
 from helper.logs.loggingHelper import log_info, log_error
 from jml.jmlFileHelper import get_jml_file
-from pipeline.consistencyResultGetter import ConsistencyResultGetter
+from pipeline.consistencyResultRunner import ConsistencyResultRunner
 from util import multiProcessUtil
 from util.envUtil import get_required_env_dict
 from verification.result.verificationResultFactory import VerificationResultFactory
@@ -21,7 +21,7 @@ inconsistency_pipeline_timer = Timer(name="run_consistency_pipeline", logger=Non
 
 @inconsistency_pipeline_timer
 def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]):
-    log_info("Starting consistency pipeline")
+    log_info("Starting consistfency pipeline")
 
     try:
         compile_java_files([c.java_code.file_path for c in consistency_tests])
@@ -83,6 +83,6 @@ def run_consistency_process(value):
         if not is_java_vm_started():
             start_java_vm()
 
-        return ConsistencyResultGetter().get_result(value)
+        return ConsistencyResultRunner().get_result(value)
     except Exception as e:
         return VerificationResultFactory.by_exception(value, e)

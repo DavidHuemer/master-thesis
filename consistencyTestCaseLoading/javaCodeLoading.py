@@ -2,8 +2,9 @@ import os
 from glob import glob
 
 import javalang
-from javalang.tree import MethodDeclaration, FormalParameter
+from javalang.tree import MethodDeclaration, FormalParameter, CompilationUnit, ClassDeclaration
 
+from definitions.code.javaTypeExtractionInfo import JavaTypeExtractionInfo
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.code.protectionModifier import ProtectionModifier
 from definitions.envKeys import JAVA_FILES
@@ -25,23 +26,21 @@ def get_java_code_from_directory() -> list[JavaCode]:
     return [code for java_file in java_file_paths if (code := get_java_code_from_file(java_file)) is not None]
 
 
-def get_java_code_from_file(java_file) -> JavaCode | None:
-    return get_java_code_from_content(java_file, FileReader.read(java_file))
+def get_java_code_from_file(java_file_path: str) -> JavaCode | None:
+    try:
+        return get_java_code_from_content(java_file_path, FileReader.read(java_file_path))
+    except Exception as e:
+        log_error(f"Error reading file {java_file_path}: {e}")
+        return None
 
 
 def get_java_code_from_content(java_file: str, java_content: str) -> JavaCode | None:
-    try:
-        tree = javalang.parse.parse(java_content)
+    tree: CompilationUnit = javalang.parse.parse(java_content)
+    class_declaration: ClassDeclaration = tree.types[0] if hasattr(tree, 'types') else None
+    methods: list[MethodDeclaration] = getattr(class_declaration, 'methods', [])
 
-        # Get class declaration
-        class_declaration = tree.types[0]
-        methods: list[MethodDeclaration] = getattr(class_declaration, 'methods', [])
-
-        method_infos = [get_method_info(m) for m in methods]
-        return JavaCode(java_file, class_declaration.name, method_infos)
-    except Exception as e:
-        log_error(f"Error parsing file {java_file}: {e}")
-        return None
+    method_infos: list[JavaMethod] = [get_method_info(m) for m in methods]
+    return JavaCode(file_path=java_file, class_name=getattr(class_declaration, 'name', None), methods=method_infos)
 
 
 def get_method_info(method: MethodDeclaration) -> JavaMethod:
@@ -66,14 +65,13 @@ def get_protection(method: MethodDeclaration) -> ProtectionModifier:
     return ProtectionModifier.PRIVATE
 
 
-def get_return_type(method: MethodDeclaration):
+def get_return_type(method: MethodDeclaration) -> JavaTypeExtractionInfo:
     if hasattr(method, 'return_type'):
         return_name = getattr(method.return_type, 'name', None)
-        if return_name:
-            return_name += '[]' * len(getattr(method.return_type, 'dimensions', []))
-        return return_name or 'void'
+        dimension = len(getattr(method.return_type, 'dimensions', []))
+        return JavaTypeExtractionInfo(return_name, dimension)
 
-    return 'void'
+    return JavaTypeExtractionInfo('void')
 
 
 def get_parameters(method: MethodDeclaration) -> list[ParameterExtractionInfo]:
@@ -95,8 +93,4 @@ def get_parameter_type(p: FormalParameter):
 
 def get_java_file_paths():
     path = os.getenv(JAVA_FILES)
-    # Check if path is a single file
-    if os.path.isfile(path):
-        return [path]
-
-    return [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.java'))]
+    return [path] if os.path.isfile(path) else glob(os.path.join(path, '**', '*.java'), recursive=True)

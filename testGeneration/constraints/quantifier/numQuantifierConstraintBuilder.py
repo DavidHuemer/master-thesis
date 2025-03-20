@@ -3,8 +3,10 @@ from definitions.ast.quantifier.numericQuantifierExpressionType import NumericQu
 from nodes.baseNodeHandler import BaseNodeHandler
 from testGeneration.constraints.constraintArrayValueHelper import ConstraintArrayValueHelper
 from testGeneration.constraints.constraintsDto import ConstraintsDto
-from testGeneration.constraints.quantifier.numQuantifierRangeConstraintBuilder import NumQuantifierRangeConstraintBuilder
-from testGeneration.constraints.quantifier.numQuantifierValueConstraintBuilder import NumQuantifierValueConstraintBuilder
+from testGeneration.constraints.quantifier.numQuantifierRangeConstraintBuilder import \
+    NumQuantifierRangeConstraintBuilder
+from testGeneration.constraints.quantifier.numQuantifierValueConstraintBuilder import \
+    NumQuantifierValueConstraintBuilder
 
 
 class NumQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):

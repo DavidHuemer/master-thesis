@@ -1,4 +1,7 @@
-class ParameterExtractionInfo:
+from definitions.code.javaTypeExtractionInfo import JavaTypeExtractionInfo
+
+
+class ParameterExtractionInfo(JavaTypeExtractionInfo):
     """
     Class that holds information about the extraction of a parameter from a method. (type, name)
     """
@@ -10,16 +13,11 @@ class ParameterExtractionInfo:
         :param name: The name of the parameter.
         """
 
-        self.parameter_type = parameter_type
-        self.full_parameter_type = parameter_type if dimension == 0 else f"{parameter_type}[]"
+        super().__init__(parameter_type, dimension)
         self.name = name
-        self.dimension = dimension
 
     def __eq__(self, other):
-        return self.parameter_type == other.parameter_type and self.name == other.name
+        return self.variable_type == other.variable_type and self.dimension == other.dimension and self.name == other.name
 
     def __str__(self):
-        return f"{self.parameter_type}{'[]' * self.dimension} {self.name}"
-
-    def is_array(self) -> bool:
-        return self.dimension > 0
+        return f"{self.variable_type}{'[]' * self.dimension} {self.name}"

@@ -1,7 +1,7 @@
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.tests.exceptions.noTestCasesException import NoTestCasesException
 from testGeneration.testSuiteBuilder import get_test_suite
-from verification.testSuite.testSuiteVerifier import run_test_suite
+from verification.testSuite.testSuiteVerificationRunner import run_test_suite_verification
 
 
 def verify_jml(consistency_test: ConsistencyTestCase, jml_code: str):
@@ -13,4 +13,4 @@ def verify_jml(consistency_test: ConsistencyTestCase, jml_code: str):
     if len(test_suite) <= 0:
         raise NoTestCasesException()
 
-    return run_test_suite(test_suite)
+    return run_test_suite_verification(test_suite)

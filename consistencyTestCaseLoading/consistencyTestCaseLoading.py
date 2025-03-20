@@ -22,7 +22,8 @@ def get_test_cases() -> list[ConsistencyTestCase]:
     return build_test_cases(expected_results=get_expected_results(), java_code_list=get_java_code_from_directory())
 
 
-def build_test_cases(expected_results, java_code_list: list[JavaCode]) -> list[ConsistencyTestCase]:
+def build_test_cases(expected_results: list[ExpectedResult], java_code_list: list[JavaCode]) -> list[
+    ConsistencyTestCase]:
     return [build_test_case(java_code, method, expected_results)
             for java_code in java_code_list
             for method in java_code.methods

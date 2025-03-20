@@ -1,3 +1,6 @@
-//@requires inputString != null && (inputString.length() == 4 || inputString.length() == 5);
-//@ensures (\result == true && inputString.equalsIgnoreCase("true")) || (\result == false && inputString.equalsIgnoreCase("false"));
-//@signals (IllegalArgumentException e) inputString == null || (!inputString.equalsIgnoreCase("true") && !inputString.equalsIgnoreCase("false"));
+//@ public normal_behavior
+//@  requires a != null;
+//@  requires 0 <= i <= j <= a.length;
+//@ also public exceptional_behavior
+//@  requires a == null || !(0 <= i <= j <= a.length);
+//@  signals_only NullPointerException, ArrayIndexOutOfBoundsException;

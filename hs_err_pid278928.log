@@ -1,0 +1,103 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_UNCAUGHT_CXX_EXCEPTION (0xe06d7363) at pc=0x00007fffaf91bb0a, pid=278928, tid=289808
+#
+# JRE version: Java(TM) SE Runtime Environment 18.9 (11.0.23+7) (build 11.0.23+7-LTS-222)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM 18.9 (11.0.23+7-LTS-222, mixed mode, tiered, compressed oops, g1 gc, windows-amd64)
+# Problematic frame:
+# C  [KERNELBASE.dll+0xcbb0a]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: 
+
+Host: AMD Ryzen 7 7745HX with Radeon Graphics        , 16 cores, 31G,  Windows 11 , 64 bit Build 26100 (10.0.26100.3037)
+Time: Fri Feb  7 16:00:47 2025 Mitteleuropäische Zeit elapsed time: 0.581234 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001d321d1d000):  JavaThread "main" [_thread_in_native, id=289808, stack(0x000000c43c610000,0x000000c43c800000)]
+
+Stack: [0x000000c43c610000,0x000000c43c800000],  sp=0x000000c43c7fcd00,  free space=1971k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [KERNELBASE.dll+0xcbb0a]
+C  [VCRUNTIME140.dll+0x6ba7]
+C  [_jpype.cp312-win_amd64.pyd+0x3df55]
+C  [_jpype.cp312-win_amd64.pyd+0x2c35b]
+C  0x000001d32c9ff377
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  org.jpype.manager.TypeFactoryNative.newWrapper(JJ)V+0
+j  org.jpype.JPypeContext.newWrapper(J)V+16
+v  ~StubRoutines::call_stub
+j  org.jpype.manager.TypeFactoryNative.newWrapper(JJ)V+0
+j  org.jpype.JPypeContext.newWrapper(J)V+16
+v  ~StubRoutines::call_stub
+
+siginfo: EXCEPTION_UNCAUGHT_CXX_EXCEPTION (0xe06d7363), ExceptionInformation=0x0000000019930520 0x000000c43c7fcf30 0x00007fff41c490b0 0x00007fff41be0000 
+
+
+Register to memory mapping:
+
+RIP=0x00007fffaf91bb0a KERNELBASE.dll
+RAX=0x0 is NULL
+RBX=0x000000c43c7fce28 is pointing into the stack for thread: 0x000001d321d1d000
+RCX=0x0 is NULL
+RDX=0x0 is NULL
+RSP=0x000000c43c7fcd00 is pointing into the stack for thread: 0x000001d321d1d000
+RBP=0x0000000000000004 is an unknown value
+RSI=0x0000000000000001 is an unknown value
+RDI=0x00000000e06d7363 is an unknown value
+R8 =0x0 is NULL
+R9 =0x0 is NULL
+R10=0x0 is NULL
+R11=0x0 is NULL
+R12=0x000000c43c7fd050 is pointing into the stack for thread: 0x000001d321d1d000
+R13=0x000001d352711090 points into unknown readable memory: 0x00007fff41c34d58 | 58 4d c3 41 ff 7f 00 00
+R14=0x000001d353bb9200 points into unknown readable memory: 0x0000000000000001 | 01 00 00 00 00 00 00 00
+R15=0x000001d353bbb840 points into unknown readable memory: 0x0000000000000002 | 02 00 00 00 00 00 00 00
+
+
+Registers:
+RAX=0x0000000000000000, RBX=0x000000c43c7fce28, RCX=0x0000000000000000, RDX=0x0000000000000000
+RSP=0x000000c43c7fcd00, RBP=0x0000000000000004, RSI=0x0000000000000001, RDI=0x00000000e06d7363
+R8 =0x0000000000000000, R9 =0x0000000000000000, R10=0x0000000000000000, R11=0x0000000000000000
+R12=0x000000c43c7fd050, R13=0x000001d352711090, R14=0x000001d353bb9200, R15=0x000001d353bbb840
+RIP=0x00007fffaf91bb0a, EFLAGS=0x0000000000000202
+
+Top of Stack: (sp=0x000000c43c7fcd00)
+0x000000c43c7fcd00:   bff0000000000000 000000c43c7fce28
+0x000000c43c7fcd10:   0000000000000001 0000000000000000
+0x000000c43c7fcd20:   00000081e06d7363 0000000000000000
+0x000000c43c7fcd30:   00007fffaf91bb0a 0000000000000004
+0x000000c43c7fcd40:   0000000019930520 000000c43c7fcf30
+0x000000c43c7fcd50:   00007fff41c490b0 00007fff41be0000
+0x000000c43c7fcd60:   0000000000000000 0000000000000000
+0x000000c43c7fcd70:   0000000000000000 0000000000000000
+0x000000c43c7fcd80:   0000000000000000 0000000000000000
+0x000000c43c7fcd90:   0000000000000000 0000000000000000
+0x000000c43c7fcda0:   0000000000000000 0000000000000000
+0x000000c43c7fcdb0:   0000000000000000 00007fffaf710139
+0x000000c43c7fcdc0:   0000acff37900590 000000c43c7fcf60
+0x000000c43c7fcdd0:   00007fff41c50000 0000000019930520
+0x000000c43c7fcde0:   000000c43c7fcf30 000000c43c7fcf60
+0x000000c43c7fcdf0:   00007fff41c490b0 00007fff8b8b6ba7 
+
+Instructions: (pc=0x00007fffaf91bb0a)
+0x00007fffaf91baea:   8b d3 44 0f 46 c5 44 89 44 24 38 49 c1 e0 03 e8
+0x00007fffaf91bafa:   59 0a 0c 00 48 8d 4c 24 20 48 ff 15 4e 74 1b 00
+0x00007fffaf91bb0a:   0f 1f 44 00 00 48 8b 8c 24 c0 00 00 00 48 33 cc
+0x00007fffaf91bb1a:   e8 81 0a 0c 00 48 81 c4 d8 00 00 00 5f 5e 5d 5b 
+
+
+Stack slot to memory mapping:
+stack at sp + 0 slots: 

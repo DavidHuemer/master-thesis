@@ -35,7 +35,7 @@ from consistencyTestCaseLoading.expectedResultsLoader import get_expected_result
 from consistencyTestCaseLoading.javaCodeLoading import get_java_code_from_file
 from helper.files.fileReader import read_file
 from helper.logs.loggingHelper import log_info
-from pipeline.consistencyResultGetter import ConsistencyResultGetter
+from pipeline.consistencyResultGetter import ConsistencyResultRunner
 from util.envUtil import load_and_check_env_file
 
 
@@ -61,7 +61,7 @@ def single_example_pipeline():
     if not is_java_vm_started():
         start_java_vm()
 
-    result = ConsistencyResultGetter().get_result_by_jml(test_case, content)
+    result = ConsistencyResultRunner().get_result_by_jml(test_case, content)
     log_info(str(result))
 
 

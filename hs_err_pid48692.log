@@ -1,0 +1,461 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_UNCAUGHT_CXX_EXCEPTION (0xe06d7363) at pc=0x00007fffaf91bb0a, pid=48692, tid=34576
+#
+# JRE version: Java(TM) SE Runtime Environment 18.9 (11.0.23+7) (build 11.0.23+7-LTS-222)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM 18.9 (11.0.23+7-LTS-222, mixed mode, tiered, compressed oops, g1 gc, windows-amd64)
+# Problematic frame:
+# C  [KERNELBASE.dll+0xcbb0a]
+#
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: 
+
+Host: AMD Ryzen 7 7745HX with Radeon Graphics        , 16 cores, 31G,  Windows 11 , 64 bit Build 26100 (10.0.26100.3037)
+Time: Fri Feb  7 09:34:10 2025 Mitteleuropäische Zeit elapsed time: 0.125498 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000001da306c5800):  JavaThread "main" [_thread_in_native, id=34576, stack(0x000000cd28a00000,0x000000cd28bf0000)]
+
+Stack: [0x000000cd28a00000,0x000000cd28bf0000],  sp=0x000000cd28bed130,  free space=1972k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [KERNELBASE.dll+0xcbb0a]
+C  [VCRUNTIME140.dll+0x6ba7]
+C  [_jpype.cp312-win_amd64.pyd+0x3df55]
+C  [_jpype.cp312-win_amd64.pyd+0x2c35b]
+C  0x000001da39bbf377
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  org.jpype.manager.TypeFactoryNative.newWrapper(JJ)V+0
+j  org.jpype.JPypeContext.newWrapper(J)V+16
+v  ~StubRoutines::call_stub
+j  org.jpype.manager.TypeFactoryNative.newWrapper(JJ)V+0
+j  org.jpype.JPypeContext.newWrapper(J)V+16
+v  ~StubRoutines::call_stub
+
+siginfo: EXCEPTION_UNCAUGHT_CXX_EXCEPTION (0xe06d7363), ExceptionInformation=0x0000000019930520 0x000000cd28bed360 0x00007fff6eb390b0 0x00007fff6ead0000 
+
+
+Register to memory mapping:
+
+RIP=0x00007fffaf91bb0a KERNELBASE.dll
+RAX=0x0 is NULL
+RBX=0x000000cd28bed258 is pointing into the stack for thread: 0x000001da306c5800
+RCX=0x0 is NULL
+RDX=0x0 is NULL
+RSP=0x000000cd28bed130 is pointing into the stack for thread: 0x000001da306c5800
+RBP=0x0000000000000004 is an unknown value
+RSI=0x0000000000000001 is an unknown value
+RDI=0x00000000e06d7363 is an unknown value
+R8 =0x0 is NULL
+R9 =0x0 is NULL
+R10=0x0 is NULL
+R11=0x0 is NULL
+R12=0x000000cd28bed480 is pointing into the stack for thread: 0x000001da306c5800
+R13=0x000001da5f9001c0 points into unknown readable memory: 0x00007fff6eb24d58 | 58 4d b2 6e ff 7f 00 00
+R14=0x000001da60d78cc0 points into unknown readable memory: 0x0000000000000001 | 01 00 00 00 00 00 00 00
+R15=0x000001da60d7b2c0 points into unknown readable memory: 0x0000000000000002 | 02 00 00 00 00 00 00 00
+
+
+Registers:
+RAX=0x0000000000000000, RBX=0x000000cd28bed258, RCX=0x0000000000000000, RDX=0x0000000000000000
+RSP=0x000000cd28bed130, RBP=0x0000000000000004, RSI=0x0000000000000001, RDI=0x00000000e06d7363
+R8 =0x0000000000000000, R9 =0x0000000000000000, R10=0x0000000000000000, R11=0x0000000000000000
+R12=0x000000cd28bed480, R13=0x000001da5f9001c0, R14=0x000001da60d78cc0, R15=0x000001da60d7b2c0
+RIP=0x00007fffaf91bb0a, EFLAGS=0x0000000000000202
+
+Top of Stack: (sp=0x000000cd28bed130)
+0x000000cd28bed130:   bff0000000000000 000000cd28bed258
+0x000000cd28bed140:   0000000000000001 0000000000000000
+0x000000cd28bed150:   00000081e06d7363 0000000000000000
+0x000000cd28bed160:   00007fffaf91bb0a 0000000000000004
+0x000000cd28bed170:   0000000019930520 000000cd28bed360
+0x000000cd28bed180:   00007fff6eb390b0 00007fff6ead0000
+0x000000cd28bed190:   0000000000000000 0000000000000000
+0x000000cd28bed1a0:   0000000000000000 0000000000000000
+0x000000cd28bed1b0:   0000000000000000 0000000000000000
+0x000000cd28bed1c0:   0000000000000000 0000000000000000
+0x000000cd28bed1d0:   0000000000000000 0000000000000000
+0x000000cd28bed1e0:   0000000000000000 00007fffaf710139
+0x000000cd28bed1f0:   00003b27f592a636 000000cd28bed390
+0x000000cd28bed200:   00007fff6eb40000 0000000019930520
+0x000000cd28bed210:   000000cd28bed360 000000cd28bed390
+0x000000cd28bed220:   00007fff6eb390b0 00007fffaa2c6ba7 
+
+Instructions: (pc=0x00007fffaf91bb0a)
+0x00007fffaf91baea:   8b d3 44 0f 46 c5 44 89 44 24 38 49 c1 e0 03 e8
+0x00007fffaf91bafa:   59 0a 0c 00 48 8d 4c 24 20 48 ff 15 4e 74 1b 00
+0x00007fffaf91bb0a:   0f 1f 44 00 00 48 8b 8c 24 c0 00 00 00 48 33 cc
+0x00007fffaf91bb1a:   e8 81 0a 0c 00 48 81 c4 d8 00 00 00 5f 5e 5d 5b 
+
+
+Stack slot to memory mapping:
+stack at sp + 0 slots: 0xbff0000000000000 is an unknown value
+stack at sp + 1 slots: 0x000000cd28bed258 is pointing into the stack for thread: 0x000001da306c5800
+stack at sp + 2 slots: 0x0000000000000001 is an unknown value
+stack at sp + 3 slots: 0x0 is NULL
+stack at sp + 4 slots: 0x00000081e06d7363 is an unknown value
+stack at sp + 5 slots: 0x0 is NULL
+stack at sp + 6 slots: 0x00007fffaf91bb0a KERNELBASE.dll
+stack at sp + 7 slots: 0x0000000000000004 is an unknown value
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x000001da5f85c450, length=13, elements={
+0x000001da306c5800, 0x000001da5f50d800, 0x000001da5f578800, 0x000001da5f5da800,
+0x000001da5f5dd000, 0x000001da5f5eb000, 0x000001da5f5f6800, 0x000001da5f602800,
+0x000001da5f618800, 0x000001da5f4f2000, 0x000001da5f795800, 0x000001da2fc9d800,
+0x000001da5fba9000
+}
+
+Java Threads: ( => current thread )
+=>0x000001da306c5800 JavaThread "main" [_thread_in_native, id=34576, stack(0x000000cd28a00000,0x000000cd28bf0000)]
+  0x000001da5f50d800 JavaThread "Reference Handler" daemon [_thread_blocked, id=59204, stack(0x000000cd2ba70000,0x000000cd2bc60000)]
+  0x000001da5f578800 JavaThread "Finalizer" daemon [_thread_blocked, id=58684, stack(0x000000cd2bc60000,0x000000cd2be50000)]
+  0x000001da5f5da800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=25560, stack(0x000000cd2be50000,0x000000cd2c040000)]
+  0x000001da5f5dd000 JavaThread "Attach Listener" daemon [_thread_blocked, id=1044, stack(0x000000cd2c040000,0x000000cd2c230000)]
+  0x000001da5f5eb000 JavaThread "Service Thread" daemon [_thread_blocked, id=38376, stack(0x000000cd2c230000,0x000000cd2c420000)]
+  0x000001da5f5f6800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=55904, stack(0x000000cd2c420000,0x000000cd2c610000)]
+  0x000001da5f602800 JavaThread "C1 CompilerThread0" daemon [_thread_blocked, id=36804, stack(0x000000cd2c610000,0x000000cd2c800000)]
+  0x000001da5f618800 JavaThread "Sweeper thread" daemon [_thread_blocked, id=6552, stack(0x000000cd2c800000,0x000000cd2c9f0000)]
+  0x000001da5f4f2000 JavaThread "C1 CompilerThread1" daemon [_thread_blocked, id=53900, stack(0x000000cd2c9f0000,0x000000cd2cbe0000)]
+  0x000001da5f795800 JavaThread "C1 CompilerThread2" daemon [_thread_blocked, id=23932, stack(0x000000cd2cbe0000,0x000000cd2cdd0000)]
+  0x000001da2fc9d800 JavaThread "Common-Cleaner" daemon [_thread_blocked, id=36416, stack(0x000000cd2cfc0000,0x000000cd2d1b0000)]
+  0x000001da5fba9000 JavaThread "SIGINT handler" daemon [_thread_blocked, id=51188, stack(0x000000cd2e8f0000,0x000000cd2eae0000)]
+
+Other Threads:
+  0x000001da5f50d000 VMThread "VM Thread" [stack: 0x000000cd2b880000,0x000000cd2ba70000] [id=58216]
+  0x000001da5f7c6000 WatcherThread [stack: 0x000000cd2cdd0000,0x000000cd2cfc0000] [id=31672]
+  0x000001da306da000 GCTaskThread "GC Thread#0" [stack: 0x000000cd2aed0000,0x000000cd2b0c0000] [id=47188]
+  0x000001da5fbd6000 GCTaskThread "GC Thread#1" [stack: 0x000000cd2d3a0000,0x000000cd2d590000] [id=36576]
+  0x000001da5fa6d000 GCTaskThread "GC Thread#2" [stack: 0x000000cd2d590000,0x000000cd2d780000] [id=36516]
+  0x000001da5fa6e000 GCTaskThread "GC Thread#3" [stack: 0x000000cd2d780000,0x000000cd2d970000] [id=56252]
+  0x000001da5f966800 GCTaskThread "GC Thread#4" [stack: 0x000000cd2d970000,0x000000cd2db60000] [id=56256]
+  0x000001da5f967000 GCTaskThread "GC Thread#5" [stack: 0x000000cd2db60000,0x000000cd2dd50000] [id=55708]
+  0x000001da5f3a2800 GCTaskThread "GC Thread#6" [stack: 0x000000cd2dd50000,0x000000cd2df40000] [id=56248]
+  0x000001da5f3a1000 GCTaskThread "GC Thread#7" [stack: 0x000000cd2df40000,0x000000cd2e130000] [id=56244]
+  0x000001da5f385000 GCTaskThread "GC Thread#8" [stack: 0x000000cd2e130000,0x000000cd2e320000] [id=56240]
+  0x000001da5f389000 GCTaskThread "GC Thread#9" [stack: 0x000000cd2e320000,0x000000cd2e510000] [id=56212]
+  0x000001da5f387800 GCTaskThread "GC Thread#10" [stack: 0x000000cd2e510000,0x000000cd2e700000] [id=53988]
+  0x000001da5f387000 GCTaskThread "GC Thread#11" [stack: 0x000000cd2e700000,0x000000cd2e8f0000] [id=56296]
+  0x000001da2ed8b800 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000cd2b0c0000,0x000000cd2b2b0000] [id=32400]
+  0x000001da30766000 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000cd2b2b0000,0x000000cd2b4a0000] [id=36460]
+  0x000001da2ed8b000 ConcurrentGCThread "G1 Refine#0" [stack: 0x000000cd2b4a0000,0x000000cd2b690000] [id=23252]
+  0x000001da5f36d800 ConcurrentGCThread "G1 Young RemSet Sampling" [stack: 0x000000cd2b690000,0x000000cd2b880000] [id=54556]
+
+Threads with active compile tasks:
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x000000060ce00000, size: 7986 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+Narrow klass base: 0x0000000800000000, Narrow klass shift: 0
+Compressed class space size: 1073741824 Address: 0x0000000800000000
+
+Heap:
+ garbage-first heap   total 20480K, used 1305K [0x000000060ce00000, 0x0000000800000000)
+  region size 2048K, 1 young (2048K), 0 survivors (0K)
+ Metaspace       used 7041K, capacity 7131K, committed 7424K, reserved 1056768K
+  class space    used 627K, capacity 671K, committed 768K, reserved 1048576K
+Heap Regions: E=young(eden), S=young(survivor), O=old, HS=humongous(starts), HC=humongous(continues), CS=collection set, F=free, A=archive, TAMS=top-at-mark-start (previous, next)
+|   0|0x000000060ce00000, 0x000000060ce00000, 0x000000060d000000|  0%| F|  |TAMS 0x000000060ce00000, 0x000000060ce00000| Untracked 
+|   1|0x000000060d000000, 0x000000060d000000, 0x000000060d200000|  0%| F|  |TAMS 0x000000060d000000, 0x000000060d000000| Untracked 
+|   2|0x000000060d200000, 0x000000060d24ca20, 0x000000060d400000| 14%| O|  |TAMS 0x000000060d200000, 0x000000060d200000| Untracked 
+|   3|0x000000060d400000, 0x000000060d400000, 0x000000060d600000|  0%| F|  |TAMS 0x000000060d400000, 0x000000060d400000| Untracked 
+|   4|0x000000060d600000, 0x000000060d643ab8, 0x000000060d800000| 13%| O|  |TAMS 0x000000060d600000, 0x000000060d600000| Untracked 
+|   5|0x000000060d800000, 0x000000060d800000, 0x000000060da00000|  0%| F|  |TAMS 0x000000060d800000, 0x000000060d800000| Untracked 
+|   6|0x000000060da00000, 0x000000060da00000, 0x000000060dc00000|  0%| F|  |TAMS 0x000000060da00000, 0x000000060da00000| Untracked 
+|   7|0x000000060dc00000, 0x000000060dc00000, 0x000000060de00000|  0%| F|  |TAMS 0x000000060dc00000, 0x000000060dc00000| Untracked 
+|   8|0x000000060de00000, 0x000000060de70b20, 0x000000060e000000| 22%| E|  |TAMS 0x000000060de00000, 0x000000060de00000| Complete 
+|  17|0x000000060f000000, 0x000000060f0b5fe8, 0x000000060f200000| 35%| O|  |TAMS 0x000000060f000000, 0x000000060f000000| Untracked 
+
+Card table byte_map: [0x000001da4ab10000,0x000001da4bab0000] _byte_map_base: 0x000001da47aa9000
+
+Marking Bits (Prev, Next): (CMBitMap*) 0x000001da302d2e48, (CMBitMap*) 0x000001da302d2e80
+ Prev Bits: [0x000001da4ca50000, 0x000001da54718000)
+ Next Bits: [0x000001da54720000, 0x000001da5c3e8000)
+
+Polling page: 0x000001da39b90000
+
+Metaspace:
+
+Usage:
+  Non-class:      6.31 MB capacity,     6.26 MB (>99%) used,    41.24 KB ( <1%) free+waste,     4.38 KB ( <1%) overhead. 
+      Class:    671.00 KB capacity,   627.06 KB ( 93%) used,    41.94 KB (  6%) free+waste,     2.00 KB ( <1%) overhead. 
+       Both:      6.96 MB capacity,     6.88 MB ( 99%) used,    83.18 KB (  1%) free+waste,     6.38 KB ( <1%) overhead. 
+
+Virtual space:
+  Non-class space:        8.00 MB reserved,       6.50 MB ( 81%) committed 
+      Class space:        1.00 GB reserved,     768.00 KB ( <1%) committed 
+             Both:        1.01 GB reserved,       7.25 MB ( <1%) committed 
+
+Chunk freelists:
+   Non-Class:  512 bytes
+       Class:  128 bytes
+        Both:  640 bytes
+
+CodeHeap 'non-profiled nmethods': size=119168Kb used=86Kb max_used=86Kb free=119081Kb
+ bounds [0x000001da41750000, 0x000001da419c0000, 0x000001da48bb0000]
+CodeHeap 'profiled nmethods': size=119168Kb used=702Kb max_used=702Kb free=118466Kb
+ bounds [0x000001da3a2f0000, 0x000001da3a560000, 0x000001da41750000]
+CodeHeap 'non-nmethods': size=7424Kb used=2199Kb max_used=2215Kb free=5224Kb
+ bounds [0x000001da39bb0000, 0x000001da39e20000, 0x000001da3a2f0000]
+ total_blobs=774 nmethods=423 adapters=261
+ compilation: enabled
+              stopped_count=0, restarted_count=0
+ full_count=0
+
+Compilation events (10 events):
+Event: 0.086 Thread 0x000001da5f602800 nmethod 418 0x000001da3a39df10 code [0x000001da3a39e0e0, 0x000001da3a39e578]
+Event: 0.086 Thread 0x000001da5f4f2000  423       3       java.util.TreeMap::successor (66 bytes)
+Event: 0.086 Thread 0x000001da5f795800  421       3       java.util.TreeMap$KeyIterator::next (8 bytes)
+Event: 0.086 Thread 0x000001da5f602800  422       3       java.util.TreeMap$PrivateEntryIterator::nextEntry (54 bytes)
+Event: 0.086 Thread 0x000001da5f795800 nmethod 421 0x000001da3a39e710 code [0x000001da3a39e8c0, 0x000001da3a39ea08]
+Event: 0.086 Thread 0x000001da5f4f2000 nmethod 423 0x000001da3a39eb10 code [0x000001da3a39ecc0, 0x000001da3a39eff8]
+Event: 0.086 Thread 0x000001da5f602800 nmethod 422 0x000001da3a39f190 code [0x000001da3a39f360, 0x000001da3a39f6e8]
+Event: 0.092 Thread 0x000001da5f5f6800 nmethod 370 0x000001da41763310 code [0x000001da41763520, 0x000001da417645f0]
+Event: 0.092 Thread 0x000001da5f5f6800  389       4       java.lang.PublicMethods$MethodList::filter (104 bytes)
+Event: 0.096 Thread 0x000001da5f5f6800 nmethod 389 0x000001da41764c10 code [0x000001da41764dc0, 0x000001da417653d8]
+
+GC Heap History (2 events):
+Event: 0.087 GC heap before
+{Heap before GC invocations=0 (full 0):
+ garbage-first heap   total 512000K, used 4096K [0x000000060ce00000, 0x0000000800000000)
+  region size 2048K, 3 young (6144K), 0 survivors (0K)
+ Metaspace       used 7034K, capacity 7131K, committed 7424K, reserved 1056768K
+  class space    used 624K, capacity 671K, committed 768K, reserved 1048576K
+}
+Event: 0.091 GC heap after
+{Heap after GC invocations=1 (full 1):
+ garbage-first heap   total 20480K, used 1305K [0x000000060ce00000, 0x0000000800000000)
+  region size 2048K, 0 young (0K), 0 survivors (0K)
+ Metaspace       used 7034K, capacity 7131K, committed 7424K, reserved 1056768K
+  class space    used 624K, capacity 671K, committed 768K, reserved 1048576K
+}
+
+Deoptimization events (1 events):
+Event: 0.034 Thread 0x000001da306c5800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000001da417548a0 method=java.lang.String.hashCode()I @ 14 c2
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (4 events):
+Event: 0.035 Thread 0x000001da306c5800 Exception <a 'java/lang/NoClassDefFoundError'{0x000000062c196778}: org/jpype/classloader/DynamicClassLoader> (0x000000062c196778) thrown at [./open/src/hotspot/share/classfile/systemDictionary.cpp, line 215]
+Event: 0.062 Thread 0x000001da306c5800 Exception <a 'java/lang/NoSuchMethodError'{0x000000062be534e0}: java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(Ljava/lang/Object;Ljava/lang/Object;)I> (0x000000062be534e0) thrown at [./open/src/hotspot/share/interpreter/linkResolver.cpp, line
+Event: 0.062 Thread 0x000001da306c5800 Exception <a 'java/lang/NoSuchMethodError'{0x000000062be599a0}: java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(Ljava/lang/Object;I)Ljava/lang/Object;> (0x000000062be599a0) thrown at [./open/src/hotspot/share/interpreter/linkResolver.cpp, line
+Event: 0.068 Thread 0x000001da306c5800 Exception <a 'sun/nio/fs/WindowsException'{0x000000062bf3ab10}> (0x000000062bf3ab10) thrown at [./open/src/hotspot/share/prims/jni.cpp, line 611]
+
+Events (10 events):
+Event: 0.092 loading class java/util/IdentityHashMap$KeyIterator done
+Event: 0.092 Thread 0x000001da5fba8800 Thread added: 0x000001da5fba8800
+Event: 0.100 Executing VM operation: ThreadDump
+Event: 0.100 Executing VM operation: ThreadDump done
+Event: 0.100 Executing VM operation: RevokeBias
+Event: 0.100 Executing VM operation: RevokeBias done
+Event: 0.117 Thread 0x000001da3097d000 Thread exited: 0x000001da3097d000
+Event: 0.117 Executing VM operation: RevokeBias
+Event: 0.117 Executing VM operation: RevokeBias done
+Event: 0.117 Thread 0x000001da5fba8800 Thread exited: 0x000001da5fba8800
+
+
+Dynamic libraries:
+0x00007ff7652b0000 - 0x00007ff7652ca000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\python.exe
+0x00007fffb2360000 - 0x00007fffb25c3000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007fffb1330000 - 0x00007fffb13f7000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007fffaf850000 - 0x00007fffafc17000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007fffaf700000 - 0x00007fffaf84c000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007fff70df0000 - 0x00007fff71499000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\python312.dll
+0x00007fffaa2c0000 - 0x00007fffaa2dd000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\VCRUNTIME140.dll
+0x00007fffb0cc0000 - 0x00007fffb0d34000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007fffb1730000 - 0x00007fffb1846000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007fff9ef60000 - 0x00007fff9ef6b000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007fffb01a0000 - 0x00007fffb0254000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007fffb2270000 - 0x00007fffb2319000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007fffb0b10000 - 0x00007fffb0bb6000 	C:\WINDOWS\System32\sechost.dll
+0x00007fffaf030000 - 0x00007fffaf056000 	C:\WINDOWS\SYSTEM32\bcrypt.dll
+0x00007fffafda0000 - 0x00007fffafe39000 	C:\WINDOWS\System32\bcryptprimitives.dll
+0x000001da0e460000 - 0x000001da0e46f000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\python3.DLL
+0x00007fff49b50000 - 0x00007fff49f63000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\_core\_multiarray_umath.cp312-win_amd64.pyd
+0x00007fff8bfb0000 - 0x00007fff8c04b000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy.libs\msvcp140-23ebcc0b37c8e3d074511f362feac48b.dll
+0x00007fff1f840000 - 0x00007fff20b9d000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy.libs\libscipy_openblas64_-c16e4918366c6bc1f1cd71e28ca36fc0.dll
+0x00007fffaa2a0000 - 0x00007fffaa2c0000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_ctypes.pyd
+0x00007fffb1590000 - 0x00007fffb1725000 	C:\WINDOWS\System32\ole32.dll
+0x00007fffb00f0000 - 0x00007fffb0193000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007fffaaac0000 - 0x00007fffaaacb000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\libffi-8.dll
+0x00007fffb1400000 - 0x00007fffb142a000 	C:\WINDOWS\System32\GDI32.dll
+0x00007fffafd70000 - 0x00007fffafd97000 	C:\WINDOWS\System32\win32u.dll
+0x00007fffaffc0000 - 0x00007fffb00eb000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007fffb18b0000 - 0x00007fffb1a79000 	C:\WINDOWS\System32\USER32.dll
+0x00007fffb0f10000 - 0x00007fffb128e000 	C:\WINDOWS\System32\combase.dll
+0x00007fffb0260000 - 0x00007fffb0336000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x00007fffb0340000 - 0x00007fffb036f000 	C:\WINDOWS\System32\IMM32.DLL
+0x00007fffaa290000 - 0x00007fffaa29a000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_wmi.pyd
+0x00007fffaa280000 - 0x00007fffaa28c000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\VCRUNTIME140_1.dll
+0x00007fffa5920000 - 0x00007fffa5a1b000 	C:\WINDOWS\SYSTEM32\PROPSYS.dll
+0x00007fffaa260000 - 0x00007fffaa27e000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\linalg\_umath_linalg.cp312-win_amd64.pyd
+0x00007fffaa1d0000 - 0x00007fffaa1e6000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_bz2.pyd
+0x00007fff993b0000 - 0x00007fff993d9000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_lzma.pyd
+0x00007fff99310000 - 0x00007fff9933f000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\bit_generator.cp312-win_amd64.pyd
+0x00007fff96230000 - 0x00007fff9625d000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_common.cp312-win_amd64.pyd
+0x00007fffaa1b0000 - 0x00007fffaa1c1000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_hashlib.pyd
+0x00007fff483d0000 - 0x00007fff488c9000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\libcrypto-3.dll
+0x00007fff88b70000 - 0x00007fff88c10000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\mtrand.cp312-win_amd64.pyd
+0x00007fff8ce30000 - 0x00007fff8ce6c000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_bounded_integers.cp312-win_amd64.pyd
+0x00007fff99390000 - 0x00007fff993aa000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_mt19937.cp312-win_amd64.pyd
+0x00007fff99130000 - 0x00007fff99148000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_philox.cp312-win_amd64.pyd
+0x00007fff96290000 - 0x00007fff962ab000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_pcg64.cp312-win_amd64.pyd
+0x00007fff923a0000 - 0x00007fff923b4000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_sfc64.cp312-win_amd64.pyd
+0x00007fff807d0000 - 0x00007fff8088c000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random\_generator.cp312-win_amd64.pyd
+0x00007fff99300000 - 0x00007fff9930b000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\pandas_parser.cp312-win_amd64.pyd
+0x00007fff96220000 - 0x00007fff9622c000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\pandas_datetime.cp312-win_amd64.pyd
+0x00007fff78140000 - 0x00007fff78258000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\interval.cp312-win_amd64.pyd
+0x00007fff77d70000 - 0x00007fff77f34000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\hashtable.cp312-win_amd64.pyd
+0x00007fff922e0000 - 0x00007fff9230e000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\missing.cp312-win_amd64.pyd
+0x00007fff8c6f0000 - 0x00007fff8c71d000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\dtypes.cp312-win_amd64.pyd
+0x00007fff8cc80000 - 0x00007fff8cc95000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\ccalendar.cp312-win_amd64.pyd
+0x00007fff8caa0000 - 0x00007fff8cac0000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\np_datetime.cp312-win_amd64.pyd
+0x00007fff8c310000 - 0x00007fff8c34d000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\conversion.cp312-win_amd64.pyd
+0x00007fff8c6d0000 - 0x00007fff8c6e1000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\base.cp312-win_amd64.pyd
+0x00007fff806f0000 - 0x00007fff807ce000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\offsets.cp312-win_amd64.pyd
+0x00007fff7f4e0000 - 0x00007fff7f561000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\timestamps.cp312-win_amd64.pyd
+0x00007fff8bf70000 - 0x00007fff8bfa4000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\nattype.cp312-win_amd64.pyd
+0x00007fff8b770000 - 0x00007fff8b7e9000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\timedeltas.cp312-win_amd64.pyd
+0x00007fff8b8e0000 - 0x00007fff8b91a000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\timezones.cp312-win_amd64.pyd
+0x00007fff925e0000 - 0x00007fff925ed000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_zoneinfo.pyd
+0x000001da2e690000 - 0x000001da2e693000 	C:\WINDOWS\SYSTEM32\tzres.dll
+0x00007fff88b20000 - 0x00007fff88b66000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\fields.cp312-win_amd64.pyd
+0x00007fff7faa0000 - 0x00007fff7fae0000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\tzconversion.cp312-win_amd64.pyd
+0x00007fff8b8c0000 - 0x00007fff8b8d4000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\properties.cp312-win_amd64.pyd
+0x00007fff7f9f0000 - 0x00007fff7fa44000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\parsing.cp312-win_amd64.pyd
+0x00007fff7f830000 - 0x00007fff7f86e000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_decimal.pyd
+0x00007fff7f260000 - 0x00007fff7f2af000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\strptime.cp312-win_amd64.pyd
+0x00007fff780d0000 - 0x00007fff7813a000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\period.cp312-win_amd64.pyd
+0x00007fff7f7f0000 - 0x00007fff7f823000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs\vectorized.cp312-win_amd64.pyd
+0x00007fff92390000 - 0x00007fff923a0000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\ops_dispatch.cp312-win_amd64.pyd
+0x00007fff70c30000 - 0x00007fff70df0000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\algos.cp312-win_amd64.pyd
+0x00007fff78020000 - 0x00007fff780c7000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\lib.cp312-win_amd64.pyd
+0x00007fff77c50000 - 0x00007fff77d67000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\unicodedata.pyd
+0x00007fff77c10000 - 0x00007fff77c45000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\ops.cp312-win_amd64.pyd
+0x00007fff88af0000 - 0x00007fff88b1d000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\hashing.cp312-win_amd64.pyd
+0x00007fff88cf0000 - 0x00007fff88d0c000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\arrays.cp312-win_amd64.pyd
+0x00007fff778a0000 - 0x00007fff778e3000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslib.cp312-win_amd64.pyd
+0x00007fff70b60000 - 0x00007fff70c30000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\sparse.cp312-win_amd64.pyd
+0x00007fff77840000 - 0x00007fff77891000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\internals.cp312-win_amd64.pyd
+0x00007fff806d0000 - 0x00007fff806e2000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\indexing.cp312-win_amd64.pyd
+0x00007fff6f270000 - 0x00007fff6f326000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\index.cp312-win_amd64.pyd
+0x00007fff719c0000 - 0x00007fff719f5000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\writers.cp312-win_amd64.pyd
+0x00007fff6ef10000 - 0x00007fff6f01f000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\join.cp312-win_amd64.pyd
+0x00007fff70b00000 - 0x00007fff70b57000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\window\aggregations.cp312-win_amd64.pyd
+0x00007fff6f1d0000 - 0x00007fff6f26b000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas.libs\msvcp140-ef6047a69b174ada5cb2eff1d2bc9a62.dll
+0x00007fff7fa70000 - 0x00007fff7fa9c000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\window\indexers.cp312-win_amd64.pyd
+0x00007fff70940000 - 0x00007fff70981000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\reshape.cp312-win_amd64.pyd
+0x00007fff56950000 - 0x00007fff56b71000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\groupby.cp312-win_amd64.pyd
+0x00007fff8f570000 - 0x00007fff8f577000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_uuid.pyd
+0x00007fff7f9d0000 - 0x00007fff7f9e1000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\json.cp312-win_amd64.pyd
+0x00007fff6ec20000 - 0x00007fff6ec85000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\parsers.cp312-win_amd64.pyd
+0x00007fff7f340000 - 0x00007fff7f359000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\testing.cp312-win_amd64.pyd
+0x00007fff7d8d0000 - 0x00007fff7d8e6000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_socket.pyd
+0x00007fffadfb0000 - 0x00007fffadfe2000 	C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+0x00007fff8dd50000 - 0x00007fff8dd59000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\select.pyd
+0x00007fff71990000 - 0x00007fff719bd000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_ssl.pyd
+0x00007fffafe40000 - 0x00007fffaffb6000 	C:\WINDOWS\System32\CRYPT32.dll
+0x00007fff6eb50000 - 0x00007fff6ec12000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\libssl-3.dll
+0x00007fff6ead0000 - 0x00007fff6eb46000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\_jpype.cp312-win_amd64.pyd
+0x00007fff92090000 - 0x00007fff9211d000 	C:\WINDOWS\SYSTEM32\MSVCP140.dll
+0x00007fff43040000 - 0x00007fff43512000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pydantic_core\_pydantic_core.cp312-win_amd64.pyd
+0x00007fffaee10000 - 0x00007fffaee1c000 	C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+0x00007fff8db30000 - 0x00007fff8db39000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_queue.pyd
+0x00007fff77820000 - 0x00007fff77832000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_asyncio.pyd
+0x00007fff8cec0000 - 0x00007fff8cece000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_overlapped.pyd
+0x00007fffaeb50000 - 0x00007fffaebb8000 	C:\WINDOWS\system32\mswsock.dll
+0x00007fff65890000 - 0x00007fff658fa000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\jiter\jiter.cp312-win_amd64.pyd
+0x00007fff36470000 - 0x00007fff3745a000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\z3\lib\libz3.dll
+0x00007fff607c0000 - 0x00007fff60938000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\dependency_injector\providers.cp312-win_amd64.pyd
+0x00007fff71680000 - 0x00007fff7169d000 	C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\dependency_injector\_cwiring.cp312-win_amd64.pyd
+0x00007fff8bf60000 - 0x00007fff8bf6a000 	C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs\_multiprocessing.pyd
+0x00007fff2ea80000 - 0x00007fff2f5de000 	C:\Program Files\Java\jdk-11\bin\server\jvm.dll
+0x00007fffb1320000 - 0x00007fffb1328000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007fff65180000 - 0x00007fff6518a000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007fff9df80000 - 0x00007fff9dfb6000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007fff8b8b0000 - 0x00007fff8b8c0000 	C:\Program Files\Java\jdk-11\bin\verify.dll
+0x00007fffaca80000 - 0x00007fffaccc1000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x00007fff70900000 - 0x00007fff70939000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x00007fff6f180000 - 0x00007fff6f1a8000 	C:\Program Files\Java\jdk-11\bin\java.dll
+0x00007fff815e0000 - 0x00007fff815ea000 	C:\Program Files\Java\jdk-11\bin\jimage.dll
+0x00007fff71660000 - 0x00007fff71677000 	C:\Program Files\Java\jdk-11\bin\zip.dll
+0x00007fffae640000 - 0x00007fffae65a000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x00007fffb0380000 - 0x00007fffb0a84000 	C:\WINDOWS\System32\SHELL32.dll
+0x00007fffad410000 - 0x00007fffadc47000 	C:\WINDOWS\SYSTEM32\windows.storage.dll
+0x00007fffb2140000 - 0x00007fffb2229000 	C:\WINDOWS\System32\SHCORE.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Users\92dav\AppData\Local\Programs\Python\Python312;C:\WINDOWS\SYSTEM32;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\_core;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy.libs;C:\Users\92dav\AppData\Local\Programs\Python\Python312\DLLs;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\linalg;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\numpy\random;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\tslibs;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas\_libs\window;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pandas.libs;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\pydantic_core;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\jiter;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\z3\lib;C:\FH\Master\Masterarbeit\master-thesis\.venv\Lib\site-packages\dependency_injector;C:\Program Files\Java\jdk-11\bin\server;C:\Program Files\Java\jdk-11\bin
+
+VM Arguments:
+java_command: <unknown>
+java_class_path (initial): C:\FH\Master\Masterarbeit\master-thesis\dist
+Launcher Type: generic
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 2097152                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 524288000                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 8373927936                                {product} {ergonomic}
+   size_t MaxNewSize                               = 5022679040                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 2097152                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 7594288                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122031976                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122031976                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+     bool UseCompressedClassPointers               = true                                 {lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                                 {lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+CLASSPATH=C:\FH\Master\Masterarbeit\tools\antlr-4.13.2-complete.jar
+PATH=C:\FH\Master\Masterarbeit\master-thesis\.venv\Scripts;C:\Program Files\Microsoft MPI\Bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Eclipse Adoptium\jre-11.0.24.8-hotspot\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\libnvvp;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\libnvvp;C:\Program Files\Eclipse Adoptium\jdk-11.0.23.9-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\NVIDIA Corporation\Nsight Compute 2024.1.1\;%CLASSPATH%;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Git\cmd;C:\Users\92dav\.cargo\bin;C:\Users\92dav\AppData\Local\Programs\Python\Launcher\;C:\Users\92dav\AppData\Local\Microsoft\WindowsApps;C:\Users\92dav\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\92dav\AppData\Roaming\npm;C:\Users\92dav\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\92dav\AppData\Local\GitHubDesktop\bin;C:\Users\92dav\AppData\Local\Muse Hub\lib;C:\texlive\2024\bin\windows;C:\Users\92dav\.dotnet\tools;C:\texlive\2024\bin;;C:\Users\92dav\AppData\Local\Microsoft\WindowsApps
+USERNAME=92dav
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 11 , 64 bit Build 26100 (10.0.26100.3037)
+Hyper-V role detected
+
+CPU:total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 97 stepping 2 microcode 0xa601209, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, mmxext, 3dnowpref, lzcnt, sse4a, ht, tsc, tscinvbit, tscinv, bmi1, bmi2, adx, evex, sha, fma
+
+Memory: 4k page, system-wide physical 31937M (16934M free)
+TotalPageFile size 56513M (AvailPageFile size 34694M)
+current process WorkingSet (physical memory assigned to process): 137M, peak: 157M
+current process commit charge ("private bytes"): 674M, peak: 1209M
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (11.0.23+7-LTS-222) for windows-amd64 JRE (11.0.23+7-LTS-222), built on Mar 11 2024 22:13:52 by "mach5one" with MS VC++ 17.6 (VS2022)
+
+END.

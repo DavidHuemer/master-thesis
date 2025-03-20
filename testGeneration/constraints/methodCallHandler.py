@@ -22,6 +22,9 @@ class MethodCallHandler(BaseNodeHandler[ConstraintsDto]):
         obj = t.evaluate_with_other_node(method.obj)
         ident = method.name
 
+        if not hasattr(obj, ident):
+            raise Exception(f"Method {ident} not found in object {obj}")
+
         m = getattr(obj, ident)
         if not m:
             raise Exception(f"Method {ident} not found in object {obj}")

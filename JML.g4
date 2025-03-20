@@ -4,20 +4,28 @@
 
 grammar JML;
 
-jml: jml_item+ EOF;
+jml: contract EOF;
 
-jml_item: behavior = behavior_expr | cond = condition;
+contract: behavior_expr (ALSO behavior_expr)*;
 
-behavior_expr: PUBLIC behavior = special_behavior;
+behavior_expr:
+	behavior = 
+		default_behavior
+		| normal_behavior
+		| exceptional_behavior
+	;
 
-special_behavior: NORMAL_BEHAVIOR | EXCEPTIONAL_BEHAVIOR;
+default_behavior: condition+;
+
+normal_behavior: PUBLIC NORMAL_BEHAVIOR condition*;
+
+exceptional_behavior: PUBLIC EXCEPTIONAL_BEHAVIOR condition*;
 
 condition: (
 		requires_condition
 		| ensures_condition
 		| signals_condition
 		| signals_only_condition
-		| also_condition
 	) ';'?;
 
 requires_condition: REQUIRES expr = expression;
@@ -25,7 +33,6 @@ ensures_condition: ENSURES expr = expression;
 signals_condition: SIGNALS expr = exception_expression;
 signals_only_condition:
 	SIGNALS_ONLY signals = signal_only_signals;
-also_condition: ALSO behavior = special_behavior?;
 
 expression:
 	primary
@@ -96,7 +103,10 @@ exists_expression:
 	EXISTS expr = bool_quantifier_core_expression;
 
 bool_quantifier_core_expression:
-	types = type_declarations ';' ranges = expression (';' | '==>') expr = expression;
+	types = type_declarations ';' ranges = expression (
+		';'
+		| '==>'
+	) expr = expression;
 
 type_declarations: type_declaration (',' type_declaration)*;
 

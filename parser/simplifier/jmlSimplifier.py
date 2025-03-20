@@ -5,7 +5,6 @@ from definitions.ast.behavior.behaviorType import BehaviorType
 from definitions.ast.exceptionExpression import ExceptionExpression
 from definitions.ast.jmlTreeNode import JmlTreeNode
 from definitions.parser.parserResult import ParserResult
-from helper.objectHelper import ObjectHelper
 from parser.simplificationDto import SimplificationDto
 from parser.simplifier.allowedSignalsSimplifier import AllowedSignalsSimplifier
 from parser.simplifier.rule_simplifier import RuleSimplifier
@@ -13,12 +12,11 @@ from util.Singleton import Singleton
 
 
 class JmlSimplifier(Singleton):
-    def __init__(self, rule_simplifier=RuleSimplifier(), allowed_signals_simplifier=AllowedSignalsSimplifier()):
-        self.rule_simplifier = rule_simplifier
-        self.allowed_signals_simplifier = allowed_signals_simplifier
+    def __init__(self, rule_simplifier=None, allowed_signals_simplifier=None):
+        self.rule_simplifier = rule_simplifier or RuleSimplifier()
+        self.allowed_signals_simplifier = allowed_signals_simplifier or AllowedSignalsSimplifier()
 
         self.behavior_nodes: list[BehaviorNode] = []
-        self.current_behavior: BehaviorNode = BehaviorNode()
 
     def simplify(self, jml: JMLParser.JMLParser.JmlContext, parser_result: ParserResult):
         """
@@ -28,64 +26,49 @@ class JmlSimplifier(Singleton):
         :return: The jml node containing all behavior nodes
         """
 
-        jml_items = [jml_item for jml_item in jml.jml_item()]
+        jml_contract: JMLParser.JMLParser.ContractContext = jml.contract()
+        behavior_nodes: list[BehaviorNode] = []
+        for behavior_expr in jml_contract.children:
+            if isinstance(behavior_expr, JMLParser.JMLParser.Behavior_exprContext):
+                behavior = behavior_expr.children[0]
+                behavior_nodes.append(self.get_behavior_node(behavior, parser_result))
 
-        self.current_behavior = BehaviorNode()
-        self.behavior_nodes = [self.current_behavior]
+        return JmlTreeNode(behavior_nodes=behavior_nodes)
 
-        for jml_item in jml_items:
-            self.handle_jml_item(jml_item, parser_result)
+    def get_behavior_node(self, behavior, parser_result):
+        behavior_node = BehaviorNode()
+        behavior_node.behavior_type = self.get_behavior_type(behavior)
+        self.handle_behavior(behavior_node, behavior, parser_result)
+        return behavior_node
 
-        return JmlTreeNode(behavior_nodes=self.behavior_nodes)
-
-    def handle_jml_item(self, jml_item: JMLParser.JMLParser.Jml_itemContext, parser_result: ParserResult):
-        if self.is_behavior_node(jml_item):
-            self.handle_behavior_node(jml_item)
+    @staticmethod
+    def get_behavior_type(behavior):
+        if isinstance(behavior, JMLParser.JMLParser.Default_behaviorContext):
+            return BehaviorType.DEFAULT
+        elif isinstance(behavior, JMLParser.JMLParser.Normal_behaviorContext):
+            return BehaviorType.NORMAL_BEHAVIOR
+        elif isinstance(behavior, JMLParser.JMLParser.Exceptional_behaviorContext):
+            return BehaviorType.EXCEPTIONAL_BEHAVIOR
         else:
-            self.handle_condition(jml_item, parser_result)
+            raise Exception("Unknown behavior type")
 
-    def handle_condition(self, jml_item: JMLParser.JMLParser.Jml_itemContext, parser_result: ParserResult):
-        condition = jml_item.cond.children[0]
+    def handle_behavior(self, behavior_node, behavior, parser_result: ParserResult):
+        for condition in behavior.children:
+            if isinstance(condition, JMLParser.JMLParser.ConditionContext):
+                self.handle_condition_expression(behavior_node, condition.children[0], parser_result)
 
-        # Check if condition is @also -> create new behavior node
-        if isinstance(condition, JMLParser.JMLParser.Also_conditionContext):
-            self.current_behavior = BehaviorNode()
-            self.behavior_nodes.append(self.current_behavior)
-        else:
-            self.handle_condition_expression(condition, parser_result)
-
-    def handle_condition_expression(self, condition, parser_result: ParserResult):
-        simplification_dto = SimplificationDto(condition.children[1], self.rule_simplifier, parser_result)
-
+    def handle_condition_expression(self, behavior_node, condition, parser_result: ParserResult):
         if isinstance(condition, JMLParser.JMLParser.Signals_only_conditionContext):
             allowed_signals = self.allowed_signals_simplifier.simplify(condition)
-            self.current_behavior.add_allowed_signals(allowed_signals)
+            behavior_node.add_allowed_signals(allowed_signals)
             return
-
+        simplification_dto = SimplificationDto(condition.children[1], self.rule_simplifier, parser_result)
         expr = self.rule_simplifier.evaluate(simplification_dto)
 
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):
-            self.current_behavior.add_pre_condition(expr)
+            behavior_node.add_pre_condition(expr)
         elif isinstance(condition, JMLParser.JMLParser.Ensures_conditionContext):
-            self.current_behavior.add_post_condition(expr)
+            behavior_node.add_post_condition(expr)
         elif isinstance(condition, JMLParser.JMLParser.Signals_conditionContext):
             if isinstance(expr, ExceptionExpression):
-                self.current_behavior.add_signals_condition(expr)
-
-    def handle_behavior_node(self, jml_item: JMLParser.JMLParser.Jml_itemContext):
-        behavior_expr: JMLParser.JMLParser.Behavior_exprContext = jml_item.children[0]
-        if self.current_behavior.defined:
-            raise Exception("Behavior already defined")
-
-        if isinstance(behavior_expr.children[1], JMLParser.JMLParser.Special_behaviorContext):
-            special_behavior = behavior_expr.children[1]
-            special_behavior_text = special_behavior.children[0].text
-
-            if special_behavior_text == "normal_behavior":
-                self.current_behavior.behavior_type = BehaviorType.NORMAL_BEHAVIOR
-            elif special_behavior_text == "exceptional_behavior":
-                self.current_behavior.behavior_type = BehaviorType.EXCEPTIONAL_BEHAVIOR
-
-    @staticmethod
-    def is_behavior_node(jml_item: JMLParser.JMLParser.Jml_itemContext):
-        return ObjectHelper.check_has_child(jml_item, 'behavior')
+                behavior_node.add_signals_condition(expr)

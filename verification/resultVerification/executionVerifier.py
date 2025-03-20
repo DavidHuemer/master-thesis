@@ -36,9 +36,6 @@ class ExecutionVerifier(Singleton):
                behavior: BehaviorNode, expected_exception, test_case: TestCase,
                result_instances: ResultInstances, stop_event: threading.Event):
 
-        a = JString("a")
-        b = JString("b")
-        c = JString("c")
         try:
             if execution_result.exception is not None:
                 # Validate exception
@@ -51,7 +48,7 @@ class ExecutionVerifier(Singleton):
                                                             stop_event=stop_event)
             else:
                 # Validate result
-                if expected_exception is not None:
+                if behavior.behavior_type == BehaviorType.EXCEPTIONAL_BEHAVIOR:
                     return False
 
                 result = execution_result.result

@@ -13,17 +13,11 @@ class JmlPromptGenerator:
         self.example_generator = example_generator or JmlTransformationExampleGenerator()
 
     def get_initial_prompt(self, test_case: ConsistencyTestCase) -> str:
-        prompt = self.initial_prompt_template
-
-        # TODO: Replace the placeholders in the prompt with the actual values
-
-        # replace {javadoc} with test_case.get_comment() in the prompt
-        prompt = prompt.replace("{javadoc}", test_case.get_comment())
-        prompt = prompt.replace("{parameters}", str(test_case.method_info.parameters))
-        prompt = prompt.replace("{examples}", self.get_examples())
-
-        return prompt
-
+        return (self.initial_prompt_template
+                .replace("{javadoc}", test_case.get_comment())
+                .replace("{parameters}", str(test_case.method_info.parameters))
+                .replace("{examples}", self.get_examples()))
+    
     @staticmethod
     def get_by_exception(e: Exception) -> str:
         return (f"The following exception occurred:\n"
