@@ -3,13 +3,15 @@ from z3 import ForAll, Implies, And, Exists, ArithRef
 
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
+from nodes.baseNodeHandler import BaseNodeHandler
 from testGeneration.constraints.constraintsDto import ConstraintsDto
 from testGeneration.constraints.quantifier.quantifierRangeValuesHelper import QuantifierRangeValuesHelper
 from verification.csp.cspParamNameGenerator import find_csp_name
 
 
-class NumQuantifierRangeConstraintBuilder:
+class NumQuantifierRangeConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     def __init__(self, quantifier_range_values_helper=QuantifierRangeValuesHelper()):
+        super().__init__()
         self.quantifier_range_values_helper = quantifier_range_values_helper
 
     def evaluate(self, expression: NumQuantifierTreeNode, t: ConstraintsDto):
@@ -26,9 +28,9 @@ class NumQuantifierRangeConstraintBuilder:
             t.constraint_parameters.loop_parameters.add_csp_parameter(csp_param)
 
         csp_values = [csp_param.value for csp_param in csp_parameters]
-        range_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.range_))
+        range_expr = self.evaluate_with_runner(t, expression.range_)
 
-        result_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expressions))
+        result_expr = self.evaluate_with_runner(t, expression.expressions)
         comparison = self.get_comparison(tmp_param=tmp_param,
                                          result_expr=result_expr,
                                          quantifier_type=expression.quantifier_type)

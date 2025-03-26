@@ -18,29 +18,29 @@ from parser.simplifier.terminalSimplifier import TerminalSimplifier
 
 
 class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
-    def __init__(self, terminal_simplifier=TerminalSimplifier(),
-                 quantifier_simplifier=QuantifierSimplifier(),
-                 array_index_simplifier=ArrayIndexSimplifier(),
-                 length_simplifier=LengthSimplifier(),
-                 infix_simplifier=InfixSimplifier(),
-                 exception_simplifier=ExceptionSimplifier(),
-                 question_mark_expression_simplifier=QuestionMarkExpressionSimplifier(),
-                 reference_simplifier=ReferenceSimplifier(),
-                 method_simplifier=MethodCallSimplifier(),
-                 prefix_simplifier=PrefixSimplifier()):
+    def __init__(self, terminal_simplifier=None,
+                 quantifier_simplifier=None,
+                 array_index_simplifier=None,
+                 length_simplifier=None,
+                 infix_simplifier=None,
+                 exception_simplifier=None,
+                 question_mark_expression_simplifier=None,
+                 reference_simplifier=None,
+                 method_simplifier=None,
+                 prefix_simplifier=None):
         super().__init__(
-            terminal_handler=terminal_simplifier,
-            infix_handler=infix_simplifier,
-            quantifier_handler=quantifier_simplifier,
-            question_mark_handler=question_mark_expression_simplifier,
-            prefix_handler=prefix_simplifier,
-            array_index_handler=array_index_simplifier,
-            length_handler=length_simplifier,
-            method_call_handler=method_simplifier
+            terminal_handler=terminal_simplifier or TerminalSimplifier(),
+            infix_handler=infix_simplifier or InfixSimplifier(),
+            quantifier_handler=quantifier_simplifier or QuantifierSimplifier(),
+            question_mark_handler=question_mark_expression_simplifier or QuestionMarkExpressionSimplifier(),
+            prefix_handler=prefix_simplifier or PrefixSimplifier(),
+            array_index_handler=array_index_simplifier or ArrayIndexSimplifier(),
+            length_handler=length_simplifier or LengthSimplifier(),
+            method_call_handler=method_simplifier or MethodCallSimplifier()
         )
-        self.exception_simplifier = exception_simplifier
+        self.exception_simplifier = exception_simplifier or ExceptionSimplifier()
         self.exception_simplifier.set_runner(self)
-        self.reference_simplifier = reference_simplifier
+        self.reference_simplifier = reference_simplifier or ReferenceSimplifier()
         self.reference_simplifier.set_runner(self)
 
     def evaluate(self, t: SimplificationDto):

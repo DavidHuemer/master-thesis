@@ -5,12 +5,14 @@ from z3 import ArrayRef, Sum, Product, If, And
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from nodes.baseNodeHandler import BaseNodeHandler
 from testGeneration.constraints.constraintArrayValueHelper import ConstraintArrayValueHelper
 from testGeneration.constraints.constraintsDto import ConstraintsDto
 
 
-class NumQuantifierValueConstraintBuilder:
+class NumQuantifierValueConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     def __init__(self, array_value_helper=ConstraintArrayValueHelper()):
+        super().__init__()
         self.array_value_helper = array_value_helper
 
     def evaluate(self, expression, t: ConstraintsDto):
@@ -59,7 +61,7 @@ class NumQuantifierValueConstraintBuilder:
         return And(*comparisons)
 
     def get_values(self, expression: NumQuantifierTreeNode, t: ConstraintsDto):
-        expression_list = [t.constraint_builder.evaluate(t.copy_with_other_node(expr)) for
+        expression_list = [self.evaluate_with_runner(t, expr) for
                            expr in expression.expressions]
 
         values = []

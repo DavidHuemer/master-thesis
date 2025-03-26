@@ -9,6 +9,7 @@ from testGeneration.constraints.quantifier.quantifierRangeValuesHelper import Qu
 
 class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     def __init__(self, quantifier_range_values_helper=QuantifierRangeValuesHelper()):
+        super().__init__()
         self.quantifier_range_values_helper = quantifier_range_values_helper
 
     def is_node(self, t: ConstraintsDto):
@@ -22,8 +23,8 @@ class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
             # TODO: Check if variable already exists
             t.constraint_parameters.loop_parameters.add_csp_parameter(var)
 
-        range_expressions = t.constraint_builder.evaluate(t.copy_with_other_node(expression.range_))
-        final_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expression))
+        range_expressions = self.evaluate_with_runner(t, expression.range_)
+        final_expr = self.evaluate_with_runner(t, expression.expression)
 
         variable_values = [var.value for var in variables]
 

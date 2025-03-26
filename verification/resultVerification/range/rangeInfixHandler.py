@@ -6,6 +6,7 @@ from verification.resultVerification.range.rangeDto import RangeDto
 
 class RangeInfixHandler(BaseNodeHandler[RangeDto]):
     def __init__(self, infix_helper=InfixHelper()):
+        super().__init__()
         self.infix_helper = infix_helper
 
     def is_node(self, t: RangeDto):

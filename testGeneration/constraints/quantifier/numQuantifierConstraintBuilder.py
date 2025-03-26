@@ -13,6 +13,7 @@ class NumQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     def __init__(self, array_value_helper=ConstraintArrayValueHelper(),
                  num_quantifier_range_constraint_builder=NumQuantifierRangeConstraintBuilder(),
                  num_quantifier_value_constraint_builder=NumQuantifierValueConstraintBuilder()):
+        super().__init__()
         self.array_value_helper = array_value_helper
         self.num_quantifier_range_constraint_builder = num_quantifier_range_constraint_builder
         self.num_quantifier_value_constraint_builder = num_quantifier_value_constraint_builder
@@ -28,3 +29,10 @@ class NumQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
             return self.num_quantifier_range_constraint_builder.evaluate(expression, t)
 
         raise Exception("NumQuantifierConstraintBuilder: Invalid quantifier expression type")
+
+    def set_runner(self, runner):
+        super().set_runner(runner)
+        self.num_quantifier_range_constraint_builder.set_runner(runner)
+        self.num_quantifier_range_constraint_builder.set_runner(runner)
+
+
