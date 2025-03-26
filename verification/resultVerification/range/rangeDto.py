@@ -4,7 +4,7 @@ from definitions.evaluations.csp.parameters.rangeParameters import RangeParamete
 
 class RangeDto(BaseExecutionDto):
     def __init__(self, node, range_parameters: RangeParameters, constraint_builder, result):
-        super().__init__(node=node, parameters=range_parameters, result=result, runner=constraint_builder)
+        super().__init__(node=node, parameters=range_parameters, result=result)
         self.node = node
 
         from verification.resultVerification.range.rangeBuilder import RangeBuilder

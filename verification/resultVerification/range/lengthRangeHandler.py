@@ -14,7 +14,7 @@ class LengthRangeHandler(BaseNodeHandler[RangeDto]):
 
     def handle(self, t: RangeDto):
         expression: ArrayLengthNode = t.node
-        expr = t.evaluate_with_other_node(expression.arr_expr)
+        expr = self.evaluate_with_runner(t, expression.arr_expr)
 
         if isinstance(expr, list):
             return len(expr)

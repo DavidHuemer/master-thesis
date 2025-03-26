@@ -12,8 +12,8 @@ class QuestionMarkExpressionSimplifier(BaseNodeHandler[SimplificationDto]):
                 (hasattr(t.node, 'false_expr') and t.node.false_expr is not None))
 
     def handle(self, t: SimplificationDto):
-        expr = t.evaluate_with_other_node(t.node.expr)
-        true_expr = t.evaluate_with_other_node(t.node.true_expr)
-        false_expr = t.evaluate_with_other_node(t.node.false_expr)
+        expr = self.evaluate_with_runner(t, t.node.expr)
+        true_expr = self.evaluate_with_runner(t, t.node.true_expr)
+        false_expr = self.evaluate_with_runner(t, t.node.false_expr)
 
         return QuestionMarkNode(expr, true_expr, false_expr)

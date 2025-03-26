@@ -17,9 +17,8 @@ class MethodCallHandler(BaseNodeHandler[ConstraintsDto]):
         else:
             return self.handle_static_method(method)
 
-    @staticmethod
-    def handle_obj_method(t: ResultDto, method: MethodCallNode):
-        obj = t.evaluate_with_other_node(method.obj)
+    def handle_obj_method(self, t: ResultDto, method: MethodCallNode):
+        obj = self.evaluate_with_runner(t, method.obj)
         ident = method.name
 
         if not hasattr(obj, ident):
@@ -29,7 +28,7 @@ class MethodCallHandler(BaseNodeHandler[ConstraintsDto]):
         if not m:
             raise Exception(f"Method {ident} not found in object {obj}")
 
-        return m(*[t.evaluate_with_other_node(arg) for arg in method.args])
+        return m(*[self.evaluate_with_runner(t, arg) for arg in method.args])
 
     def handle_static_method(self, method: MethodCallNode):
         raise Exception("Not implemented yet")

@@ -30,11 +30,11 @@ class ArrayIndexSimplifier(BaseNodeHandler[SimplificationDto]):
         expr = self.evaluate_with_runner(t, t.node.expr)
 
         if self.is_array_node(t):
-            index_expr = t.evaluate_with_other_node(t.node.index_expr)
+            index_expr = self.evaluate_with_runner(t, t.node.index_expr)
             return ArrayIndexNode(expr, index_expr)
 
         if self.is_string_node(t):
-            method_expr = t.evaluate_with_other_node(t.node.getChild(2))
+            method_expr = self.evaluate_with_runner(t, t.node.getChild(2))
             if not isinstance(method_expr, MethodCallNode):
                 raise Exception("Method expression is not a MethodCallNode")
 

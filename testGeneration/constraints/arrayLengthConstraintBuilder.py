@@ -12,7 +12,7 @@ class ArrayLengthConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
 
     def handle(self, t: ConstraintsDto):
         parent_expr: ArrayLengthNode = t.node
-        expr = t.constraint_builder.evaluate(t.copy_with_other_node(parent_expr.arr_expr))
+        expr = self.evaluate_with_runner(t, parent_expr.arr_expr)
 
         if isinstance(expr, ArrayRef):
             length_param = t.constraint_parameters.csp_parameters.get_helper(str(expr), CSPParamHelperType.LENGTH)

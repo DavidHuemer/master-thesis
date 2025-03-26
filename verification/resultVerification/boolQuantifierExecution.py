@@ -7,6 +7,7 @@ from verification.resultVerification.resultDto import ResultDto
 
 class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
     def __init__(self, range_execution=RangeExecution()):
+        super().__init__()
         self.range_execution = range_execution
 
     def is_node(self, t: ResultDto):
@@ -26,7 +27,7 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
         # TODO: Add here all the range variables
 
         for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
-            evaluation_result = t.evaluate_with_other_node(expression.expression)
+            evaluation_result = self.evaluate_with_runner(t, expression.expression)
             if not evaluation_result:
                 for var_name in expression.variable_names:
                     t.get_result_parameters().local_parameters.pop(var_name[1])

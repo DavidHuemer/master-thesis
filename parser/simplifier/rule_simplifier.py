@@ -39,7 +39,9 @@ class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
             method_call_handler=method_simplifier
         )
         self.exception_simplifier = exception_simplifier
+        self.exception_simplifier.set_runner(self)
         self.reference_simplifier = reference_simplifier
+        self.reference_simplifier.set_runner(self)
 
     def evaluate(self, t: SimplificationDto):
         base_eval_result = super().evaluate(t)
@@ -59,14 +61,13 @@ class RuleSimplifier(BaseNodeRunner[SimplificationDto]):
 
         raise Exception(f"No simplification option found for rule: {str(t.node)}")
 
-    @staticmethod
-    def can_simplify(t: SimplificationDto) -> AstTreeNode | None:
+    def can_simplify(self, t: SimplificationDto) -> AstTreeNode | None:
         if t.node.getChildCount() == 1:
-            return t.evaluate_with_other_node(t.node.getChild(0))
+            return self.evaluate(t.copy_with_other_node(t.node.getChild(0)))
         elif isinstance(t.node, JMLParser.JMLParser.PrimaryContext) and t.node.getChildCount() == 3:
-            return t.evaluate_with_other_node(t.node.children[1])
+            return self.evaluate(t.copy_with_other_node(t.node.children[1]))
         elif isinstance(t.node, JMLParser.JMLParser.Atomic_valueContext) and t.node.getChildCount() == 3:
-            return t.evaluate_with_other_node(t.node.children[1])
+            return self.evaluate(t.copy_with_other_node(t.node.children[1]))
 
         return None
 

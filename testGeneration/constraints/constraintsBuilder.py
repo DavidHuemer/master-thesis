@@ -38,7 +38,6 @@ def add_expression_constraints(jml_problem: JMLProblem, expressions: list[AstTre
 
         constraints_dto = ConstraintsDto(node=expression,
                                          jml_problem=jml_problem,
-                                         constraint_builder=expr_constraint_builder,
                                          constraint_parameters=constraint_parameters)
         constraint = expr_constraint_builder.evaluate(constraints_dto)
         jml_problem.add_constraint(constraint)

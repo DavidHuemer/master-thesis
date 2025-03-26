@@ -6,7 +6,7 @@ from definitions.evaluations.csp.parameters.resultParameters import ResultParame
 
 class ResultDto(BaseExecutionDto):
     def __init__(self, node, result_parameters: ResultParameters, result, result_verifier, stop_event: threading.Event):
-        super().__init__(node=node, parameters=result_parameters, runner=result_verifier, result=result)
+        super().__init__(node=node, parameters=result_parameters, result=result)
         from verification.resultVerification.resultVerifier import ResultVerifier
         self.result_verifier: ResultVerifier = result_verifier
         self.stop_event = stop_event

@@ -42,12 +42,12 @@ class MethodCallSimplifier(BaseNodeHandler[SimplificationDto]):
         return MethodCallNode(ident, args)
 
     def handle_object_method(self, t: SimplificationDto):
-        method_t = SimplificationDto(t.node.method, t.runner, t.parser_result)
+        method_t = SimplificationDto(t.node.method, t.parser_result)
 
         ident = method_t.node.ident.text
         args = self.get_args(method_t)
 
-        obj = t.evaluate_with_other_node(t.node.expr)
+        obj = self.evaluate_with_runner(t, t.node.expr)
         return MethodCallNode(ident, args, obj)
 
     def get_args(self, t: SimplificationDto):
@@ -57,11 +57,11 @@ class MethodCallSimplifier(BaseNodeHandler[SimplificationDto]):
         else:
             return self.get_arg_expressions(arguments_expr.expressions, t)
 
-    @staticmethod
-    def get_arg_expressions(expressions_list_expr: JMLParser.JMLParser.ExpressionListContext, t: SimplificationDto):
+    def get_arg_expressions(self, expressions_list_expr: JMLParser.JMLParser.ExpressionListContext,
+                            t: SimplificationDto):
         # Filter real expressions
         real_expressions = list(filter(lambda x: isinstance(x, JMLParser.JMLParser.ExpressionContext),
                                        expressions_list_expr.children))
 
-        simplified_expressions = [t.evaluate_with_other_node(expr) for expr in real_expressions]
+        simplified_expressions = [self.evaluate_with_runner(t, expr) for expr in real_expressions]
         return simplified_expressions

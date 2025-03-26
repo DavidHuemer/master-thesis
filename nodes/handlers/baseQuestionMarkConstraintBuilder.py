@@ -12,8 +12,8 @@ class BaseQuestionMarkConstraintBuilder(BaseNodeHandler[BaseDto]):
 
     def handle(self, t: BaseDto):
         question_mark_expr: QuestionMarkNode = t.node
-        question_expr = t.evaluate_with_other_node(question_mark_expr.expr)
-        true_expr = t.evaluate_with_other_node(question_mark_expr.true_expr)
-        false_expr = t.evaluate_with_other_node(question_mark_expr.false_expr)
+        question_expr = self.evaluate_with_runner(t, question_mark_expr.expr)
+        true_expr = self.evaluate_with_runner(t, question_mark_expr.true_expr)
+        false_expr = self.evaluate_with_runner(t, question_mark_expr.false_expr)
 
         return If(question_expr, true_expr, false_expr)

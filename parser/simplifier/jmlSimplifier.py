@@ -62,7 +62,7 @@ class JmlSimplifier(Singleton):
             allowed_signals = self.allowed_signals_simplifier.simplify(condition)
             behavior_node.add_allowed_signals(allowed_signals)
             return
-        simplification_dto = SimplificationDto(condition.children[1], self.rule_simplifier, parser_result)
+        simplification_dto = SimplificationDto(condition.children[1], parser_result)
         expr = self.rule_simplifier.evaluate(simplification_dto)
 
         if isinstance(condition, JMLParser.JMLParser.Requires_conditionContext):

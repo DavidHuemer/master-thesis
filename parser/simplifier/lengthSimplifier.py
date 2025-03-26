@@ -21,5 +21,5 @@ class LengthSimplifier(BaseNodeHandler[SimplificationDto]):
 
 
     def handle(self, t: SimplificationDto):
-        arr_expr = t.evaluate_with_other_node(t.node.children[0])
+        arr_expr = self.evaluate_with_runner(t, t.node.children[0])
         return ArrayLengthNode(arr_expr)

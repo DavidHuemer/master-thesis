@@ -11,6 +11,11 @@ class QuantifierExecution(BaseNodeHandler[ResultDto]):
         self.bool_quantifier_execution = bool_quantifier_execution
         self.num_quantifier_execution = num_quantifier_execution
 
+    def set_runner(self, runner):
+        super().set_runner(runner)
+        self.bool_quantifier_execution.set_runner(runner)
+        self.num_quantifier_execution.set_runner(runner)
+
     def is_node(self, t: ResultDto):
         return self.bool_quantifier_execution.is_node(t) or self.num_quantifier_execution.is_node(t)
 

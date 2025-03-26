@@ -9,6 +9,6 @@ class BaseArrayIndexConstraintBuilder(BaseNodeHandler[BaseDto]):
 
     def handle(self, t: BaseDto):
         expression: ArrayIndexNode = t.node
-        array_expr = t.evaluate_with_other_node(expression.arr_expression)
-        index_expr = t.evaluate_with_other_node(expression.index_expression)
+        array_expr = self.evaluate_with_runner(t, expression.arr_expression)
+        index_expr = self.evaluate_with_runner(t, expression.index_expression)
         return array_expr[index_expr]
