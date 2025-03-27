@@ -15,9 +15,7 @@ class RangeInfixHandler(BaseNodeHandler[RangeDto]):
     def handle(self, t: RangeDto):
         expression: InfixExpression = t.node
         return self.infix_helper.evaluate_infix(infix_operator=expression.name,
-                                                left=lambda: t.constraint_builder.evaluate(
-                                                    t.copy_with_other_node(expression.left)),
-                                                right=lambda: t.constraint_builder.evaluate(
-                                                    t.copy_with_other_node(expression.right)),
+                                                left=lambda: self.evaluate_with_runner(t, expression.left),
+                                                right=lambda: self.evaluate_with_runner(t, expression.right),
                                                 is_smt=True,
                                                 csp_parameters=t.get_range_parameters().csp_parameters)

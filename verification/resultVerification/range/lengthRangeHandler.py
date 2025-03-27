@@ -1,8 +1,8 @@
+import jpype
 from jpype import java
 from z3 import ArrayRef, SeqRef, Length
 
 from definitions.ast.arrayLengthNode import ArrayLengthNode
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from nodes.baseNodeHandler import BaseNodeHandler
 from verification.resultVerification.range.rangeDto import RangeDto
 
@@ -16,12 +16,14 @@ class LengthRangeHandler(BaseNodeHandler[RangeDto]):
         expression: ArrayLengthNode = t.node
         expr = self.evaluate_with_runner(t, expression.arr_expr)
 
+        if isinstance(expr, jpype.JArray):
+            return len(expr)
+
         if isinstance(expr, list):
             return len(expr)
 
         if isinstance(expr, ArrayRef):
-            length_param = t.get_range_parameters().csp_parameters.get_helper(str(expr), CSPParamHelperType.LENGTH)
-            return length_param.value
+            return t.get_range_parameters().csp_parameters[str(expr)].length_param
 
         # Check if the expression is a java.lang.String
         if isinstance(expr, java.lang.String):

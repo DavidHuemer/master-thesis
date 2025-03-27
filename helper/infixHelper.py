@@ -15,12 +15,10 @@ class InfixHelper:
         if is_smt:
             right_expr = right()
             if (isinstance(left_expr, ArrayRef) or isinstance(left_expr, SeqRef)) and isinstance(right_expr, BoolRef):
-                # left_expr = get_param(is_null_name).value
-                left_expr = csp_parameters.get_helper(str(left_expr), CSPParamHelperType.IS_NULL).value
+                left_expr = csp_parameters[str(left_expr)].is_null_param
 
             if (isinstance(right_expr, ArrayRef) or isinstance(right_expr, SeqRef)) and isinstance(left_expr, BoolRef):
-                # is_null_name = f"{str(right_expr)}_is_null"
-                right_expr = csp_parameters.get_helper(str(right_expr), CSPParamHelperType.IS_NULL).value
+                right_expr = csp_parameters[str(right_expr)].is_null_param
         else:
             if infix_operator == "==>" and not left_expr:
                 return True

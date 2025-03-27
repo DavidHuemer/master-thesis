@@ -15,7 +15,6 @@ class ArrayLengthConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
         expr = self.evaluate_with_runner(t, parent_expr.arr_expr)
 
         if isinstance(expr, ArrayRef):
-            length_param = t.constraint_parameters.csp_parameters.get_helper(str(expr), CSPParamHelperType.LENGTH)
-            return length_param.value
+            return t.constraint_parameters.csp_parameters[str(expr)].length_param
         elif isinstance(expr, SeqRef):
             return Length(expr)

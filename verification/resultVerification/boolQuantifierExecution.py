@@ -42,7 +42,7 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
     def evaluate_exists(self, t: ResultDto):
         expression: BoolQuantifierTreeNode = t.node
         for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
-            evaluation_result = t.result_verifier.evaluate(t.copy_with_other_node(expression.expression))
+            evaluation_result = self.evaluate_with_runner(t, expression.expression)
             if evaluation_result:
                 return True
 

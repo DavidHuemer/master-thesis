@@ -15,8 +15,8 @@ class RangeParameters(BaseParameters):
     def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool):
         if use_old or use_this:
             return self.csp_parameters.get_parameter_by_key(key, use_old, use_this)
-
-        if self.csp_parameters.parameter_exists(key):
+        elif self.csp_parameters.parameter_exists(key):
             return self.csp_parameters.get_parameter_by_key(key, use_old, use_this).value
         elif self.result_parameters.parameter_exists(key):
             return self.result_parameters.get_parameter_by_key(key, use_old, use_this)
+

@@ -68,7 +68,7 @@ class NumQuantifierValueConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
 
         for expr in expression_list:
             if isinstance(expr, ArrayRef):
-                length_param = t.constraint_parameters.csp_parameters.get_helper(str(expr), CSPParamHelperType.LENGTH)
+                length_param = t.constraint_parameters.csp_parameters[str(expr)].length_param
                 value = self.array_value_helper.get_value_from_array(expr,
                                                                      length_param,
                                                                      expression.quantifier_type,

@@ -67,8 +67,8 @@ def get_protection(method: MethodDeclaration) -> ProtectionModifier:
 
 def get_return_type(method: MethodDeclaration) -> JavaTypeExtractionInfo:
     if hasattr(method, 'return_type'):
-        return_name = getattr(method.return_type, 'name', None)
-        dimension = len(getattr(method.return_type, 'dimensions', []))
+        return_name = getattr(method.return_type, 'name', 'void')
+        dimension = 0 if return_name == 'void' else len(getattr(method.return_type, 'dimensions', []))
         return JavaTypeExtractionInfo(return_name, dimension)
 
     return JavaTypeExtractionInfo('void')

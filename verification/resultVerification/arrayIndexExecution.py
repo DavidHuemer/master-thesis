@@ -10,8 +10,8 @@ class ArrayIndexExecution(BaseNodeHandler[ResultDto]):
 
     def handle(self, t: ResultDto):
         expression: ArrayIndexNode = t.node
-        arr = t.result_verifier.evaluate(t.copy_with_other_node(expression.arr_expression))
-        index = t.result_verifier.evaluate(t.copy_with_other_node(expression.index_expression))
+        arr = self.evaluate_with_runner(t, expression.arr_expression)
+        index = self.evaluate_with_runner(t, expression.index_expression)
 
         original = arr[index]
         return transform_to_jpype_value(original)

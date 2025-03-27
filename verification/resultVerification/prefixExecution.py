@@ -10,8 +10,7 @@ class PrefixExecution(BaseNodeHandler[ResultDto]):
 
     def handle(self, t: ResultDto):
         expression: PrefixNode = t.node
-
-        evaluated_expr = t.result_verifier.evaluate(t.copy_with_other_node(expression.expr))
+        evaluated_expr = self.evaluate_with_runner(t, expression.expr)
 
         if expression.prefix == '++':
             return evaluated_expr + 1

@@ -8,8 +8,7 @@ from testGeneration.constraints.typeRanges import get_min_max_values
 
 
 def add_array_constraint(jml_problem: JMLProblem, parameter: CSPParameter):
-    length_parameter = (jml_problem.parameters.csp_parameters
-                        .get_helper(parameter.name, CSPParamHelperType.LENGTH).value)
+    length_parameter = jml_problem.parameters.csp_parameters[parameter.name].length_param
     jml_problem.add_constraint(length_parameter >= 0)
 
     array_type = parameter.param_type

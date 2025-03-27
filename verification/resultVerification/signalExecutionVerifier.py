@@ -38,8 +38,8 @@ class SignalExecutionVerifier:
     def verify_signals(self, exception: ExecutionException, signals: list[ExceptionExpression],
                        result_parameters: ResultParameters, stop_event: threading.Event):
         for signal_condition in signals:
-            t = ResultDto(node=signal_condition.expression, result_verifier=self.result_verifier,
-                          result_parameters=result_parameters, result=None, stop_event=stop_event)
+            t = ResultDto(node=signal_condition.expression, result_parameters=result_parameters, result=None,
+                          stop_event=stop_event)
 
             if (verify_exception_subclass(exception, signal_condition.exception_type) and
                     self.result_verifier.evaluate(t)):

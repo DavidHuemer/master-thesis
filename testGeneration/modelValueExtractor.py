@@ -18,7 +18,7 @@ def get_value_of_param(csp_parameters: CSPParameters, param, model: ModelRef):
 
 
 def get_array_value(csp_parameters: CSPParameters, csp_parameter, param, model):
-    length_param = csp_parameters.get_helper(str(param), CSPParamHelperType.LENGTH).value
+    length_param = csp_parameters[str(param)].length_param
     length = model[length_param].as_long()
 
     wrapper = get_wrapper_for_type(csp_parameter.param_type)

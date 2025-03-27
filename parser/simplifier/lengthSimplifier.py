@@ -19,7 +19,6 @@ class LengthSimplifier(BaseNodeHandler[SimplificationDto]):
         return isinstance(t.node.children[2],
                           TerminalNodeImpl) and t.node.children[2].getText() == 'length'
 
-
     def handle(self, t: SimplificationDto):
         arr_expr = self.evaluate_with_runner(t, t.node.children[0])
         return ArrayLengthNode(arr_expr)

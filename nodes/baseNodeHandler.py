@@ -25,16 +25,6 @@ class BaseNodeHandler[T]:
         """
         raise NotImplemented
 
-    def evaluate(self, t: T):
-        """
-        Evaluate the node
-        :return:
-        """
-        if self.is_node(t):
-            return self.handle(t)
-
-        raise Exception(f"No runner specified: {str(t)}")
-
     def evaluate_with_runner(self, t: T, other):
         if not self.runner:
             raise Exception("No runner specified")

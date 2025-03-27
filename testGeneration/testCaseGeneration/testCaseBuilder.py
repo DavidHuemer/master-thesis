@@ -51,8 +51,8 @@ def build_test_case(jml_problem: JMLProblem, solution: ParameterModel) -> TestCa
 
 def get_array_values(jml_problem: JMLProblem, jml_problem_param, parameter_key: str, solution: ModelRef):
     # Get array length
-    length_param = jml_problem.parameters.csp_parameters.get_helper(parameter_key, CSPParamHelperType.LENGTH)
-    length_value = solution[length_param.value].as_long()
+    length_param = jml_problem.parameters.csp_parameters[parameter_key].length_param
+    length_value = solution[length_param].as_long()
     # Get array values
     array_values = []
     for i in range(length_value):

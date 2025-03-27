@@ -12,4 +12,4 @@ class ParameterModel:
             if not csp_parameters.parameter_exists(str(param)):
                 continue
             csp_param = csp_parameters[str(param)]
-            self.parameter_dict[csp_param.name] = get_value_of_param(csp_parameters, param, model)
+            self.parameter_dict[str(param)] = get_value_of_param(csp_parameters, param, model)

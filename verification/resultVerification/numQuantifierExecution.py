@@ -8,6 +8,7 @@ from verification.resultVerification.resultDto import ResultDto
 
 class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
     def __init__(self, range_execution=RangeExecution()):
+        super().__init__()
         self.range_execution = range_execution
 
     def is_node(self, t: ResultDto):
@@ -26,7 +27,7 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         raise Exception("NumQuantifierExecution: Invalid quantifier expression type")
 
     def evaluate_with_value(self, expression: NumQuantifierTreeNode, t: ResultDto):
-        values = [t.result_verifier.evaluate(t.copy_with_other_node(expr)) for expr in expression.expressions]
+        values = [self.evaluate_with_runner(t, expr) for expr in expression.expressions]
 
         # check if value is a list
         if not isinstance(values, list):
@@ -60,7 +61,7 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         r = self.range_execution.execute_range(expression.range_, expression.variable_names, t)
 
         for _ in r:
-            yield t.result_verifier.evaluate(t.copy_with_other_node(expression.expressions))
+            yield self.evaluate_with_runner(t, expression.expressions)
 
         for var_name in expression.variable_names:
             t.get_result_parameters().local_parameters.pop(var_name[1])

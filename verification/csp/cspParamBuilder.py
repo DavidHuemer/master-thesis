@@ -14,7 +14,7 @@ def build_csp_parameters(parameters: list[ParameterExtractionInfo]) -> CSPParame
         csp_parameters.add_csp_parameter(get_csp_param_for_param(param))
 
     build_special_parameters(csp_parameters)
-    build_helper_parameters(csp_parameters, parameters)
+    # build_helper_parameters(csp_parameters, parameters)
 
     return csp_parameters
 
@@ -49,18 +49,3 @@ def build_special_parameters(csp_parameters: CSPParameters):
 
     csp_parameters.add_csp_parameter(is_null_param)
     csp_parameters.is_null_helper_param = is_null_param
-
-
-def build_helper_parameters(csp_parameters: CSPParameters, parameters: list[ParameterExtractionInfo]):
-    # Build helper parameters for each parameter
-    for param in parameters:
-        # Add is null
-        is_null_name = find_csp_name(csp_parameters, f"{param.name}_is_null")
-        is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
-        csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.IS_NULL, is_null_param)
-
-        # Add length for array parameters
-        if param.is_array():
-            length_name = find_csp_name(csp_parameters, f"{param.name}_length")
-            length_param = CSPParameter(length_name, Int(length_name), "int", helper=True)
-            csp_parameters.add_helper_parameter(param.name, CSPParamHelperType.LENGTH, length_param)

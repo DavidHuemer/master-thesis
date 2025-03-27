@@ -1,5 +1,6 @@
 from z3 import Or, sat, ArrayRef
 
+from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
 from testGeneration.parameterModel import ParameterModel
 from verification.csp.jmlSolver import JmlSolver
@@ -36,9 +37,10 @@ class JMLProblem:
         return ParameterModel(model, self.parameters.csp_parameters) if model is not None else None
 
     @staticmethod
-    def get_distinct_constraints(csp_param, value):
-        if isinstance(csp_param, ArrayRef):
-            or_expressions = [csp_param[i] != value[i] for i in range(len(value))]
+    def get_distinct_constraints(csp_param : CSPParameter, value):
+        if csp_param.is_array():
+            or_expressions = [csp_param.value[i] != value[i] for i in range(len(value))]
+            or_expressions.append(csp_param.length_param != len(value))
             return Or(*or_expressions)
 
         return csp_param != value
@@ -66,7 +68,7 @@ class JMLProblem:
             return
 
         distinct_constraints = [
-            self.get_distinct_constraints(self.parameters.csp_parameters[key].value,
+            self.get_distinct_constraints(self.parameters.csp_parameters[key],
                                           parameter_model.parameter_dict[key])
             for key in parameter_model.parameter_dict
         ]
@@ -74,6 +76,9 @@ class JMLProblem:
         valid_constraints = [constraint for constraint in distinct_constraints if constraint is not None]
 
         if len(valid_constraints) == 0:
+            return
+        elif len(valid_constraints) == 1:
+            self.add_constraint(valid_constraints[0])
             return
 
         or_constraint = Or(*valid_constraints)

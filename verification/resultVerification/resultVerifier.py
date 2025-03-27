@@ -40,6 +40,9 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
         self.num_quantifier_execution = num_quantifier_execution
         self.infix_helper = infix_helper
 
+        self.bool_quantifier_execution.set_runner(self)
+        self.num_quantifier_execution.set_runner(self)
+
     def verify(self, result: ExecutionResult, behavior_node: BehaviorNode, result_parameters: ResultParameters,
                stop_event: threading.Event):
         try:
@@ -49,7 +52,6 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
                 result_dto = ResultDto(node=post_condition,
                                        result=result.result,
                                        result_parameters=result_parameters,
-                                       result_verifier=self,
                                        stop_event=stop_event)
                 if not self.evaluate(result_dto):
                     return False

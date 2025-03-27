@@ -30,23 +30,30 @@ class RangeExecution:
             quantifier_csp_parameters.add_csp_parameter(csp_param)
             method_param = t.get_result_parameters().method_call_parameters.get_parameter_by_key(csp_param.name, False,
                                                                                                  False)
+            range_problem.add_constraint(
+                quantifier_csp_parameters[csp_param.name].is_null_param == (method_param is None))
+
             if isinstance(csp_param.value, ArrayRef):
                 for i in range(len(method_param)):
                     range_problem.add_constraint(csp_param.value[i] == method_param[i])
+
+                range_problem.add_constraint(
+                    quantifier_csp_parameters[csp_param.name].length_param == len(method_param))
             else:
                 range_problem.add_constraint(csp_param.value == method_param)
 
-            helpers = t.get_result_parameters().csp_parameters.get_helper_list_for_parameter(csp_param.name)
+            # helpers = t.get_result_parameters().csp_parameters.get_helper_list_for_parameter(csp_param.name)
 
-            for helper in helpers:
-                csp_helper_key = t.get_result_parameters().csp_parameters.helper_parameters[helper]
-                csp_helper = t.get_result_parameters().csp_parameters[csp_helper_key]
-                quantifier_csp_parameters.add_helper_parameter(csp_param.name, helper[1], csp_helper)
-
-                if helper[1] == CSPParamHelperType.LENGTH:
-                    range_problem.add_constraint(csp_helper.value == len(method_param))
+            # for helper in helpers:
+            #     csp_helper_key = t.get_result_parameters().csp_parameters.helper_parameters[helper]
+            #     csp_helper = t.get_result_parameters().csp_parameters[csp_helper_key]
+            #     quantifier_csp_parameters.add_helper_parameter(csp_param.name, helper[1], csp_helper)
+            #
+            #     if helper[1] == CSPParamHelperType.LENGTH:
+            #         range_problem.add_constraint(csp_helper.value == len(method_param))
 
         range_parameters = RangeParameters(t.get_result_parameters(), quantifier_csp_parameters)
+        # range_parameters.result_parameters.local_parameters.clear()
         range_dto = RangeDto(node=range_, range_parameters=range_parameters, constraint_builder=self.range_builder,
                              result=t.result)
 
@@ -58,7 +65,12 @@ class RangeExecution:
 
         start_time = time.time()
 
+        counter = 0
         while range_problem.check() == sat and not t.stop_event.is_set():
+            counter += 1
+            if counter > 100000:
+                print("More than 100000 iterations")
+
             model = range_problem.get_model()
             solution = dict()
             constraints = []
