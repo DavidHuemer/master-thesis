@@ -5,11 +5,11 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class QuantifierExecution(BaseNodeHandler[ResultDto]):
-    def __init__(self, bool_quantifier_execution=BoolQuantifierExecution(),
-                 num_quantifier_execution=NumQuantifierExecution()):
+    def __init__(self, bool_quantifier_execution=None,
+                 num_quantifier_execution=None):
         super().__init__()
-        self.bool_quantifier_execution = bool_quantifier_execution
-        self.num_quantifier_execution = num_quantifier_execution
+        self.bool_quantifier_execution = bool_quantifier_execution or BoolQuantifierExecution()
+        self.num_quantifier_execution = num_quantifier_execution or NumQuantifierExecution()
 
     def set_runner(self, runner):
         super().set_runner(runner)

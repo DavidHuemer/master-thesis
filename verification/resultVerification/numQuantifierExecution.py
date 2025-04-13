@@ -7,9 +7,9 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
-    def __init__(self, range_execution=RangeExecution()):
+    def __init__(self, range_execution=None):
         super().__init__()
-        self.range_execution = range_execution
+        self.range_execution = range_execution or RangeExecution()
 
     def is_node(self, t: ResultDto):
         return isinstance(t.node, NumQuantifierTreeNode)
@@ -58,9 +58,7 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         return self.evaluate_list(expression, values)
 
     def get_values_by_range(self, expression: NumQuantifierTreeNode, t: ResultDto):
-        r = self.range_execution.execute_range(expression.range_, expression.variable_names, t)
-
-        for _ in r:
+        for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
             yield self.evaluate_with_runner(t, expression.expressions)
 
         for var_name in expression.variable_names:

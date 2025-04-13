@@ -33,6 +33,6 @@ class NumQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     def set_runner(self, runner):
         super().set_runner(runner)
         self.num_quantifier_range_constraint_builder.set_runner(runner)
-        self.num_quantifier_range_constraint_builder.set_runner(runner)
+        self.num_quantifier_value_constraint_builder.set_runner(runner)
 
 

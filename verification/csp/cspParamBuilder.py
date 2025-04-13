@@ -2,9 +2,7 @@ from z3 import Int, Array, IntSort, Real, Bool, RealSort, BoolSort, String, Stri
 
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.cspParameter import CSPParameter
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
-from verification.csp.cspParamNameGenerator import find_csp_name
 
 
 def build_csp_parameters(parameters: list[ParameterExtractionInfo]) -> CSPParameters:
@@ -12,9 +10,6 @@ def build_csp_parameters(parameters: list[ParameterExtractionInfo]) -> CSPParame
 
     for param in parameters:
         csp_parameters.add_csp_parameter(get_csp_param_for_param(param))
-
-    build_special_parameters(csp_parameters)
-    # build_helper_parameters(csp_parameters, parameters)
 
     return csp_parameters
 
@@ -40,12 +35,3 @@ def get_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
         return CSPParameter(param.name, single_type(param.name), param.variable_type)
 
     raise Exception(f"Parameter type {param.variable_type} is not supported")
-
-
-def build_special_parameters(csp_parameters: CSPParameters):
-    # Add is_null parameter
-    is_null_name = find_csp_name(csp_parameters, "is_null")
-    is_null_param = CSPParameter(is_null_name, Bool(is_null_name), "boolean", helper=True)
-
-    csp_parameters.add_csp_parameter(is_null_param)
-    csp_parameters.is_null_helper_param = is_null_param

@@ -17,33 +17,29 @@ def generate_solver_test_cases(jml_problem: JMLProblem) -> list[TestCase]:
     # All real parameters (that are not helper)
     real_parameters = jml_problem.parameters.csp_parameters.get_actual_parameters()
 
-    constraints = [x for x in get_constraints(jml_problem, real_parameters)]
-
-    return [result for constraint in constraints
-            if (result := generate_for_parameter_constraints(jml_problem, constraint)) is not None]
+    return [result for constraint in get_constraints(jml_problem, real_parameters)
+            if (result := generate_test_case_by_constraints(jml_problem, constraint)) is not None]
 
 
 def get_combinations(parameters):
     return product(*parameters)
 
 
-@inject
 def get_constraints(jml_problem: JMLProblem, parameters):
-    new_params = [TestConstraintsGenerator().get_test_constraints(jml_problem, element) for element in parameters]
-    return get_combinations(new_params)
+    constraints_per_parameter = [TestConstraintsGenerator().get_test_constraints(jml_problem, parameter) for parameter in parameters]
+    return get_combinations(constraints_per_parameter)
 
 
-def generate_for_parameter_constraints(jml_problem: JMLProblem, constraints):
+def generate_test_case_by_constraints(jml_problem: JMLProblem, constraints):
     singular_constraint = And(*constraints) if len(constraints) > 1 else constraints[0]
     jml_problem.push()
     jml_problem.add_constraint(singular_constraint)
 
     solution = jml_problem.get_solver_solution()
-    jml_problem.pop_constraint()
+    jml_problem.pop()
 
     if solution is not None:
         jml_problem.add_solution_constraint(solution)
-        x = build_test_case(jml_problem, solution)
-        return x
+        return build_test_case(jml_problem, solution)
 
     return None

@@ -2,6 +2,7 @@ from codeExecution.runtime.javaRuntimeClassLoader import get_class
 from definitions.evaluations.tests.testSuite import TestSuite
 from definitions.verification.verificatonException import VerificationException
 from verification.behaviors.behaviorsRunner import run_behaviors
+from verification.result.verificationResultFactory import VerificationResultFactory
 from verification.staticVerification.staticMethodVerifier import has_correct_method
 
 
@@ -16,5 +17,6 @@ def run_test_suite_verification(test_suite: TestSuite):
         raise VerificationException("Method does not exist")
 
     # 3. Run the test cases
-    return run_behaviors(test_class=test_class, behaviors=test_suite.behavior_tests,
+    return run_behaviors(test_class=test_class,
+                         behaviors=test_suite.behavior_tests,
                          consistency_test_case=test_suite.consistency_test_case)

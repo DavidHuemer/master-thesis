@@ -1,4 +1,4 @@
-from dependency_injector.wiring import inject
+import os
 
 from codeExecution.duplication.javaDuplicationHelper import duplicate_java_class
 from codeExecution.duplication.javaVariableExtractor import get_parameters
@@ -7,20 +7,18 @@ from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.codeExecution.result.resultInstances import ResultInstances
 from definitions.codeExecution.runtime.javaRuntimeClass import JavaRuntimeClass
 from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.envKeys import VALIDATION_TIMEOUT
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
 from definitions.verification.testCase import TestCase
 from helper.timeout.timeoutHelper import TimeoutHelper
 from testGeneration.testCaseGeneration.testCaseExecution import execute_method
 from verification.resultVerification.executionVerifier import ExecutionVerifier
-import jpype.imports
-
-
 
 
 class TestCaseRunner:
-    def __init__(self, timeout_helper=TimeoutHelper()):
-        self.timeout_helper = timeout_helper
+    def __init__(self, timeout_helper=None):
+        self.timeout_helper = timeout_helper or TimeoutHelper()
 
     # TODO: Return more than just a boolean (e.g. why the test failed)
     def run(self, test_class: JavaRuntimeClass,
@@ -46,6 +44,8 @@ class TestCaseRunner:
 
         result_instances = ResultInstances(old=old_duplicate, new=test_instance)
 
+        timeout = float(os.getenv(VALIDATION_TIMEOUT))
+
         return self.timeout_helper.run_with_timeout(
             method=lambda stop_event: ExecutionVerifier().verify(execution_result=execution_result,
                                                                  result_parameters=result_parameters,
@@ -54,4 +54,4 @@ class TestCaseRunner:
                                                                  consistency_test_case=consistency_test_case,
                                                                  test_case=test_case,
                                                                  result_instances=result_instances,
-                                                                 stop_event=stop_event), timeout=500)
+                                                                 stop_event=stop_event), timeout=timeout)

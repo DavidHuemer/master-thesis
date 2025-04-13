@@ -12,6 +12,10 @@ class LocalResultParameters(BaseParameters):
         if self.parameter_exists(key):
             self.parameters.pop(key)
 
+    def pop_var_names(self, var_names):
+        for var_name in var_names:
+            self.pop(var_name[1])
+
     def parameter_exists(self, key: str) -> bool:
         return key in self.parameters
 

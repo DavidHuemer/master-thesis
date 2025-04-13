@@ -1,4 +1,4 @@
-from z3 import Or, sat, ArrayRef
+from z3 import Or, sat
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.parameters.jmlParameters import JmlParameters
@@ -37,7 +37,7 @@ class JMLProblem:
         return ParameterModel(model, self.parameters.csp_parameters) if model is not None else None
 
     @staticmethod
-    def get_distinct_constraints(csp_param : CSPParameter, value):
+    def get_distinct_constraints(csp_param: CSPParameter, value):
         if csp_param.is_array():
             or_expressions = [csp_param.value[i] != value[i] for i in range(len(value))]
             or_expressions.append(csp_param.length_param != len(value))
@@ -52,7 +52,7 @@ class JMLProblem:
         """
         return self.solver.solver.check() == sat
 
-    def pop_constraint(self):
+    def pop(self):
         """
         Returns to the previous state of the solver.
         """

@@ -4,11 +4,10 @@ from z3 import ExprRef, ArrayRef, Bool, Int
 
 
 class CSPParameter:
-    def __init__(self, name: str, value: ExprRef, param_type: str, helper: bool = False):
+    def __init__(self, name: str, value: ExprRef | ArrayRef, param_type: str, helper: bool = False):
         self.name = name
         self.value = value
         self.param_type = param_type
-        self.is_helper = helper
 
         is_null_name = f"{name}_is_null_{uuid.uuid4()}"
         self.is_null_param = Bool(is_null_name)

@@ -20,8 +20,8 @@ def build_constraints(jml_problem: JMLProblem, expressions: list[AstTreeNode]):
 
 
 def add_special_constraints(jml_problem: JMLProblem):
-    is_null_param = jml_problem.parameters.csp_parameters.is_null_helper_param
-    jml_problem.add_constraint(is_null_param.value == True)
+    is_null_param = jml_problem.parameters.csp_parameters.is_null_param
+    jml_problem.add_constraint(is_null_param == True)
 
 
 def add_type_constraints(jml_problem: JMLProblem):

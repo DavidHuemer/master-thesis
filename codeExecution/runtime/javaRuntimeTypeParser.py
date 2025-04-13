@@ -7,7 +7,9 @@ class JavaRuntimeTypeParser:
             return 'double[]'
         elif java_type == '[Ljava.lang.String;':
             return 'String[]'
-        elif java_type == 'java.lang.String':
-            return 'String'
-        else:
-            return java_type
+
+        # Check if the type contains 'java.lang.' and remove it
+        if 'java.lang.' in java_type:
+            return java_type.replace('java.lang.', '')
+
+        return java_type

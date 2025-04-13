@@ -16,10 +16,7 @@ class NumQuantifierValueConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
         self.array_value_helper = array_value_helper
 
     def evaluate(self, expression, t: ConstraintsDto):
-        values = self.get_values(expression, t)
-        return self.evaluate_list(expression, values)
-
-    def evaluate_list(self, expression, values: list):
+        values: list = self.get_values(expression, t)
         if len(values) == 0:
             return None
 

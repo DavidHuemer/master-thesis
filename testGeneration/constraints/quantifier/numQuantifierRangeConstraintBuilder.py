@@ -1,3 +1,5 @@
+import uuid
+
 import z3.z3num
 from z3 import ForAll, Implies, And, Exists, ArithRef
 
@@ -21,8 +23,7 @@ class NumQuantifierRangeConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
 
         csp_parameters = self.quantifier_range_values_helper.get_variables(expression)
         # TODO: Include csp and loop parameters
-        tmp_key = find_csp_name(t.constraint_parameters, "tmp")
-        tmp_param = z3.Int(tmp_key)
+        tmp_param = z3.Int(f"tmp_{uuid.uuid4()}")
 
         for csp_param in csp_parameters:
             t.constraint_parameters.loop_parameters.add_csp_parameter(csp_param)
@@ -30,16 +31,13 @@ class NumQuantifierRangeConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
         csp_values = [csp_param.value for csp_param in csp_parameters]
         range_expr = self.evaluate_with_runner(t, expression.range_)
 
-        result_expr = self.evaluate_with_runner(t, expression.expressions)
+        value_expression = self.evaluate_with_runner(t, expression.expressions)
         comparison = self.get_comparison(tmp_param=tmp_param,
-                                         result_expr=result_expr,
+                                         result_expr=value_expression,
                                          quantifier_type=expression.quantifier_type)
 
-        for_implies = Implies(range_expr, comparison)
-        f = ForAll(csp_values, for_implies)
-
-        exists_and = And(range_expr, tmp_param == result_expr)
-        e = Exists(csp_values, exists_and)
+        f = ForAll(csp_values, Implies(range_expr, comparison))
+        e = Exists(csp_values, And(range_expr, tmp_param == value_expression))
 
         t.jml_problem.add_constraint(f)
         t.jml_problem.add_constraint(e)

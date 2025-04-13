@@ -6,6 +6,7 @@ from definitions.ast.astTreeNode import AstTreeNode
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 from definitions.evaluations.csp.parameters.rangeParameters import RangeParameters
+from testGeneration.testCaseGeneration.javaTypeMapper import get_python_from_java
 from verification.csp.cspParamBuilder import build_csp_parameters
 from verification.resultVerification.range.rangeBuilder import RangeBuilder
 from verification.resultVerification.range.rangeDto import RangeDto
@@ -14,8 +15,8 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class RangeExecution:
-    def __init__(self, range_builder=RangeBuilder()):
-        self.range_builder = range_builder
+    def __init__(self, range_builder=None):
+        self.range_builder = range_builder or RangeBuilder()
 
     def execute_range(self, range_: AstTreeNode, variables: list, t: ResultDto):
         range_problem = RangeProblem()
@@ -30,6 +31,8 @@ class RangeExecution:
             quantifier_csp_parameters.add_csp_parameter(csp_param)
             method_param = t.get_result_parameters().method_call_parameters.get_parameter_by_key(csp_param.name, False,
                                                                                                  False)
+
+            method_param = get_python_from_java(method_param)
             range_problem.add_constraint(
                 quantifier_csp_parameters[csp_param.name].is_null_param == (method_param is None))
 

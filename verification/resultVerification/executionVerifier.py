@@ -25,9 +25,9 @@ class ExecutionVerifier(Singleton):
     This class is responsible for verifying the execution of a test case
     """
 
-    def __init__(self, result_verifier=ResultVerifier(), signal_execution_verifier=SignalExecutionVerifier()):
-        self.result_verifier = result_verifier
-        self.signal_execution_verifier = signal_execution_verifier
+    def __init__(self, result_verifier=None, signal_execution_verifier=None):
+        self.result_verifier = result_verifier or ResultVerifier()
+        self.signal_execution_verifier = signal_execution_verifier or SignalExecutionVerifier()
 
     @execution_verifier_timer
     def verify(self, execution_result: ExecutionResult,

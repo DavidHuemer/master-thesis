@@ -1,8 +1,6 @@
 from z3 import ModelRef
 
 from definitions.evaluations.csp.jmlProblem import JMLProblem
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
-from definitions.evaluations.csp.parameters.methodCallParameters import MethodCallParameters
 from definitions.verification.testCase import TestCase
 from testGeneration.parameterModel import ParameterModel
 
@@ -15,8 +13,7 @@ def build_test_case(jml_problem: JMLProblem, solution: ParameterModel) -> TestCa
     :return: The test case
     """
 
-    method_call_parameters = MethodCallParameters()
-    #solution_param_keys = [str(var) for var in solution]
+    method_call_parameters = dict[str]()
     required_param_keys = [param.name for param in jml_problem.parameters.csp_parameters.get_actual_parameters()]
 
     for parameter_key in required_param_keys:

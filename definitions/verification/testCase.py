@@ -2,7 +2,7 @@ from definitions.evaluations.csp.parameters.methodCallParameters import MethodCa
 
 
 class TestCase:
-    def __init__(self, parameters: MethodCallParameters):
+    def __init__(self, parameters: dict[str]):
         self.parameters = parameters
 
     def __str__(self):

@@ -7,7 +7,7 @@ from parser.tree.astGenerator import get_ast_by_jml
 from testGeneration.testCollections.testCollectionsBuilder import build_test_collections
 
 
-def get_test_suite(test_case: ConsistencyTestCase, jml_code: str):
+def get_test_suite(test_case: ConsistencyTestCase, jml_code: str) -> TestSuite:
     ast = get_ast_by_jml(jml_code)
 
     return TestSuite(consistency_test_case=test_case,

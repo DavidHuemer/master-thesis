@@ -22,7 +22,9 @@ def run_behaviors(test_class: JavaRuntimeClass, behaviors: list[BehaviorTest],
         raise Exception("Class has no empty constructor")
 
     for behavior in behaviors:
-        behavior_result = run_behavior(behavior, test_class, consistency_test_case)
+        behavior_result = run_behavior(behavior=behavior,
+                                       test_class=test_class,
+                                       consistency_test_case=consistency_test_case)
         if not behavior_result.consistent:
             return VerificationResultFactory.inconsistent_result(consistency_test_case)
 
@@ -32,6 +34,7 @@ def run_behaviors(test_class: JavaRuntimeClass, behaviors: list[BehaviorTest],
 def run_behavior(behavior: BehaviorTest, test_class: JavaRuntimeClass,
                  consistency_test_case: ConsistencyTestCase) -> VerificationResult:
     log_info(f"Running behavior: {str(behavior)}")
+
     return run_test_collections(test_class=test_class,
                                 test_collections=behavior.test_collections,
                                 consistency_test_case=consistency_test_case,
