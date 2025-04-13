@@ -2,15 +2,20 @@
 * Add two integers
 */
 -----------------------------------
-//@requires true
-//@ensures \result == a + b
+//@ public normal_behavior
+//@ requires true
+//@ ensures \result == a + b
 ===================================
 /**
-* Multiplies by factor of 2
+* Divides two integers
+* @throws ArithmeticException if b == 0
 */
 -----------------------------------
 //@requires true
-//@ensures \result == 2 * a
+//@ensures \result == a / b
+//@also public exceptional_behavior
+//@requires b == 0
+//@signals (ArithmeticException e) b == 0
 ===================================
 /**
 * Returns an array with all elements greater than 0
@@ -25,3 +30,14 @@
 -----------------------------------
 //@ requires arr != null;
 //@ ensures \result == (\sum int i; 0 <= i && i < arr.length; arr[i]);
+===================================
+/**
+* Returns the first element of the array that is greater than 0
+* If there is no such element, returns -1
+*/
+-----------------------------------
+//@ public normal_behavior
+//@ requires arr != null;
+//@ requires arr.length > 0;
+//@ ensures \result == (\exists int i; 0 <= i && i < arr.length; arr[i] > 0) ? arr[0] : -1;
+//@ ensures \forall int i; 0 <= i && i < \result; arr[i] < 0;

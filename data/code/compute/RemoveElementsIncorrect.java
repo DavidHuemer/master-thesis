@@ -1,13 +1,15 @@
 public class RemoveElementsIncorrect {
     /**
-     * Returns a new array with all occurrences of an element removed.
-     * The original array is not modified.
-     * The new array may be shorter than the original array.
-     *
-     * @param arr the array from which the returning array is built (without the element to remove)
-     * @param b   the element to remove
-     * @return the new array with the element removed (may be shorter than the original array)
-     */
+    * Returns a new array with all occurrences of the specified element removed.
+    *
+    * This method iterates through the given array and constructs a new array
+    * that contains all elements except those equal to the specified value {@code b}.
+    *
+    *
+    * @param arr the input array of integers
+    * @param b the integer value to be removed from the array
+    * @return a new array containing all elements of {@code arr} except those equal to {@code b}
+    */
     public int[] removeElement(int[] arr, int b) {
         int count = 0;
         for (int i = 0; i < arr.length; i++) {

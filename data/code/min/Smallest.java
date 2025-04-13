@@ -1,10 +1,11 @@
 public class Smallest {
     /**
-     * Returns the smallest element in the given array.
-     * If the array is empty, returns -1.
+     * Returns the smallest number in the given array.
+     * If the array is empty, this method returns -1 as a sentinel value
+     * to indicate that there is no smallest element.
      * 
      * @param a the array of integers
-     * @return the smallest element in the array, or -1 if the array is empty
+     * @return the smallest integer in the array, or -1 if the array is empty
      */
     public int smallest(int[] a) {
         if (a.length == 0)

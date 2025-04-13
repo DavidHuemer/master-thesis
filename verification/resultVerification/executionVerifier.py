@@ -49,6 +49,7 @@ class ExecutionVerifier(Singleton):
             else:
                 # Validate result
                 if behavior.behavior_type == BehaviorType.EXCEPTIONAL_BEHAVIOR:
+                    self.log_result(consistency_test_case, test_case, execution_result.result, False)
                     return False
 
                 result = execution_result.result

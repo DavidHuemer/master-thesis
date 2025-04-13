@@ -56,16 +56,16 @@ def run_test_collections(test_class: JavaRuntimeClass, test_collections: TestCol
                                                                  parameters=str(test_case.parameters))
 
     # 2. Run exception tests
-    # for signal_collection in test_collections.signal_collections:
-    #     log_info(f"Running signal collection for {signal_collection.exception_type}")
-    #     for test_case in signal_collection.test_cases:
-    #         result = TestCaseRunner().run(test_class, test_case,
-    #                                       consistency_test_case=consistency_test_case,
-    #                                       behavior=behavior,
-    #                                       expected_exception=signal_collection.exception_type,
-    #                                       csp_parameters=signal_collection.csp_parameters)
-    #
-    #         if not result:
-    #             return VerificationResultFactory.inconsistent_result(consistency_test_case)
+    for signal_collection in test_collections.signal_collections:
+        log_info(f"Running signal collection for {signal_collection.exception_type}")
+        for test_case in signal_collection.test_cases:
+            result = TestCaseRunner().run(test_class, test_case,
+                                          consistency_test_case=consistency_test_case,
+                                          behavior=behavior,
+                                          expected_exception=signal_collection.exception_type,
+                                          csp_parameters=signal_collection.csp_parameters)
+
+            if not result:
+                return VerificationResultFactory.inconsistent_result(consistency_test_case)
 
     return VerificationResultFactory.consistent_result(consistency_test_case)

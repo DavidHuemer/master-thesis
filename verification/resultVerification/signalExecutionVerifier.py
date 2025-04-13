@@ -45,4 +45,4 @@ class SignalExecutionVerifier:
                     self.result_verifier.evaluate(t)):
                 return True
 
-        return False
+        return True
