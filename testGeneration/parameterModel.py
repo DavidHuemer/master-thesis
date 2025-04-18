@@ -12,4 +12,9 @@ class ParameterModel:
             if not csp_parameters.parameter_exists(str(param)):
                 continue
             csp_param = csp_parameters[str(param)]
+
+            if model[csp_param.is_null_param]:
+                self.parameter_dict[str(param)] = None
+                continue
+
             self.parameter_dict[str(param)] = get_value_of_param(csp_parameters, param, model)

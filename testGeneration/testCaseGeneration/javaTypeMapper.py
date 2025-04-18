@@ -56,7 +56,7 @@ def get_java_parameters(test_case: TestCase, parameter_infos: list[ParameterExtr
 
     for parameter_info in parameter_infos:
         param_value = test_case.parameters[parameter_info.name]
-        java_param_value = get_java_parameter(param_value, parameter_info)
+        java_param_value = get_java_parameter(param_value, parameter_info) if param_value is not None else None
         method_call_parameters[parameter_info.name] = MethodCallParameter(java_param_value)
 
     return method_call_parameters
