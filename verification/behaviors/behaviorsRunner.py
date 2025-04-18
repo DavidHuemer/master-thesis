@@ -1,5 +1,3 @@
-from codetiming import Timer
-
 from codeExecution.runtime.javaClassConstructorHelper import JavaClassConstructorHelper
 from definitions.codeExecution.runtime.javaRuntimeClass import JavaRuntimeClass
 from definitions.consistencyTestCase import ConsistencyTestCase
@@ -9,10 +7,7 @@ from helper.logs.loggingHelper import log_info
 from testGeneration.testCollections.testCollectionsRunner import run_test_collections
 from verification.result.verificationResultFactory import VerificationResultFactory
 
-behavior_runner_timer = Timer(name="run_behaviors", logger=None)
 
-
-@behavior_runner_timer
 def run_behaviors(test_class: JavaRuntimeClass, behaviors: list[BehaviorTest],
                   consistency_test_case: ConsistencyTestCase) -> VerificationResult:
     log_info("Running test behaviors")

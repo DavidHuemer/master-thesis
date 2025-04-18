@@ -5,9 +5,9 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class InfixExecution(BaseNodeHandler[ResultDto]):
-    def __init__(self, infix_helper=InfixHelper()):
+    def __init__(self, infix_helper=None):
         super().__init__()
-        self.infix_helper = infix_helper
+        self.infix_helper = infix_helper or InfixHelper()
 
     def is_node(self, t: ResultDto):
         return isinstance(t.node, InfixExpression)

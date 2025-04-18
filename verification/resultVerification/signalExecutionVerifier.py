@@ -12,8 +12,8 @@ from verification.resultVerification.resultVerifier import ResultVerifier
 
 
 class SignalExecutionVerifier:
-    def __init__(self, result_verifier=ResultVerifier()):
-        self.result_verifier = result_verifier
+    def __init__(self, result_verifier=None):
+        self.result_verifier = result_verifier or ResultVerifier()
 
     def verify_signal(self, exception: ExecutionException,
                       behavior: BehaviorNode,
@@ -37,12 +37,18 @@ class SignalExecutionVerifier:
 
     def verify_signals(self, exception: ExecutionException, signals: list[ExceptionExpression],
                        result_parameters: ResultParameters, stop_event: threading.Event):
-        for signal_condition in signals:
-            t = ResultDto(node=signal_condition.expression, result_parameters=result_parameters, result=None,
+        matching_signals = [signal_condition for signal_condition in signals
+                            if verify_exception_subclass(exception, signal_condition.exception_type)]
+
+        if len(matching_signals) == 0:
+            return True
+
+        return all(
+            self.result_verifier.evaluate(
+                ResultDto(node=signal_condition.expression,
+                          result_parameters=result_parameters,
+                          result=None,
                           stop_event=stop_event)
-
-            if (verify_exception_subclass(exception, signal_condition.exception_type) and
-                    self.result_verifier.evaluate(t)):
-                return True
-
-        return True
+            )
+            for signal_condition in matching_signals
+        )

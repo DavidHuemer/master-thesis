@@ -17,8 +17,6 @@ from util.Singleton import Singleton
 from verification.resultVerification.resultVerifier import ResultVerifier
 from verification.resultVerification.signalExecutionVerifier import SignalExecutionVerifier
 
-execution_verifier_timer = Timer(name="execution_verifier", logger=None)
-
 
 class ExecutionVerifier(Singleton):
     """
@@ -29,7 +27,6 @@ class ExecutionVerifier(Singleton):
         self.result_verifier = result_verifier or ResultVerifier()
         self.signal_execution_verifier = signal_execution_verifier or SignalExecutionVerifier()
 
-    @execution_verifier_timer
     def verify(self, execution_result: ExecutionResult,
                result_parameters: ResultParameters,
                consistency_test_case: ConsistencyTestCase,
@@ -37,8 +34,14 @@ class ExecutionVerifier(Singleton):
                result_instances: ResultInstances, stop_event: threading.Event):
 
         try:
-            if execution_result.exception is not None:
-                # Validate exception
+            if execution_result.exception is None:
+                # validate result
+                result = execution_result.result
+                verification_result = self.verify_result(execution_result=execution_result,
+                                                         behavior=behavior,
+                                                         result_parameters=result_parameters, stop_event=stop_event)
+            else:
+                # validate exception
                 result = execution_result.exception
                 verification_result = self.verify_exception(exception=execution_result.exception,
                                                             behavior=behavior,
@@ -46,16 +49,6 @@ class ExecutionVerifier(Singleton):
                                                             signal_conditions=behavior.signals_conditions,
                                                             result_parameters=result_parameters,
                                                             stop_event=stop_event)
-            else:
-                # Validate result
-                if behavior.behavior_type == BehaviorType.EXCEPTIONAL_BEHAVIOR:
-                    self.log_result(consistency_test_case, test_case, execution_result.result, False)
-                    return False
-
-                result = execution_result.result
-                verification_result = self.verify_result(execution_result=execution_result,
-                                                         behavior=behavior,
-                                                         result_parameters=result_parameters, stop_event=stop_event)
 
             self.log_result(consistency_test_case, test_case, result, verification_result)
             return verification_result

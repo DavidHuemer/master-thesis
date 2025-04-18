@@ -3,15 +3,12 @@ import threading
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
-from helper.infixHelper import InfixHelper
 from helper.logs.loggingHelper import log_error
 from nodes.baseNodeRunner import BaseNodeRunner
 from verification.resultVerification.arrayIndexExecution import ArrayIndexExecution
-from verification.resultVerification.boolQuantifierExecution import BoolQuantifierExecution
 from verification.resultVerification.infixExecution import InfixExecution
 from verification.resultVerification.lengthExecution import LengthExecution
 from verification.resultVerification.methodCallExecution import MethodCallExecution
-from verification.resultVerification.numQuantifierExecution import NumQuantifierExecution
 from verification.resultVerification.prefixExecution import PrefixExecution
 from verification.resultVerification.quantifier_execution import QuantifierExecution
 from verification.resultVerification.questionMarkExecution import QuestionMarkExecution
@@ -20,8 +17,7 @@ from verification.resultVerification.terminalExecution import TerminalExecution
 
 
 class ResultVerifier(BaseNodeRunner[ResultDto]):
-    def __init__(self, terminal_execution=None, bool_quantifier_execution=None,
-                 num_quantifier_execution=None, infix_helper=None,
+    def __init__(self, terminal_execution=None,
                  infix_execution=None, prefix_execution=None,
                  quantifier_execution=None, length_execution=None,
                  method_call_execution=None, array_index_execution=None,
@@ -36,12 +32,6 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
             array_index_handler=array_index_execution or ArrayIndexExecution(),
             question_mark_handler=question_mark_execution or QuestionMarkExecution()
         )
-        self.bool_quantifier_execution = bool_quantifier_execution or BoolQuantifierExecution()
-        self.num_quantifier_execution = num_quantifier_execution or NumQuantifierExecution()
-        self.infix_helper = infix_helper or InfixHelper()
-
-        self.bool_quantifier_execution.set_runner(self)
-        self.num_quantifier_execution.set_runner(self)
 
     def verify(self, result: ExecutionResult, behavior_node: BehaviorNode, result_parameters: ResultParameters,
                stop_event: threading.Event):

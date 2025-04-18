@@ -19,6 +19,8 @@ from verification.resultVerification.executionVerifier import ExecutionVerifier
 class TestCaseRunner:
     def __init__(self, timeout_helper=None):
         self.timeout_helper = timeout_helper or TimeoutHelper()
+        self.execution_verifier = ExecutionVerifier()
+        self.timeout = float(os.getenv(VALIDATION_TIMEOUT))
 
     # TODO: Return more than just a boolean (e.g. why the test failed)
     def run(self, test_class: JavaRuntimeClass,
@@ -44,14 +46,12 @@ class TestCaseRunner:
 
         result_instances = ResultInstances(old=old_duplicate, new=test_instance)
 
-        timeout = float(os.getenv(VALIDATION_TIMEOUT))
-
         return self.timeout_helper.run_with_timeout(
-            method=lambda stop_event: ExecutionVerifier().verify(execution_result=execution_result,
-                                                                 result_parameters=result_parameters,
-                                                                 behavior=behavior,
-                                                                 expected_exception=expected_exception,
-                                                                 consistency_test_case=consistency_test_case,
-                                                                 test_case=test_case,
-                                                                 result_instances=result_instances,
-                                                                 stop_event=stop_event), timeout=timeout)
+            method=lambda stop_event: self.execution_verifier.verify(execution_result=execution_result,
+                                                                     result_parameters=result_parameters,
+                                                                     behavior=behavior,
+                                                                     expected_exception=expected_exception,
+                                                                     consistency_test_case=consistency_test_case,
+                                                                     test_case=test_case,
+                                                                     result_instances=result_instances,
+                                                                     stop_event=stop_event), timeout=self.timeout)
