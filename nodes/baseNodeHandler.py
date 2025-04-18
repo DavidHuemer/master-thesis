@@ -8,6 +8,7 @@ T = TypeVar('T')
 class BaseNodeHandler[T]:
     def __init__(self):
         self.runner: nodes.baseNodeRunner.BaseNodeRunner[T] | None = None
+        self.sub_handlers = []
 
     def is_node(self, t: T):
         """
@@ -33,3 +34,5 @@ class BaseNodeHandler[T]:
 
     def set_runner(self, runner):
         self.runner = runner
+        for handler in self.sub_handlers:
+            handler.set_runner(runner)
