@@ -25,7 +25,7 @@ class VerificationResult:
 
     def get_expected_result(self) -> bool | None:
         return None if self.consistency_test_case.expected_result is None \
-            else self.consistency_test_case.expected_result
+            else self.consistency_test_case.expected_result.expected_result
 
     def get_message(self):
         return self.message if self.message is not None else 'No further message'

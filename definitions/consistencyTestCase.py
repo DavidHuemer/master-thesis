@@ -17,7 +17,7 @@ class ConsistencyTestCase:
         """
         self.java_code = java_code
         self.method_info = method_info
-        self.expected_result = expected_result.expected_result
+        self.expected_result = expected_result
 
     def get_comment(self):
         """

@@ -1,23 +1,20 @@
 from typing import List, Optional
+
+from dependency_injector.providers import Callable
 from prettytable import PrettyTable
 from definitions.verification.verificationResult import VerificationResult
 from helper.logs.loggingHelper import log_info
 
 
 def write_confusion_matrix(verification_results: List[VerificationResult]):
-    results_with_expected_result = filter_results_by_condition(
-        verification_results,
-        lambda x: x.consistency_test_case.expected_result is not None
-    )
+    results_with_expected_result = [result for result in verification_results
+                                    if result.consistency_test_case.expected_result is not None]
 
-    expected_consistencies = filter_results_by_condition(
-        results_with_expected_result,
-        lambda x: x.consistency_test_case.expected_result is True
-    )
-    expected_inconsistencies = filter_results_by_condition(
-        results_with_expected_result,
-        lambda x: x.consistency_test_case.expected_result is False
-    )
+    expected_consistencies = [result for result in results_with_expected_result
+                              if result.get_expected_result() is True]
+
+    expected_inconsistencies = [result for result in results_with_expected_result
+                                if result.get_expected_result() is False]
 
     confusion_data = {
         "true_positive": count_results(expected_consistencies, True),
@@ -55,7 +52,8 @@ def write_confusion_matrix(verification_results: List[VerificationResult]):
     log_info(table.get_string())
 
 
-def filter_results_by_condition(results: List[VerificationResult], condition) -> List[VerificationResult]:
+def filter_results_by_condition(results: List[VerificationResult], condition) \
+        -> List[VerificationResult]:
     """Filter a list of results based on a given condition."""
     return list(filter(condition, results))
 

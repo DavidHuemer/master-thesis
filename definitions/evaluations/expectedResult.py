@@ -3,7 +3,7 @@ class ExpectedResult:
     This class is used to store the expected result of a method in a file.
     """
 
-    def __init__(self, file_path: str, method_name: str, expected_result: bool):
+    def __init__(self, file_path: str, method_name: str, expected_result: bool, category: str):
         """
         Initializes the ExpectedResult object
         :param file_path: The file path of the java file
@@ -14,6 +14,7 @@ class ExpectedResult:
         self.file_path = file_path
         self.method_name = method_name
         self.expected_result = expected_result
+        self.category = category
 
     def __str__(self):
         return f"{self.file_path}  =>  {self.method_name}={self.expected_result})"
