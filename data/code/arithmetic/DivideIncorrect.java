@@ -7,11 +7,11 @@ public class DivideIncorrect {
      * @param b the divisor
      * @return the quotient
      * 
-     * @throws IllegalArgumentException if the divisor is zero
+     * @throws ArithmeticException if the divisor is zero
      */
     public int divide(int a, int b) {
         if (b == 0) {
-            throw new IllegalArgumentException("Cannot divide by zero");
+            throw new ArithmeticException("Cannot divide by zero");
         }
 
         return b / a;

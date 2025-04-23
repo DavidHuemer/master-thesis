@@ -1,3 +1,5 @@
 You are a JML (Java Modeling Language) expert.
 
 I will give you a JavaDoc comment, and you will generate the JML specification for the method.
+Generate only the JML specification, nothing else.
+Every line should start with the Java Comment symbol "//"
