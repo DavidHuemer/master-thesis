@@ -1,0 +1,6 @@
+Generate a JML (Java Modelling Language) for the following JavaDoc:
+{javadoc}
+
+Only include the JML, nothing else.
+Every line should start with the Java Comment symbol "//"
+Do not use any external classes or methods.

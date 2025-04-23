@@ -41,7 +41,8 @@ class ConstraintArrayValueHelper:
     def get_min(self, array: ArrayRef, length: ArithRef, t: ConstraintsDto):
         return self.get_comparison(t, array, length, lambda a, b: a <= b)
 
-    def get_comparison(self, t: ConstraintsDto, array: ArrayRef, length: ArithRef,
+    @staticmethod
+    def get_comparison(t: ConstraintsDto, array: ArrayRef, length: ArithRef,
                        comparison: Callable[[ExprRef, ExprRef], Any]):
 
         i = Int('index')

@@ -1,3 +1,5 @@
+import z3
+
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from verification.testConstraints.baseTestContraintsGenerator import BaseTestConstraintsGenerator
 

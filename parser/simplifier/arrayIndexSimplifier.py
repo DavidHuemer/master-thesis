@@ -20,7 +20,8 @@ class ArrayIndexSimplifier(BaseNodeHandler[SimplificationDto]):
                 and ObjectHelper.check_has_child(t.node, "expr")
                 and ObjectHelper.check_has_child(t.node, "index_expr"))
 
-    def is_string_node(self, t: SimplificationDto):
+    @staticmethod
+    def is_string_node(t: SimplificationDto):
         return (t.node.getChildCount() == 3
                 and ObjectHelper.check_child_text(t.node, 1, '.')
                 and isinstance(t.node.getChild(2), JMLParser.JMLParser.Method_callContext)

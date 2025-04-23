@@ -17,7 +17,7 @@ class MethodCallHandler(BaseNodeHandler[ConstraintsDto]):
         else:
             return self.handle_static_method(method)
 
-    def handle_obj_method(self, t: ResultDto, method: MethodCallNode):
+    def handle_obj_method(self, t: ConstraintsDto, method: MethodCallNode):
         obj = self.evaluate_with_runner(t, method.obj)
         ident = method.name
 
