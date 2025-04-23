@@ -1,5 +1,4 @@
 import os
-import time
 import traceback
 
 from definitions.consistencyTestCase import ConsistencyTestCase
@@ -7,6 +6,7 @@ from definitions.envKeys import MAX_RETRIES, JML_FILE, PARALLEL
 from helper.logs.loggingHelper import log_debug, log_error, log_info
 from jml.jmlGeneration.jmlProvider import JmlProvider
 from jml.jmlGeneration.jmlStorage import store_jml_for_test_case
+from pipeline.consistencyPipelineLogsContainer import add_consistency_log
 from pipeline.jmlVerifier.jmlVerifier import verify_jml
 from util import multiProcessUtil
 from util.Singleton import Singleton
@@ -35,7 +35,8 @@ class ConsistencyResultRunner(Singleton):
 
     def get_result_by_jml(self, consistency_test: ConsistencyTestCase, jml_code: str):
         try:
-            log_debug("JMl code: \n" + jml_code.strip())
+            log_debug(f"JMl code: \n{jml_code.strip()}")
+            add_consistency_log(f"JML code \n {jml_code.strip()}")
             result = verify_jml(consistency_test, jml_code)
 
             if self.parallel:

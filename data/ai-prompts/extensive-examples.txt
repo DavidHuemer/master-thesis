@@ -12,4 +12,5 @@ This also applies to String data types.
 The only String method that is allowed is .length().
 In preconditions (requires) you can use these kind of methods.
 
-Connect multiple behaviors with @also
+Some examples of JavaDoc to JML transformations:
+{examples}

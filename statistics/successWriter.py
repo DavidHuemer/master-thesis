@@ -3,13 +3,11 @@ from helper.logs.loggingHelper import log_info
 
 
 def write_success(test_results: list[VerificationResult]):
-    results = get_results_with_expected_result(test_results)
+    results = [result for result in test_results if result.consistency_test_case.expected_result is not None]
 
-    successful_results = list(
-        filter(lambda x: x.consistent == x.consistency_test_case.expected_result, results))
-    successful_len = len(successful_results)
+    successful_results = [result for result in results if result.consistent == result.get_expected_result()]
 
-    success = successful_len * 100 / len(results)
+    success = len(successful_results) * 100 / len(results)
     log_info(f"Success rate: {success}%")
 
 

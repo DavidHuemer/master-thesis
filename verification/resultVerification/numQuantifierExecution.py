@@ -7,9 +7,9 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
-    def __init__(self, range_execution=None):
+    def __init__(self, range_execution=None, quantifier_exec=None):
         super().__init__()
-        self.range_execution = range_execution or RangeExecution()
+        self.range_execution = range_execution or RangeExecution(quantifier_exec=quantifier_exec)
 
     def is_node(self, t: ResultDto):
         return isinstance(t.node, NumQuantifierTreeNode)

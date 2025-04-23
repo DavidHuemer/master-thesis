@@ -15,8 +15,8 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class RangeExecution:
-    def __init__(self, range_builder=None):
-        self.range_builder = range_builder or RangeBuilder()
+    def __init__(self, range_builder=None, quantifier_exec=None):
+        self.range_builder = range_builder or RangeBuilder(quantifier_range_execution=quantifier_exec)
 
     def execute_range(self, range_: AstTreeNode, variables: list, t: ResultDto):
         range_problem = RangeProblem()

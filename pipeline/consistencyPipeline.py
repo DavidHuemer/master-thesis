@@ -9,8 +9,10 @@ from codeExecution.compilation.javaCompilationRunner import compile_java_files
 from codeExecution.vm.javaVm import is_java_vm_started, start_java_vm
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.envKeys import JML_FILE
+from definitions.verification.verificationResult import VerificationResult
 from helper.logs.loggingHelper import log_info, log_error
 from jml.jmlFileHelper import get_jml_file
+from pipeline.consistencyPipelineLogsContainer import consistency_logs, clear_consistency_logs
 from pipeline.consistencyResultRunner import ConsistencyResultRunner
 from util import multiProcessUtil
 from util.envUtil import get_required_env_dict
@@ -20,8 +22,8 @@ inconsistency_pipeline_timer = Timer(name="run_consistency_pipeline", logger=Non
 
 
 @inconsistency_pipeline_timer
-def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]):
-    log_info("Starting consistfency pipeline")
+def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]) -> list[VerificationResult]:
+    log_info("Starting consistency pipeline")
 
     try:
         compile_java_files([c.java_code.file_path for c in consistency_tests])
@@ -37,7 +39,7 @@ def run_consistency_pipeline(consistency_tests: list[ConsistencyTestCase]):
         return [VerificationResultFactory.by_exception(test_case, e) for test_case in consistency_tests]
 
 
-def run_consistency_pipeline_parallel(consistency_tests: list[ConsistencyTestCase]):
+def run_consistency_pipeline_parallel(consistency_tests: list[ConsistencyTestCase]) -> list[VerificationResult]:
     env_dict = get_required_env_dict()
     log_lock = multiprocessing.Lock()
     ordered_consistency_tests = sorted(consistency_tests, key=lambda x: get_consistency_test_case_order(x),
@@ -76,9 +78,10 @@ def initialize_consistency_process(env_dict: dict[str, str], log_lock: multiproc
     log_info("Initialized consistency process")
 
 
-def run_consistency_process(value):
+def run_consistency_process(value: ConsistencyTestCase):
     try:
         log_info(f"Running consistency process for {str(value)}")
+        clear_consistency_logs()
 
         if not is_java_vm_started():
             start_java_vm()

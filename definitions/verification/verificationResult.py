@@ -4,12 +4,13 @@ from definitions.consistencyTestCase import ConsistencyTestCase
 class VerificationResult:
     def __init__(self, consistency_test_case: ConsistencyTestCase, consistent: bool | None, parameters: str | None,
                  message: str | None,
-                 exception: Exception | None):
+                 exception: Exception | None, logs: list[str]):
         self.consistency_test_case = consistency_test_case
         self.consistent = consistent
         self.parameters = parameters
         self.message = message
         self.exception = exception
+        self.logs = logs
 
     def get_error_message(self):
         if self.exception is None:

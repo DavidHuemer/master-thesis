@@ -17,9 +17,9 @@ behavior_expr:
 
 default_behavior: condition+;
 
-normal_behavior: PUBLIC NORMAL_BEHAVIOR condition*;
+normal_behavior: PUBLIC? NORMAL_BEHAVIOR condition*;
 
-exceptional_behavior: PUBLIC EXCEPTIONAL_BEHAVIOR condition*;
+exceptional_behavior: PUBLIC? EXCEPTIONAL_BEHAVIOR condition*;
 
 condition: (
 		requires_condition

@@ -1,5 +1,6 @@
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.verification.verificationResult import VerificationResult
+from pipeline.consistencyPipelineLogsContainer import consistency_logs, get_consistency_logs
 
 
 class VerificationResultFactory:
@@ -17,7 +18,8 @@ class VerificationResultFactory:
                                   consistent=None,
                                   parameters=None,
                                   message=message,
-                                  exception=exception)
+                                  exception=exception,
+                                  logs=get_consistency_logs())
 
     @staticmethod
     def inconsistent_result(consistency_test_case, parameters: str | None = None):
@@ -25,7 +27,8 @@ class VerificationResultFactory:
                                   consistent=False,
                                   parameters=parameters,
                                   message=None,
-                                  exception=None)
+                                  exception=None,
+                                  logs=get_consistency_logs())
 
     @staticmethod
     def consistent_result(consistency_test_case):
@@ -33,4 +36,5 @@ class VerificationResultFactory:
                                   consistent=True,
                                   parameters=None,
                                   message=None,
-                                  exception=None)
+                                  exception=None,
+                                  logs=get_consistency_logs())

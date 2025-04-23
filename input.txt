@@ -1,6 +1,21 @@
-//@ public normal_behavior
-//@  requires a != null;
-//@  requires 0 <= i <= j <= a.length;
-//@ also public exceptional_behavior
-//@  requires a == null || !(0 <= i <= j <= a.length);
-//@  signals_only NullPointerException, ArrayIndexOutOfBoundsException;
+// @ public normal_behavior
+// @ requires balance >= 0;
+// @ requires amount >= 0;
+// @ requires amount <= balance;
+// @ ensures \result == balance - amount;
+//
+// @ public exceptional_behavior
+// @ requires amount < 0;
+// @ signals (IllegalArgumentException e);
+//
+// @ public exceptional_behavior
+// @ requires amount > balance;
+// @ signals (IllegalArgumentException e);
+//
+// @ public exceptional_behavior
+// @ requires balance < 0;
+// @ signals (IllegalArgumentException e);
+//
+// @ public exceptional_behavior
+// @ requires balance - amount < 0;
+// @ signals (IllegalArgumentException e);
