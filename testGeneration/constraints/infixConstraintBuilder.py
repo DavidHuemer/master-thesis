@@ -1,3 +1,5 @@
+from typing import cast
+
 from definitions.ast.infixExpression import InfixExpression
 from helper.infixHelper import InfixHelper
 from nodes.baseNodeHandler import BaseNodeHandler
@@ -13,7 +15,7 @@ class InfixConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
         return isinstance(t.node, InfixExpression) and hasattr(t.node, "left") and hasattr(t.node, "right")
 
     def handle(self, t: ConstraintsDto):
-        expression: InfixExpression = t.node
+        expression: InfixExpression = cast(InfixExpression, t.node)
         return self.infix_helper.evaluate_infix(infix_operator=expression.name,
                                                 left=lambda: self.evaluate_with_runner(t, expression.left),
                                                 right=lambda: self.evaluate_with_runner(t, expression.right),

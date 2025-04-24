@@ -106,6 +106,7 @@ bool_quantifier_core_expression:
 	types = type_declarations ';' ranges = expression (
 		';'
 		| '==>'
+		| '&&'
 	) expr = expression;
 
 type_declarations: type_declaration (',' type_declaration)*;
@@ -174,7 +175,7 @@ exception_declaration:
 
 old_expression: OLD '(' expr = expression ')';
 
-this_expression: JML_THIS '.' expr = expression;
+this_expression: (JML_THIS|JAVA_THIS) '.' expr = expression;
 
 // jml rules
 BOOL_LITERAL: 'true' | 'false';
@@ -228,6 +229,8 @@ SUM: '\\sum';
 PRODUCT: '\\product';
 
 OLD: '\\old';
+
+JAVA_THIS: 'this';
 JML_THIS: '\\this';
 
 // Behaviors

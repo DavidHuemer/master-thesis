@@ -5,9 +5,9 @@ from verification.resultVerification.range.rangeDto import RangeDto
 
 
 class RangeInfixHandler(BaseNodeHandler[RangeDto]):
-    def __init__(self, infix_helper=InfixHelper()):
+    def __init__(self, infix_helper=None):
         super().__init__()
-        self.infix_helper = infix_helper
+        self.infix_helper = infix_helper or InfixHelper()
 
     def is_node(self, t: RangeDto):
         return isinstance(t.node, InfixExpression)

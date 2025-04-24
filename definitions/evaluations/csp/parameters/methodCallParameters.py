@@ -25,5 +25,8 @@ class MethodCallParameters(BaseParameters):
     def parameter_exists(self, key: str) -> bool:
         return key in self.parameters
 
+    def keys(self):
+        return self.parameters.keys()
+
     def __str__(self):
         return str(self.parameters.values())

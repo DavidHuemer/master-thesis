@@ -67,4 +67,7 @@ def get_python_from_java(java_object):
         if isinstance(java_object, java_type):
             return java_to_python_map[java_type](java_object)
 
+        if isinstance(java_object, java_to_python_map[java_type]):
+            return java_object
+
     raise ValueError(f"Unsupported type to convert into python type: {java_object}")

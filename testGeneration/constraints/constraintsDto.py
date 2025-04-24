@@ -1,10 +1,11 @@
+from definitions.ast.astTreeNode import AstTreeNode
 from definitions.evaluations.BaseDto import BaseDto
 from definitions.evaluations.csp.jmlProblem import JMLProblem
 from definitions.evaluations.csp.parameters.constraintParameters import ConstraintParameters
 
 
 class ConstraintsDto(BaseDto):
-    def __init__(self, node,
+    def __init__(self, node: AstTreeNode,
                  jml_problem: JMLProblem,
                  constraint_parameters: ConstraintParameters):
         super().__init__(node=node)

@@ -1,3 +1,5 @@
+from typing import cast
+
 from definitions.ast.terminalNode import TerminalNode
 from definitions.evaluations.baseExecutinoDto import BaseExecutionDto
 from helper.terminalHelper import TerminalNodeHandler
@@ -8,5 +10,4 @@ class TerminalExecution(TerminalNodeHandler[BaseExecutionDto]):
         super().__init__(False)
 
     def handle(self, t: BaseExecutionDto):
-        terminal: TerminalNode = t.node
-        return self.get_original_value(t.node, t.parameters, terminal.use_old, terminal.use_this, t.result)
+        return self.get_value(cast(TerminalNode, t.node), t.parameters, t.result)

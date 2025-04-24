@@ -38,10 +38,13 @@ class JMLProblem:
 
     @staticmethod
     def get_distinct_constraints(csp_param: CSPParameter, value):
-        if csp_param.is_array():
+        if csp_param.is_array() and value is not None:
             or_expressions = [csp_param.value[i] != value[i] for i in range(len(value))]
             or_expressions.append(csp_param.length_param != len(value))
             return Or(*or_expressions)
+
+        if value is None:
+            return csp_param.is_null_param != True
 
         return csp_param != value
 

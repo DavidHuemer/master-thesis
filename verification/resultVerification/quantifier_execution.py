@@ -8,7 +8,7 @@ class QuantifierExecution(BaseSubNodeHandler[ResultDto]):
     def __init__(self, bool_quantifier_execution=None,
                  num_quantifier_execution=None):
         super().__init__()
-        self.bool_quantifier_execution = bool_quantifier_execution or BoolQuantifierExecution()
+        self.bool_quantifier_execution = bool_quantifier_execution or BoolQuantifierExecution(quantifier_exec=self)
         self.num_quantifier_execution = num_quantifier_execution or NumQuantifierExecution(quantifier_exec=self)
 
         self.sub_handlers = [self.bool_quantifier_execution, self.num_quantifier_execution]

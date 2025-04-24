@@ -58,11 +58,9 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         return self.evaluate_list(expression, values)
 
     def get_values_by_range(self, expression: NumQuantifierTreeNode, t: ResultDto):
-        for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
-            yield self.evaluate_with_runner(t, expression.expressions)
-
-        for var_name in expression.variable_names:
-            t.get_result_parameters().local_parameters.pop(var_name[1])
+        with self.range_execution.execute_range(expression.range_, expression.variable_names, t) as ranges:
+            for _ in ranges:
+                yield self.evaluate_with_runner(t, expression.expressions)
 
     @staticmethod
     def get_product(value):

@@ -1,9 +1,12 @@
+from definitions.ast.astTreeNode import AstTreeNode
+
+
 class BaseDto:
     """
     Base DTO that is used for node evaluations
     """
 
-    def __init__(self, node):
+    def __init__(self, node: AstTreeNode):
         """
         Constructor for the BaseDto
         :param node: The node to evaluate

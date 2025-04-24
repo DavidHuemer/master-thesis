@@ -10,19 +10,19 @@ from verification.resultVerification.terminalExecution import TerminalExecution
 
 
 class RangeBuilder(BaseNodeRunner[RangeDto]):
-    def __init__(self, terminal_execution=TerminalExecution(), infix_range_execution=RangeInfixHandler(),
-                 quantifier_range_execution=QuantifierRangeExecution(),
-                 question_mark_handler=BaseQuestionMarkConstraintBuilder(),
-                 prefix_handler=BasePrefixConstraintBuilder(),
-                 array_index_handler=BaseArrayIndexConstraintBuilder(), length_handler=LengthRangeHandler()):
+    def __init__(self, terminal_execution=None, infix_range_execution=None,
+                 quantifier_range_execution=None,
+                 question_mark_handler=None,
+                 prefix_handler=None,
+                 array_index_handler=None, length_handler=None):
         super().__init__(
-            terminal_handler=terminal_execution,
-            length_handler=length_handler,
-            prefix_handler=prefix_handler,
-            quantifier_handler=quantifier_range_execution,
-            question_mark_handler=question_mark_handler,
-            infix_handler=infix_range_execution,
-            array_index_handler=array_index_handler,
+            terminal_handler=terminal_execution or TerminalExecution(),
+            length_handler=length_handler or LengthRangeHandler(),
+            prefix_handler=prefix_handler or BasePrefixConstraintBuilder(),
+            quantifier_handler=quantifier_range_execution or QuantifierRangeExecution(),
+            question_mark_handler=question_mark_handler or BaseQuestionMarkConstraintBuilder(),
+            infix_handler=infix_range_execution or RangeInfixHandler(),
+            array_index_handler=array_index_handler or BaseArrayIndexConstraintBuilder(),
             method_call_handler=None
         )
 

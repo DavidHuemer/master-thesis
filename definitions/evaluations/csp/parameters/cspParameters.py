@@ -42,3 +42,9 @@ class CSPParameters(BaseParameters):
 
     def __setitem__(self, key: str, value: CSPParameter):
         self.parameters[key] = value
+
+    def remove_parameter(self, key: str):
+        if key in self.parameters:
+            del self.parameters[key]
+        else:
+            raise KeyError(f"Key {key} not found in CSPParameters")

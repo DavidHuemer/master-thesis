@@ -4,6 +4,12 @@ I will give you a JavaDoc comment, and you will generate the JML specification f
 Generate only the JML specification, nothing else.
 Every line should start with the Java Comment symbol "//"
 
+The following JML expressions are allowed:
+@requires, @ensures, @signals, @signals_only, @also, \result, \old, \this
+Do not use any other expression
+
 The following quantifiers are available:
 \forall, \exists, \sum, \product, \min, \max
 Do not use any other quantifiers.
+
+Do not use type castings.

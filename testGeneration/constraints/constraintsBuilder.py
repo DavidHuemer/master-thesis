@@ -31,9 +31,9 @@ def add_type_constraints(jml_problem: JMLProblem):
 
 # TODO: Increase performance
 def add_expression_constraints(jml_problem: JMLProblem, expressions: list[AstTreeNode]):
-    for expression in expressions:
-        constraint_parameters = ConstraintParameters(jml_problem.parameters.csp_parameters)
+    constraint_parameters = ConstraintParameters(jml_problem.parameters.csp_parameters)
 
+    for expression in expressions:
         expr_constraint_builder = ExpressionConstraintBuilder()
 
         constraints_dto = ConstraintsDto(node=expression,
