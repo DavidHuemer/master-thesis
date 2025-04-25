@@ -30,7 +30,6 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
             for _ in ranges:
                 evaluation_result = self.evaluate_with_runner(t, expression.expression)
                 if not evaluation_result:
-                    t.get_result_parameters().local_parameters.pop_var_names(expression.variable_names)
                     return False
 
         return True

@@ -1,12 +1,17 @@
 from definitions.codeExecution.runtime.javaRuntimeClass import JavaRuntimeClass
 from definitions.evaluations.csp.parameters.instanceVariables import InstanceVariables
+from definitions.parameters.parameters import Parameters
 
 
-def get_parameters(instance, test_class: JavaRuntimeClass) -> InstanceVariables:
-    variables = InstanceVariables()
+def get_parameters(instance, test_class: JavaRuntimeClass) -> list[Parameters]:
+    parameters = []
+    # TODO: Go through fields of instance
+    return parameters
 
-    for field in test_class.get_fields():
-        field.setAccessible(True)
-        variables.add_parameter(field.getName(), field.get(instance))
-
-    return variables
+    # instance_parameters = Parameters()
+    #
+    # for field in test_class.get_fields():
+    #     field.setAccessible(True)
+    #     instance_parameters.add_parameter(field.getName(), field.get(instance))
+    #
+    # return instance_parameters

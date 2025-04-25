@@ -10,4 +10,4 @@ class TerminalConstraintBuilder(TerminalNodeHandler[ConstraintsDto]):
         super().__init__(True)
 
     def handle(self, t: ConstraintsDto):
-        return self.get_value(cast(TerminalNode, t.node), t.constraint_parameters)
+        return self.get_value(cast(TerminalNode, t.node), t.jml_problem.variables)

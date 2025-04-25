@@ -14,7 +14,7 @@ def build_test_case(jml_problem: JMLProblem, solution: ParameterModel) -> TestCa
     """
 
     method_call_parameters = dict[str]()
-    required_param_keys = [param.name for param in jml_problem.parameters.csp_parameters.get_actual_parameters()]
+    required_param_keys = [param.name for param in jml_problem.variables.csp_parameters.get_actual_parameters()]
 
     for parameter_key in required_param_keys:
         method_call_parameters[parameter_key] = solution.parameter_dict[parameter_key]
@@ -48,7 +48,7 @@ def build_test_case(jml_problem: JMLProblem, solution: ParameterModel) -> TestCa
 
 def get_array_values(jml_problem: JMLProblem, jml_problem_param, parameter_key: str, solution: ModelRef):
     # Get array length
-    length_param = jml_problem.parameters.csp_parameters[parameter_key].length_param
+    length_param = jml_problem.variables.csp_parameters[parameter_key].length_param
     length_value = solution[length_param].as_long()
     # Get array values
     array_values = []

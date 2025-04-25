@@ -1,12 +1,12 @@
 from definitions.ast.quantifier.boolQuantifierTreeNode import BoolQuantifierTreeNode
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from nodes.baseNodeHandler import BaseNodeHandler
-from verification.resultVerification.range.rangeDto import RangeDto
+from verification.resultVerification.resultDto import ResultDto
 
 
-class QuantifierRangeExecution(BaseNodeHandler[RangeDto]):
-    def is_node(self, t: RangeDto):
+class QuantifierRangeExecution(BaseNodeHandler[ResultDto]):
+    def is_node(self, t: ResultDto):
         return isinstance(t.node, BoolQuantifierTreeNode) or isinstance(t.node, NumQuantifierTreeNode)
 
-    def handle(self, t: RangeDto):
-        raise Exception("QuantifierRangeExecution: Node type not supported")
+    def handle(self, t: ResultDto):
+        raise Exception("A quantifier inside the range of another quantifier is not supported")

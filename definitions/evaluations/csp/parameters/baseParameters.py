@@ -7,5 +7,5 @@ class BaseParameters:
         """
         raise NotImplementedError
 
-    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool):
+    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool, use_csp: bool = False):
         raise NotImplementedError

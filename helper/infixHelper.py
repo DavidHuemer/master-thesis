@@ -1,24 +1,27 @@
 from typing import Callable
 
-from jpype import java, JChar, JDouble
-from z3 import And, Or, Not, ArrayRef, BoolRef, SeqRef, CharVal, CharRef
+from jpype import JDouble
+from z3 import And, Or, Not, BoolRef, SeqRef, CharVal, CharRef
 
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
-from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
+from definitions.evaluations.csp.cspParameter import CSPParameter
+from definitions.parameters.Variables import Variables
+from helper.z3Helper import get_z3_value
 
 
 class InfixHelper:
-    def evaluate_infix(self, infix_operator: str, csp_parameters: CSPParameters | None, left: Callable, right: Callable,
+    def evaluate_infix(self, infix_operator: str, variables: Variables | None, left: Callable, right: Callable,
                        is_smt: bool):
         left_expr = left()
 
         if is_smt:
             right_expr = right()
-            if (isinstance(left_expr, ArrayRef) or isinstance(left_expr, SeqRef)) and isinstance(right_expr, BoolRef):
-                left_expr = csp_parameters[str(left_expr)].is_null_param
+            if ((isinstance(left_expr, CSPParameter) and not isinstance(left_expr.value, BoolRef))
+                    and isinstance(get_z3_value(right_expr), BoolRef)):
+                left_expr = left_expr.is_null_param
 
-            if (isinstance(right_expr, ArrayRef) or isinstance(right_expr, SeqRef)) and isinstance(left_expr, BoolRef):
-                right_expr = csp_parameters[str(right_expr)].is_null_param
+            if ((isinstance(right_expr, CSPParameter) and not isinstance(right_expr.value, BoolRef))
+                    and isinstance(get_z3_value(left_expr), BoolRef)):
+                right_expr = right_expr.is_null_param
         else:
             if infix_operator == "==>" and not left_expr:
                 return True
@@ -36,6 +39,9 @@ class InfixHelper:
 
             if infix_operator == "!=" and isinstance(left_expr, list):
                 return left_expr is not right_expr
+
+        left_expr = get_z3_value(left_expr)
+        right_expr = get_z3_value(right_expr)
 
         if infix_operator == "+":
             return left_expr + right_expr

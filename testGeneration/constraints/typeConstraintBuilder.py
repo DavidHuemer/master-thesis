@@ -1,13 +1,14 @@
-from z3 import Length, InRe, Re, Range, Star
+from z3 import Length, InRe, Range, Star
 
 from definitions import javaTypes
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.jmlProblem import JMLProblem
+from definitions.parameters.parameter import Parameter
 from testGeneration.constraints.arrayTypeConstraintBuilder import add_array_constraint
 from testGeneration.constraints.typeRanges import get_min_max_values
 
 
-def build_type_constraint(jml_problem: JMLProblem, parameter: CSPParameter):
+def build_type_constraint(jml_problem: JMLProblem, parameter: Parameter):
     """
     Builds the type constraints for the given parameter.
     :param jml_problem: The JML problem that the constraints will be added to
@@ -16,15 +17,15 @@ def build_type_constraint(jml_problem: JMLProblem, parameter: CSPParameter):
 
     # Check if the parameter is an array
     if parameter.is_array():
-        add_array_constraint(jml_problem, parameter)
+        add_array_constraint(jml_problem, parameter.get_state().csp_parameter)
 
     # Check if the parameter is a number
-    elif parameter.param_type in javaTypes.PRIMARY_ARITHMETIC_TYPES:
-        add_number_constraints(jml_problem, parameter)
+    elif parameter.java_type in javaTypes.PRIMARY_ARITHMETIC_TYPES:
+        add_number_constraints(jml_problem, parameter.get_state().csp_parameter)
 
     # Check if the parameter is a string
-    elif parameter.param_type in javaTypes.PRIMARY_TEXT_TYPES:
-        add_text_constraints(jml_problem, parameter)
+    elif parameter.java_type in javaTypes.PRIMARY_TEXT_TYPES:
+        add_text_constraints(jml_problem, parameter.get_state().csp_parameter)
 
 
 def add_number_constraints(jml_problem, parameter: CSPParameter):

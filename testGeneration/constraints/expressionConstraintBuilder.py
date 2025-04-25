@@ -20,7 +20,6 @@ class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto], Singleton):
                  array_index_constraint_builder: BaseArrayIndexConstraintBuilder | None = None,
                  array_length_constraint_builder: ArrayLengthConstraintBuilder | None = None,
                  method_call_handler: MethodCallHandler | None = None):
-        terminal_constraint_builder = terminal_constraint_builder or TerminalConstraintBuilder()
         quantifier_constraint_builder = quantifier_constraint_builder or QuantifierConstraintBuilder()
         question_mark_constraint_builder = question_mark_constraint_builder or BaseQuestionMarkConstraintBuilder()
         prefix_constraint_builder = prefix_constraint_builder or BasePrefixConstraintBuilder()
@@ -31,7 +30,7 @@ class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto], Singleton):
 
         # noinspection PyTypeChecker
         super().__init__(
-            terminal_handler=terminal_constraint_builder,
+            terminal_handler=terminal_constraint_builder or TerminalConstraintBuilder(),
             quantifier_handler=quantifier_constraint_builder,
             prefix_handler=prefix_constraint_builder,
             question_mark_handler=question_mark_constraint_builder,
@@ -42,8 +41,4 @@ class ExpressionConstraintBuilder(BaseNodeRunner[ConstraintsDto], Singleton):
         )
 
     def evaluate(self, t: ConstraintsDto):
-        base_constraint = super().evaluate(t)
-        if base_constraint is not None:
-            return base_constraint
-
-        raise Exception(f"ExpressionConstraintBuilder: Node type {str(t)} not supported")
+        return super().evaluate(t)

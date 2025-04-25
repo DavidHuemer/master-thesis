@@ -13,7 +13,12 @@ class TimeoutHelper:
         stop_event = threading.Event()
 
         def wrapper():
-            ergebnis[0] = method(stop_event)
+            try:
+                result = method(stop_event)
+            except Exception as e:
+                result = e
+
+            ergebnis[0] = result
 
         # Thread starten
         thread = threading.Thread(target=wrapper)
@@ -25,6 +30,9 @@ class TimeoutHelper:
         if thread.is_alive():
             stop_event.set()
             raise TimeoutException(f"Die Methode hat die Zeit von {timeout} Sekunden überschritten!")
+
+        if isinstance(ergebnis[0], Exception):
+            raise ergebnis[0]
 
         return ergebnis[0]
 

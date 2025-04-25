@@ -1,16 +1,14 @@
+ //@ requires original != null;
 //@ public normal_behavior
-//@ requires original != null;
 //@ requires 0 <= from && from <= original.length;
-//@ requires from <= to;
-//@ ensures \result != null;
+//@ requires to >= from;
 //@ ensures \result.length == to - from;
 //@ ensures (\forall int i; 0 <= i && i < \result.length; (from + i < original.length ? \result[i] == original[from + i] : \result[i] == 0));
 //@ also public exceptional_behavior
 //@ requires original != null;
 //@ requires from < 0 || from > original.length;
-//@ signals (ArrayIndexOutOfBoundsException e);
+//@ signals (ArrayIndexOutOfBoundsException e) from < 0 || from > original.length;
 //@ also public exceptional_behavior
 //@ requires original != null;
-//@ requires 0 <= from && from <= original.length;
-//@ requires from > to;
-//@ signals (IllegalArgumentException e);
+//@ requires 0 <= from && from <= original.length && from > to;
+//@ signals (IllegalArgumentException e) from > to

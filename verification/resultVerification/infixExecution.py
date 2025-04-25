@@ -17,4 +17,4 @@ class InfixExecution(BaseNodeHandler[ResultDto]):
         return self.infix_helper.evaluate_infix(infix_operator=expression.name,
                                                 left=lambda: self.evaluate_with_runner(t, expression.left),
                                                 right=lambda: self.evaluate_with_runner(t, expression.right),
-                                                csp_parameters=None, is_smt=False)
+                                                variables=None, is_smt=False)

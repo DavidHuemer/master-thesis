@@ -17,7 +17,7 @@ class ParameterExtractionInfo(JavaTypeExtractionInfo):
         self.name = name
 
     def __eq__(self, other):
-        return self.variable_type == other.variable_type and self.dimension == other.dimension and self.name == other.name
+        return self.variable_type == other.variable_type and self.dimension == other._dimension and self.name == other.name
 
     def __str__(self):
         return f"{self.variable_type}{'[]' * self.dimension} {self.name}"

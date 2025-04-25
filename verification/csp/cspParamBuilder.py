@@ -1,3 +1,5 @@
+import uuid
+
 from z3 import Int, Array, IntSort, Real, Bool, RealSort, BoolSort, String, StringSort
 
 from definitions.code.parameterExtractionInfo import ParameterExtractionInfo
@@ -35,3 +37,15 @@ def get_csp_param_for_param(param: ParameterExtractionInfo) -> CSPParameter:
         return CSPParameter(param.name, single_type(param.name), param.variable_type)
 
     raise Exception(f"Parameter type {param.variable_type} is not supported")
+
+
+def build_csp_param(java_type: str, name: str, dimension: int = 0):
+    csp_name = f"{name}_{uuid.uuid4()}"
+
+    if java_type in param_type_map:
+        single_type, array_type = param_type_map[java_type]
+        if dimension > 0:
+            return CSPParameter(name, Array(csp_name, IntSort(), array_type()), java_type)
+        return CSPParameter(name, single_type(csp_name), java_type)
+
+    raise Exception(f"Parameter type {java_type} is not supported")

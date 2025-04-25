@@ -20,4 +20,4 @@ class InfixConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
                                                 left=lambda: self.evaluate_with_runner(t, expression.left),
                                                 right=lambda: self.evaluate_with_runner(t, expression.right),
                                                 is_smt=True,
-                                                csp_parameters=t.constraint_parameters.csp_parameters)
+                                                variables=t.jml_problem.variables)

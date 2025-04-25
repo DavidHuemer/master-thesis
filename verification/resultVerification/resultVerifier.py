@@ -3,6 +3,7 @@ import threading
 from definitions.ast.behavior.behaviorNode import BehaviorNode
 from definitions.codeExecution.result.executionResult import ExecutionResult
 from definitions.evaluations.csp.parameters.resultParameters import ResultParameters
+from definitions.parameters.Variables import Variables
 from helper.logs.loggingHelper import log_error
 from nodes.baseNodeRunner import BaseNodeRunner
 from verification.resultVerification.arrayIndexExecution import ArrayIndexExecution
@@ -33,7 +34,7 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
             question_mark_handler=question_mark_execution or QuestionMarkExecution()
         )
 
-    def verify(self, result: ExecutionResult, behavior_node: BehaviorNode, result_parameters: ResultParameters,
+    def verify(self, result: ExecutionResult, behavior_node: BehaviorNode, variables: Variables,
                stop_event: threading.Event):
 
         try:
@@ -42,7 +43,7 @@ class ResultVerifier(BaseNodeRunner[ResultDto]):
 
                 result_dto = ResultDto(node=post_condition,
                                        result=result.result,
-                                       result_parameters=result_parameters,
+                                       variables=variables,
                                        stop_event=stop_event)
                 if not self.evaluate(result_dto):
                     return False

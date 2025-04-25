@@ -1,10 +1,9 @@
 from typing import Callable, Any
 
-from z3 import Int, ForAll, And, Implies, Bool
+from z3 import Int, ForAll, And, Implies
 
 from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.jmlProblem import JMLProblem
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
 
 
 class ArrayTestConstraintsGenerator:
@@ -20,7 +19,7 @@ class ArrayTestConstraintsGenerator:
         :return: A list of constraints
         """
 
-        length_parameter = jml_problem.parameters.csp_parameters[parameter.name].length_param
+        length_parameter = parameter.length_param
         yield length_parameter == 0
 
         testing_lengths = [1, 2, 5, 10]

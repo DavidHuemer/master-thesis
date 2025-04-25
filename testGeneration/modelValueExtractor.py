@@ -1,8 +1,35 @@
 from jpype import JChar
 from z3 import ModelRef
 
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from definitions.evaluations.csp.cspParameter import CSPParameter
 from definitions.evaluations.csp.parameters.cspParameters import CSPParameters
+from definitions.parameters.parameterValue import ParameterValue
+from helper.parameterHelper.parameterValueGenerator import get_parameter_value_by_python
+
+
+def get_parameter_value(csp_parameter: CSPParameter, model: ModelRef, func_decl_dict) -> ParameterValue:
+    is_null_csp_name = str(csp_parameter.is_null_param)
+    is_null_func_decl = func_decl_dict.get(is_null_csp_name)
+
+    if is_null_func_decl is not None:
+        is_null = model[is_null_func_decl]
+        if is_null:
+            return get_parameter_value_by_python(None, csp_parameter.param_type)
+
+    csp_name = str(csp_parameter.value)
+    csp_func_decl = func_decl_dict.get(csp_name)
+    value = model[csp_func_decl]
+
+    wrapper = get_wrapper_for_type(csp_parameter.param_type)
+
+    if csp_parameter.is_array():
+        length_param_name = str(csp_parameter.length_param)
+        length_func_decl = func_decl_dict.get(length_param_name)
+        length = model[length_func_decl].as_long()
+        lst = [wrapper(model.evaluate(csp_parameter.value[i])) for i in range(length)]
+        return get_parameter_value_by_python(lst, csp_parameter.param_type)
+    else:
+        return get_parameter_value_by_python(wrapper(value), csp_parameter.param_type)
 
 
 def get_value_of_param(csp_parameters: CSPParameters, param, model: ModelRef):

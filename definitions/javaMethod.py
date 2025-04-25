@@ -17,7 +17,7 @@ class JavaMethod:
         return (self.return_type == other.return_type
                 and self.name == other.name
                 and self.comment == other.comment
-                and self.parameters == other.parameters)
+                and self.parameters == other.variables)
 
     def __str__(self):
         return (f"{self.method_protection} {str(self.return_type)} {self.name} "

@@ -10,4 +10,4 @@ class TerminalExecution(TerminalNodeHandler[BaseExecutionDto]):
         super().__init__(False)
 
     def handle(self, t: BaseExecutionDto):
-        return self.get_value(cast(TerminalNode, t.node), t.parameters, t.result)
+        return self.get_value(cast(TerminalNode, t.node), t.variables, t.result)

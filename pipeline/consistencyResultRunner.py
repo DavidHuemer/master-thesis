@@ -48,6 +48,7 @@ class ConsistencyResultRunner(Singleton):
             return result
         except Exception as e:
             log_error(traceback.format_exc())
+            add_consistency_log(traceback.format_exc())
             if self.retries >= self.max_retries or not self.jml_provider.fetch_from_server:
                 return VerificationResultFactory.by_exception(consistency_test, e)
 
