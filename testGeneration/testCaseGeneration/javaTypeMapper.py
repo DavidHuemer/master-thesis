@@ -31,6 +31,19 @@ java_to_python_map = {
     jpype.JArray: list
 }
 
+java_type_to_python_map = {
+    "java.lang.Integer": int,
+    "java.lang.Double": float,
+    "java.lang.Float": float,
+    "java.lang.Long": int,
+    "java.lang.Short": int,
+    "java.lang.Byte": int,
+    "java.lang.Boolean": bool,
+    "java.lang.Character": str,
+    "java.lang.String": str,
+    "java.lang.Array": list
+}
+
 
 # def to_java_type(value) -> jpype.JObject:
 #     if isinstance(value, list):
@@ -71,3 +84,27 @@ def get_python_from_java(java_object):
             return java_object
 
     raise ValueError(f"Unsupported type to convert into python type: {java_object}")
+
+
+def get_python_value_from_original_java(java_object):
+    """
+    Returns the python value from the original java object (java.lang.<type>).
+    For example, java.lang.Double will be converted to float.
+    :param java_object: The java object to convert.
+    :return: The python value.
+    """
+    java_type_str = java_object.getClass().getName()
+    if java_type_str in java_type_to_python_map:
+        return java_type_to_python_map[java_type_str](java_object)
+
+    raise ValueError(f"Unsupported type to convert into python type: {java_object}")
+
+
+def get_type_as_string_from_java_value(java_value):
+    """
+    Returns the type of the java value as a string.
+    For example JDouble will be returned as "double".
+    :param java_value: The java value to get the type from.
+    :return: The type of the java value as a string.
+    """
+    pass

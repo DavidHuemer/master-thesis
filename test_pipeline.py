@@ -12,7 +12,7 @@ def main_test():
     test_cases = get_test_cases()
 
     test_case = [test_case for test_case in test_cases if
-                 test_case.java_code.class_name == "StringConcat"]
+                 test_case.java_code.class_name == "CreditCard"]
 
     if len(test_case) == 0:
         log_error("No test case found")

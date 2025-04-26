@@ -1,6 +1,5 @@
- //@ public normal_behavior
-//@ requires a != null;
-//@ requires b != null;
-//@ ensures \result.length() == a.length() + b.length();
-//@ ensures (\forall int i; 0 <= i && i < a.length(); \result.charAt(i) == a.charAt(i));
-//@ ensures (\forall int i; 0 <= i && i < b.length(); \result.charAt(a.length() + i) == b.charAt(i));
+ //@ requires amount >= 0;
+//@ ensures this.balance == \old(this.balance) + amount;
+//@ also
+//@ requires amount < 0;
+//@ signals (IllegalArgumentException e) amount < 0
