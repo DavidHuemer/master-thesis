@@ -33,7 +33,7 @@ def python_to_java(python_value, java_type: str):
         return None
 
     if isinstance(python_value, list):
-        return jpype.JArray(jpype.JInt, 1)(python_value)
+        return jpype.JArray(java_types_map[java_type.lower()], 1)(python_value)
 
     for key in java_types_map:
         if java_type.lower() == key.lower():

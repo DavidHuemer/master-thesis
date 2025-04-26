@@ -3,10 +3,9 @@ from definitions.evaluations.csp.parameters.methodCallParameters import MethodCa
 
 
 class ExecutionResult:
-    def __init__(self, result, parameters: MethodCallParameters, exception: ExecutionException | None = None):
+    def __init__(self, result, exception: ExecutionException | None = None):
         self.result = result
-        self.parameters = parameters
         self.exception = exception
 
     def __str__(self):
-        return f'Result: {self.result}, Parameters: {self.parameters}'
+        return f'Result: {self.result}, Exception: {str(self.exception) or "No exception"}'

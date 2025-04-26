@@ -1,5 +1,8 @@
- //@ requires amount >= 0;
-//@ ensures this.balance == \old(this.balance) + amount;
-//@ also
-//@ requires amount < 0;
-//@ signals (IllegalArgumentException e) amount < 0
+ // @public normal_behavior
+// @requires n >= 0 && n <= 20
+// @ensures \result != null
+// @ensures (\forall int i; 0 <= i && i < \result.length; 2 <= \result[i] && \result[i] <= n && (\forall int d; 2 <= d && d*d <= \result[i]; \result[i] % d != 0))
+// @ensures \result.length == (\sum int k; 2 <= k && k <= n; (\forall int d; 2 <= d && d*d <= k; k % d != 0) ? 1 : 0)
+// @also public exceptional_behavior
+// @requires n < 0 || n > 20
+// @signals (IllegalArgumentException e) n < 0 || n > 20

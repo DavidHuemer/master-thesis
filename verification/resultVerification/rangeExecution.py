@@ -43,6 +43,9 @@ class RangeExecution:
         variable_infos = [ParameterExtractionInfo(variable[0], variable[1]) for variable in variables]
         range_var_names = [variable_info.name for variable_info in variable_infos]
 
+        if t.get_result_parameters().special_parameters.result_parameter is not None:
+            range_problem.add_constraint(t.get_result_parameters().special_parameters.result_parameter.get_constraint())
+
         for method_call_parameter in t.get_result_parameters().method_call_parameters.get_parameter_list():
             method_call_param_constraint = method_call_parameter.get_constraint()
             range_problem.add_constraint(method_call_param_constraint)

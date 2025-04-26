@@ -1,3 +1,5 @@
+from typing import Callable
+
 import jpype
 from jpype import JString
 
@@ -19,6 +21,18 @@ java_types_map = {
 }
 
 java_to_python_map = {
+    "int": int,
+    "float": float,
+    "double": float,
+    "long": int,
+    "short": int,
+    "byte": int,
+    "char": str,
+    "boolean": bool,
+    "string": str
+}
+
+jpype_to_python_map = {
     jpype.JInt: int,
     jpype.JFloat: float,
     jpype.JDouble: float,
@@ -43,6 +57,13 @@ java_type_to_python_map = {
     "java.lang.String": str,
     "java.lang.Array": list
 }
+
+
+def get_python_value_converter(java_type: str) -> Callable:
+    if java_type.lower() in java_types_map:
+        return java_to_python_map[java_type.lower()]
+
+    raise ValueError(f"Unsupported type to convert into python type: {java_type}")
 
 
 # def to_java_type(value) -> jpype.JObject:
@@ -76,11 +97,11 @@ def get_java_parameters(test_case: TestCase, parameter_infos: list[ParameterExtr
 
 
 def get_python_from_java(java_object):
-    for java_type in java_to_python_map:
+    for java_type in jpype_to_python_map:
         if isinstance(java_object, java_type):
-            return java_to_python_map[java_type](java_object)
+            return jpype_to_python_map[java_type](java_object)
 
-        if isinstance(java_object, java_to_python_map[java_type]):
+        if isinstance(java_object, jpype_to_python_map[java_type]):
             return java_object
 
     raise ValueError(f"Unsupported type to convert into python type: {java_object}")

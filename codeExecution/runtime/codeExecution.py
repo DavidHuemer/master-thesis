@@ -2,8 +2,6 @@ import jpype
 from codetiming import Timer
 
 from definitions.consistencyTestCase import ConsistencyTestCase
-from definitions.evaluations.csp.parameters.methodCallParameters import MethodCallParameters
-from definitions.verification.testCase import TestCase
 
 code_execution_timer = Timer(name="code_execution", logger=None)
 

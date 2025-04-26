@@ -17,9 +17,6 @@ class Parameter:
     def __init__(self, old: ParameterState, new: ParameterState | None):
         self.name = old.csp_parameter.name
         self.java_type = old.csp_parameter.param_type
-        # self.java_type = java_type
-        # self._dimension = dimension
-        # self.csp_parameter = build_csp_param(java_type, name, dimension)
 
         self.old = old
         self.new: ParameterState | None = new
