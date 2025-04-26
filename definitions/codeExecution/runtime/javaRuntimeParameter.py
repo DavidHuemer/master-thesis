@@ -13,7 +13,7 @@ class JavaRuntimeParameter:
         """
         self.param = param
 
-        self.parameter_name = JavaRuntimeTypeParser.get_correct_type(str(param.getName()))
+        self.parameter_name = param.getSimpleName()
 
     def __str__(self):
         return self.parameter_name

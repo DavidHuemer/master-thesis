@@ -1,0 +1,24 @@
+Generate a JML (Java Modelling Language) for the following JavaDoc:
+{javadoc}
+
+The parameters for the method the comment describes are: {parameters}
+Only include the JML, nothing else, no code, no comments, no method name, nothing.
+Do not include the name of the programming language.
+Do not use any external classes or methods like Math, Arrays, etc.
+
+In the preconditions (requires) as well as in signals no method can be used.
+This also applies to methods of data types like List, String, etc.
+So for example s.equals("foo") or s.charAt(0) are not allowed.
+The only String method that is allowed is .length().
+In postconditions (ensures) you can use these kind of methods.
+
+Multiple behaviors must be separated by @also
+
+Arrays cannot be compared with == or !=.
+Instead, their length and elements must be compared.
+
+Signal expressions must have the form:
+//@ signals (Exception e) condition
+
+Some examples of JavaDoc to JML transformations:
+{examples}

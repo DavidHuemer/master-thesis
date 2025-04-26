@@ -12,5 +12,5 @@ class PrefixSimplifier(BaseNodeHandler[SimplificationDto]):
 
     def handle(self, t: SimplificationDto):
         prefix = t.node.prefix.text
-        expr = t.evaluate_with_other_node(t.node.expr)
+        expr = self.evaluate_with_runner(t, t.node.expr)
         return PrefixNode(prefix, expr)

@@ -1,6 +1,6 @@
 from definitions import config
 from helper.files.fileHelper import FileHelper
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_error, log_info
 from helper.processHelper import ProcessHelper
 
 
@@ -20,22 +20,22 @@ class ParserEnvironmentChecker:
         """
 
         if not self.check_java():
-            LoggingHelper.log_error("Java is not installed")
+            log_error("Java is not installed")
             return False
 
-        LoggingHelper.log_info("Java is installed")
+        log_info("Java is installed")
 
         if not self.check_antlr_tool():
-            LoggingHelper.log_error("The antlr tool is not installed")
+            log_error("The antlr tool is not installed")
             return False
 
-        LoggingHelper.log_info("The antlr tool is installed")
+        log_info("The antlr tool is installed")
 
         if not self.check_parser_file(parser_file):
-            LoggingHelper.log_error("The parser file is not found")
+            log_error("The parser file is not found")
             return False
 
-        LoggingHelper.log_info("The parser file is found")
+        log_info("The parser file is found")
 
         return True
 

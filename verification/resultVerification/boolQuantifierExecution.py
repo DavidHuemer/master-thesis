@@ -6,8 +6,9 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
-    def __init__(self, range_execution=RangeExecution()):
-        self.range_execution = range_execution
+    def __init__(self, range_execution=None, quantifier_exec=None):
+        super().__init__()
+        self.range_execution = range_execution or RangeExecution(quantifier_exec=quantifier_exec)
 
     def is_node(self, t: ResultDto):
         return isinstance(t.node, BoolQuantifierTreeNode)
@@ -25,26 +26,20 @@ class BoolQuantifierExecution(BaseNodeHandler[ResultDto]):
         expression: BoolQuantifierTreeNode = t.node
         # TODO: Add here all the range variables
 
-        for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
-            evaluation_result = t.evaluate_with_other_node(expression.expression)
-            if not evaluation_result:
-                for var_name in expression.variable_names:
-                    t.get_result_parameters().local_parameters.pop(var_name[1])
-                return False
-
-        # TODO: Remove here all the range variables of the current range
-        for var_name in expression.variable_names:
-            t.get_result_parameters().local_parameters.pop(var_name[1])
+        with self.range_execution.execute_range(expression.range_, expression.variable_names, t) as ranges:
+            for _ in ranges:
+                evaluation_result = self.evaluate_with_runner(t, expression.expression)
+                if not evaluation_result:
+                    return False
 
         return True
 
     def evaluate_exists(self, t: ResultDto):
         expression: BoolQuantifierTreeNode = t.node
-        for _ in self.range_execution.execute_range(expression.range_, expression.variable_names, t):
-            evaluation_result = t.result_verifier.evaluate(t.copy_with_other_node(expression.expression))
-            if evaluation_result:
-                return True
+        with self.range_execution.execute_range(expression.range_, expression.variable_names, t) as ranges:
+            for _ in ranges:
+                evaluation_result = self.evaluate_with_runner(t, expression.expression)
+                if evaluation_result:
+                    return True
 
-        for var_name in expression.variable_names:
-            t.get_result_parameters().local_parameters.pop(var_name[1])
         return False

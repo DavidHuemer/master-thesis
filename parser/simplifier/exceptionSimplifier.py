@@ -18,7 +18,7 @@ class ExceptionSimplifier(BaseNodeHandler[SimplificationDto]):
             raise Exception("Exception node must have an expression")
 
         expr = t.node.expr
-        simplified_expr = t.evaluate_with_other_node(expr)
+        simplified_expr = self.evaluate_with_runner(t, expr)
         return ExceptionExpression(exception_type, exception_name, simplified_expr)
 
     @staticmethod

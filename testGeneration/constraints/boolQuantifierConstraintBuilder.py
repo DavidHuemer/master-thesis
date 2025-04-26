@@ -8,8 +8,9 @@ from testGeneration.constraints.quantifier.quantifierRangeValuesHelper import Qu
 
 
 class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
-    def __init__(self, quantifier_range_values_helper=QuantifierRangeValuesHelper()):
-        self.quantifier_range_values_helper = quantifier_range_values_helper
+    def __init__(self, quantifier_range_values_helper=None):
+        super().__init__()
+        self.quantifier_range_values_helper = quantifier_range_values_helper or QuantifierRangeValuesHelper()
 
     def is_node(self, t: ConstraintsDto):
         return isinstance(t.node, BoolQuantifierTreeNode)
@@ -19,18 +20,17 @@ class BoolQuantifierConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
         variables = self.quantifier_range_values_helper.get_variables(expression)
 
         for var in variables:
-            # TODO: Check if variable already exists
             t.constraint_parameters.loop_parameters.add_csp_parameter(var)
 
-        range_expressions = t.constraint_builder.evaluate(t.copy_with_other_node(expression.range_))
-        final_expr = t.constraint_builder.evaluate(t.copy_with_other_node(expression.expression))
+        range_expressions = self.evaluate_with_runner(t, expression.range_)
+        final_expr = self.evaluate_with_runner(t, expression.expression)
 
         variable_values = [var.value for var in variables]
 
         if expression.quantifier_type == BoolQuantifierType.FORALL:
-            return self.evaluate_for_all(variable_values, range_expressions, final_expr)
+            return ForAll(*variable_values, Implies(range_expressions, final_expr))
         elif expression.quantifier_type == BoolQuantifierType.EXISTS:
-            return self.evaluate_exists(variable_values, range_expressions, final_expr)
+            return Exists(*variable_values, And(range_expressions, final_expr))
 
     @staticmethod
     def evaluate_for_all(variable_values, range_, expr):

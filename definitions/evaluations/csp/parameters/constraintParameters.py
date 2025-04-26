@@ -13,7 +13,7 @@ class ConstraintParameters(BaseParameters):
     def parameter_exists(self, key: str) -> bool:
         return self.loop_parameters.parameter_exists(key) or self.csp_parameters.parameter_exists(key)
 
-    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool) -> CSPParameter:
+    def get_parameter_by_key(self, key: str, use_old: bool, use_this: bool, use_csp: bool = False) -> CSPParameter:
         if use_this or use_this:
             raise Exception("\\old and \\this are not supported in constraint parameters")
 

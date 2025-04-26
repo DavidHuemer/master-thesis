@@ -5,19 +5,18 @@ from z3 import ArrayRef, Sum, Product, If, And
 from definitions.ast.quantifier.numQuantifierTreeNode import NumQuantifierTreeNode
 from definitions.ast.quantifier.numericQuantifierType import NumericQuantifierType
 from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from nodes.baseNodeHandler import BaseNodeHandler
 from testGeneration.constraints.constraintArrayValueHelper import ConstraintArrayValueHelper
 from testGeneration.constraints.constraintsDto import ConstraintsDto
 
 
-class NumQuantifierValueConstraintBuilder:
+class NumQuantifierValueConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
     def __init__(self, array_value_helper=ConstraintArrayValueHelper()):
+        super().__init__()
         self.array_value_helper = array_value_helper
 
     def evaluate(self, expression, t: ConstraintsDto):
-        values = self.get_values(expression, t)
-        return self.evaluate_list(expression, values)
-
-    def evaluate_list(self, expression, values: list):
+        values: list = self.get_values(expression, t)
         if len(values) == 0:
             return None
 
@@ -59,14 +58,14 @@ class NumQuantifierValueConstraintBuilder:
         return And(*comparisons)
 
     def get_values(self, expression: NumQuantifierTreeNode, t: ConstraintsDto):
-        expression_list = [t.constraint_builder.evaluate(t.copy_with_other_node(expr)) for
+        expression_list = [self.evaluate_with_runner(t, expr) for
                            expr in expression.expressions]
 
         values = []
 
         for expr in expression_list:
             if isinstance(expr, ArrayRef):
-                length_param = t.constraint_parameters.csp_parameters.get_helper(str(expr), CSPParamHelperType.LENGTH)
+                length_param = t.constraint_parameters.csp_parameters[str(expr)].length_param
                 value = self.array_value_helper.get_value_from_array(expr,
                                                                      length_param,
                                                                      expression.quantifier_type,

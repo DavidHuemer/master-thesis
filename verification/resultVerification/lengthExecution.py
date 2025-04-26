@@ -9,5 +9,5 @@ class LengthExecution(BaseNodeHandler[ResultDto]):
 
     def handle(self, t: ResultDto):
         expression: ArrayLengthNode = t.node
-        eval_expr = t.result_verifier.evaluate(t.copy_with_other_node(expression.arr_expr))
+        eval_expr = self.evaluate_with_runner(t, expression.arr_expr)
         return len(eval_expr)

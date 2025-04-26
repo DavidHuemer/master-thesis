@@ -7,6 +7,7 @@ from parser.parserContainer import ParserContainer
 from pipeline.containers import PipelineContainer
 from testGeneration.constraints.constraintsContainer import ConstraintsContainer
 from testGeneration.testCaseGeneration.testCaseGenerationContainer import TestCaseGenerationContainer
+from verification.resultVerification.resultVerificationContainer import ResultVerificationContainer
 
 
 class Application(containers.DeclarativeContainer):
@@ -32,6 +33,10 @@ class Application(containers.DeclarativeContainer):
 
     constraints = providers.Container(
         ConstraintsContainer
+    )
+
+    result_verification = providers.Container(
+        ResultVerificationContainer
     )
 
     test_case_generation = providers.Container(

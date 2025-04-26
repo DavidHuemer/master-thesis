@@ -9,9 +9,9 @@ class QuestionMarkExecution(BaseNodeHandler[ResultDto]):
 
     def handle(self, t: ResultDto):
         expression: QuestionMarkNode = t.node
-        expr_result = t.result_verifier.evaluate(t.copy_with_other_node(expression.expr))
+        expr_result = self.evaluate_with_runner(t, expression.expr)
 
         if expr_result:
-            return t.result_verifier.evaluate(t.copy_with_other_node(expression.true_expr))
+            return self.evaluate_with_runner(t, expression.true_expr)
         else:
-            return t.result_verifier.evaluate(t.copy_with_other_node(expression.false_expr))
+            return self.evaluate_with_runner(t, expression.false_expr)

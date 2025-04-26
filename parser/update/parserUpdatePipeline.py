@@ -1,8 +1,9 @@
 import importlib
 
 from definitions import config
-from helper.logs.loggingHelper import LoggingHelper
 from parser.generated import JMLLexer, JMLParser
+
+from helper.logs.loggingHelper import log_error
 from parser.parserEnvironmentChecker import ParserEnvironmentChecker
 from parser.test.parserTestRunner import ParserTestRunner
 from parser.update.parserUpdater import ParserUpdater
@@ -29,7 +30,7 @@ class ParserUpdatePipeline:
 
         # First check environment
         if not self.parser_environment_checker.check_environment(parser_file_path):
-            LoggingHelper.log_error("The environment is not set up correctly for the parser")
+            log_error("The environment is not set up correctly for the parser")
             return
 
         # Then build the parser

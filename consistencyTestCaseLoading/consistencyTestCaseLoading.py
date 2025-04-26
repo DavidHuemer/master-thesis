@@ -3,6 +3,7 @@ import os
 from codetiming import Timer
 
 from consistencyTestCaseLoading.javaCodeLoading import get_java_code_from_directory
+from definitions.code.protectionModifier import ProtectionModifier
 from definitions.consistencyTestCase import ConsistencyTestCase
 from definitions.evaluations.expectedResult import ExpectedResult
 from definitions.javaCode import JavaCode
@@ -17,20 +18,16 @@ get_test_cases_timer = Timer(name="get_test_cases", logger=None)
 def get_test_cases() -> list[ConsistencyTestCase]:
     log_info("Loading consistency test cases")
 
-    # First get expected results
-    expected_results = get_expected_results()
-
-    # Get java code list
-    java_code = get_java_code_from_directory()
-
     # Build test cases
-    return build_test_cases(expected_results, java_code)
+    return build_test_cases(expected_results=get_expected_results(), java_code_list=get_java_code_from_directory())
 
 
-def build_test_cases(expected_results, java_code) -> list[ConsistencyTestCase]:
+def build_test_cases(expected_results: list[ExpectedResult], java_code_list: list[JavaCode]) -> list[
+    ConsistencyTestCase]:
     return [build_test_case(java_code, method, expected_results)
-            for java_code in java_code
-            for method in java_code.methods]
+            for java_code in java_code_list
+            for method in java_code.methods
+            if method.comment is not None and method.method_protection == ProtectionModifier.PUBLIC]
 
 
 def build_test_case(java_code, method, expected_results: list[ExpectedResult]) -> ConsistencyTestCase:

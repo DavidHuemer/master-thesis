@@ -1,0 +1,15 @@
+Generate a JML (Java Modelling Language) for the following JavaDoc:
+{javadoc}
+
+The parameters for the method the comment describes are: {parameters}
+Only include the JML, nothing else, no code, no comments, no method name, nothing.
+Do not include the name of the programming language.
+Every line should start with the Java Comment symbol "//"
+Do not use any external classes or methods like Math, Arrays, etc.
+
+In the preconditions (requires) as well as in signals no method can be used.
+This also applies to String data types.
+The only String method that is allowed is .length().
+In preconditions (requires) you can use these kind of methods.
+
+Connect multiple behaviors with @also

@@ -31,8 +31,8 @@ class InfixSimplifier(BaseNodeHandler[SimplificationDto]):
                 hasattr(rule, "op") and rule.op is not None)
 
     def handle(self, t: SimplificationDto):
-        left = t.evaluate_with_other_node(t.node.left)
-        right = t.evaluate_with_other_node(t.node.right)
+        left = self.evaluate_with_runner(t, t.node.left)
+        right = self.evaluate_with_runner(t, t.node.right)
 
         if self.is_relational(t.node.op.text):
             if isinstance(left, InfixExpression) and self.is_relational(left.name):

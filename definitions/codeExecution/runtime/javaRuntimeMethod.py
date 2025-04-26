@@ -1,4 +1,3 @@
-from codeExecution.runtime.javaRuntimeTypeParser import JavaRuntimeTypeParser
 from definitions.codeExecution.runtime.javaRuntimeParameter import JavaRuntimeParameter
 
 
@@ -15,7 +14,7 @@ class JavaRuntimeMethod:
         self.method = method
         self.method_name = str(method.getName())
         self.modifiers = method.getModifiers()
-        self.return_type = JavaRuntimeTypeParser.get_correct_type(method.getReturnType().getName())
+        self.return_type = method.getReturnType().getSimpleName()
         self.parameters = [JavaRuntimeParameter(param) for param in method.getParameterTypes()]
 
     def __str__(self):

@@ -1,18 +1,15 @@
 from definitions.verification.verificationResult import VerificationResult
-from helper.logs.loggingHelper import LoggingHelper
+from helper.logs.loggingHelper import log_info
 
 
-class SuccessWriter:
-    def write_success(self, test_results: list[VerificationResult]):
-        results = self.get_results_with_expected_result(test_results)
+def write_success(test_results: list[VerificationResult]):
+    results = [result for result in test_results if result.consistency_test_case.expected_result is not None]
 
-        successful_results = list(
-            filter(lambda x: x.consistent == x.consistency_test_case.expected_result.expected_result, results))
-        successful_len = len(successful_results)
+    successful_results = [result for result in results if result.consistent == result.get_expected_result()]
 
-        success = successful_len * 100 / len(results)
-        LoggingHelper.log_info(f"Success rate: {success}%", show_level=False)
+    success = len(successful_results) * 100 / len(results)
+    log_info(f"Success rate: {success}%")
 
-    @staticmethod
-    def get_results_with_expected_result(results: list[VerificationResult]):
-        return list(filter(lambda x: x.consistency_test_case.expected_result is not None, results))
+
+def get_results_with_expected_result(results: list[VerificationResult]):
+    return list(filter(lambda x: x.consistency_test_case.expected_result is not None, results))

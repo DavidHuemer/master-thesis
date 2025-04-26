@@ -31,14 +31,13 @@ class ReferenceSimplifier(BaseNodeHandler[SimplificationDto]):
         raise Exception("ReferenceSimplifier: Rule is not a reference expression")
 
     def simplify_old(self, t: SimplificationDto) -> AstTreeNode | None:
-        expr = t.evaluate_with_other_node(t.node.expr)
+        expr = self.evaluate_with_runner(t, t.node.expr)
         # Set for all expressions that they are old
         self.set_old(expr)
         return expr
 
-    @staticmethod
-    def simplify_this(t: SimplificationDto):
-        expr = t.evaluate_with_other_node(t.node.expr)
+    def simplify_this(self, t: SimplificationDto):
+        expr = self.evaluate_with_runner(t, t.node.expr)
         expr.use_this = True
         return expr
 

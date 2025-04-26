@@ -17,6 +17,10 @@ def start_java_vm():
         log_warning("JVM is already started")
 
 
+def is_java_vm_started():
+    return jpype.isJVMStarted()
+
+
 def stop_java_vm():
     log_info("Closing JVM")
     if not jpype.isJVMStarted():

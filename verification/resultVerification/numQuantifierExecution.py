@@ -7,8 +7,9 @@ from verification.resultVerification.resultDto import ResultDto
 
 
 class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
-    def __init__(self, range_execution=RangeExecution()):
-        self.range_execution = range_execution
+    def __init__(self, range_execution=None, quantifier_exec=None):
+        super().__init__()
+        self.range_execution = range_execution or RangeExecution(quantifier_exec=quantifier_exec)
 
     def is_node(self, t: ResultDto):
         return isinstance(t.node, NumQuantifierTreeNode)
@@ -26,7 +27,7 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         raise Exception("NumQuantifierExecution: Invalid quantifier expression type")
 
     def evaluate_with_value(self, expression: NumQuantifierTreeNode, t: ResultDto):
-        values = [t.result_verifier.evaluate(t.copy_with_other_node(expr)) for expr in expression.expressions]
+        values = [self.evaluate_with_runner(t, expr) for expr in expression.expressions]
 
         # check if value is a list
         if not isinstance(values, list):
@@ -35,6 +36,12 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         return self.evaluate_list(expression, values)
 
     def evaluate_list(self, expression: NumQuantifierTreeNode, values: list):
+        if expression.quantifier_type == NumericQuantifierType.SUM:
+            return sum(values)
+
+        if expression.quantifier_type == NumericQuantifierType.PRODUCT:
+            return self.get_product(values)
+
         if len(values) == 0:
             return None
 
@@ -44,12 +51,6 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         if expression.quantifier_type == NumericQuantifierType.MIN:
             return min(values)
 
-        if expression.quantifier_type == NumericQuantifierType.SUM:
-            return sum(values)
-
-        if expression.quantifier_type == NumericQuantifierType.PRODUCT:
-            return self.get_product(values)
-
         raise Exception("Numeric quantifier expression type not supported")
 
     def evaluate_with_range(self, expression: NumQuantifierTreeNode, t: ResultDto):
@@ -57,13 +58,9 @@ class NumQuantifierExecution(BaseNodeHandler[ResultDto]):
         return self.evaluate_list(expression, values)
 
     def get_values_by_range(self, expression: NumQuantifierTreeNode, t: ResultDto):
-        r = self.range_execution.execute_range(expression.range_, expression.variable_names, t)
-
-        for _ in r:
-            yield t.result_verifier.evaluate(t.copy_with_other_node(expression.expressions))
-
-        for var_name in expression.variable_names:
-            t.get_result_parameters().local_parameters.pop(var_name[1])
+        with self.range_execution.execute_range(expression.range_, expression.variable_names, t) as ranges:
+            for _ in ranges:
+                yield self.evaluate_with_runner(t, expression.expressions)
 
     @staticmethod
     def get_product(value):

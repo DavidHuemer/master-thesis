@@ -1,0 +1,602 @@
+[
+  {
+    "path": "data/code/arithmetic/MultiplyCorrect.java",
+    "method": "multiply",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/arithmetic/MultiplyInCorrect.java",
+    "method": "multiply",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/arithmetic/AddCorrect.java",
+    "method": "add",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/arithmetic/AddIncorrect.java",
+    "method": "add",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/arithmetic/SubtractCorrect.java",
+    "method": "subtract",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/arithmetic/SubtractInvalidOrder.java",
+    "method": "subtract",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/arithmetic/IntSquare.java",
+    "method": "squareOf",
+    "expectedResult": true,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/arithmetic/IntSquareIncorrect.java",
+    "method": "squareOf",
+    "expectedResult": false,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/max/Biggest.java",
+    "method": "biggest",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/max/BiggestIncorrect.java",
+    "method": "biggest",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/exceptionTest/ExceptionTest.java",
+    "method": "test",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/exceptionTest/ExceptionTestIncorrect.java",
+    "method": "test",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/abs/AbsCorrect.java",
+    "method": "abs",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/abs/AbsIncorrect.java",
+    "method": "abs",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/find/IndexOf.java",
+    "method": "find",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/find/IndexOfIncorrect.java",
+    "method": "find",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/CompareArray.java",
+    "method": "compare",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/CompareArrayIncorrect.java",
+    "method": "compare",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/IsAscending.java",
+    "method": "isAscending",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/IsAscendingIncorrect.java",
+    "method": "isAscending",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/ComputeArea.java",
+    "method": "computeArea",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/ComputeAreaIncorrect.java",
+    "method": "computeArea",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/find/BubbleSort.java",
+    "method": "bubbleSort",
+    "expectedResult": true,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/find/BubbleSortIncorrect.java",
+    "method": "bubbleSort",
+    "expectedResult": false,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/comparison/Conjunction.java",
+    "method": "conjunctOf",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/ConjunctionIncorrect.java",
+    "method": "conjunctOf",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/XOR.java",
+    "method": "xor",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/XORIncorrect.java",
+    "method": "xor",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/Temperatures.java",
+    "method": "convertTemperature",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/TemperaturesIncorrect.java",
+    "method": "convertTemperature",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/SetZero.java",
+    "method": "setZero",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/SetZeroIncorrectLength.java",
+    "method": "setZero",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/StringLength.java",
+    "method": "length",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/StringLengthIncorrect.java",
+    "method": "length",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/find/ContainsDuplicate.java",
+    "method": "containsDuplicate",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/find/ContainsDuplicateIncorrect.java",
+    "method": "containsDuplicate",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/CreditCard.java",
+    "method": "charge",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/CreditCardIncorrect.java",
+    "method": "charge",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/find/FindFirstZero.java",
+    "method": "findFirstZero",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/find/FindFirstZeroIncorrect.java",
+    "method": "findFirstZero",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/DistinctArray.java",
+    "method": "isDistinct",
+    "expectedResult": true,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/comparison/DistinctArrayIncorrect.java",
+    "method": "isDistinct",
+    "expectedResult": false,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/compute/GenerateString.java",
+    "method": "generateString",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/GenerateStringIncorrectLength.java",
+    "method": "generateString",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/IsCommonFactor.java",
+    "method": "isCommonFactor",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/IsCommonFactorIncorrect.java",
+    "method": "isCommonFactor",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/IsDescending.java",
+    "method": "isDescending",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/IsDescendingIncorrect.java",
+    "method": "isDescending",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/min/Smallest.java",
+    "method": "smallest",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/min/SmallestIncorrect.java",
+    "method": "smallest",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/find/LastIndexOf.java",
+    "method": "lastIndexOf",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/find/LastIndexOfIncorrect.java",
+    "method": "lastIndexOf",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/ParseBoolean.java",
+    "method": "parse",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/ParseBooleanIncorrect.java",
+    "method": "parse",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/arithmetic/Divide.java",
+    "method": "divide",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/arithmetic/DivideIncorrect.java",
+    "method": "divide",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/RangeCheck.java",
+    "method": "rangeCheck",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/RangeCheckIncorrect.java",
+    "method": "rangeCheck",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/CopyOfRange.java",
+    "method": "copyOfRange",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/CopyOfRangeIncorrect.java",
+    "method": "copyOfRange",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/RandomInt.java",
+    "method": "randomInt",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/RandomIntIncorrect.java",
+    "method": "randomInt",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/CombineArray.java",
+    "method": "combine",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/CombineArrayIncorrect.java",
+    "method": "combine",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/ReverseArray.java",
+    "method": "reverse",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/ReverseArrayIncorrect.java",
+    "method": "reverse",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/RemoveElements.java",
+    "method": "removeElement",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/RemoveElementsIncorrect.java",
+    "method": "removeElement",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/arithmetic/StringIndexOf.java",
+    "method": "indexOf",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/arithmetic/StringIndexOfIncorrect.java",
+    "method": "indexOf",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/SplitString.java",
+    "method": "split",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/SplitStringIncorrect.java",
+    "method": "split",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/StringConcat.java",
+    "method": "concat",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/StringConcatIncorrect.java",
+    "method": "concat",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/PrimeCheck.java",
+    "method": "isPrime",
+    "expectedResult": true,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/PrimeCheckIncorrect.java",
+    "method": "isPrime",
+    "expectedResult": false,
+    "category": "sequential"
+  },
+  {
+    "path": "data/code/compute/PrimeNumberGenerator.java",
+    "method": "generatePrimes",
+    "expectedResult": true,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/compute/PrimeNumberGeneratorIncorrect.java",
+    "method": "generatePrimes",
+    "expectedResult": false,
+    "category": "nested-loop"
+  },
+  {
+    "path": "data/code/compute/LeapYear.java",
+    "method": "isLeapYear",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/LeapYearIncorrect.java",
+    "method": "isLeapYear",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/Withdraw.java",
+    "method": "withdraw",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/WithdrawIncorrect.java",
+    "method": "withdraw",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/arithmetic/AddWithMax.java",
+    "method": "addWithMax",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/arithmetic/AddWithMaxIncorrect.java",
+    "method": "addWithMax",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/arithmetic/Pow.java",
+    "method": "pow",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/arithmetic/PowIncorrect.java",
+    "method": "pow",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/Dart.java",
+    "method": "calculateScore",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/DartIncorrect.java",
+    "method": "calculateScore",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/Factorial.java",
+    "method": "factorial",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/FactorialIncorrect.java",
+    "method": "factorial",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/ReverseString.java",
+    "method": "reverse",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/ReverseStringIncorrect.java",
+    "method": "reverse",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/Palindrom.java",
+    "method": "isPalindrom",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/PalindromIncorrect.java",
+    "method": "isPalindrom",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/Substring.java",
+    "method": "substring",
+    "expectedResult": true,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/compute/SubstringIncorrect.java",
+    "method": "substring",
+    "expectedResult": false,
+    "category": "loop"
+  },
+  {
+    "path": "data/code/comparison/CompareInt.java",
+    "method": "compareInt",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/comparison/CompareIntIncorrect.java",
+    "method": "compareInt",
+    "expectedResult": false,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/GreatestCommonDivisor.java",
+    "method": "getGreatestCommonDivisor",
+    "expectedResult": true,
+    "category": "branched"
+  },
+  {
+    "path": "data/code/compute/GreatestCommonDivisorIncorrect.java",
+    "method": "getGreatestCommonDivisor",
+    "expectedResult": false,
+    "category": "branched"
+  }
+]

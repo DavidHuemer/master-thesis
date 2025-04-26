@@ -1,7 +1,9 @@
+from typing import cast
+
 from z3 import ArrayRef, SeqRef, Length
 
 from definitions.ast.arrayLengthNode import ArrayLengthNode
-from definitions.evaluations.csp.parameters.cspParamHelperType import CSPParamHelperType
+from definitions.evaluations.csp.cspParameter import CSPParameter
 from nodes.baseNodeHandler import BaseNodeHandler
 from testGeneration.constraints.constraintsDto import ConstraintsDto
 
@@ -11,11 +13,18 @@ class ArrayLengthConstraintBuilder(BaseNodeHandler[ConstraintsDto]):
         return isinstance(t.node, ArrayLengthNode)
 
     def handle(self, t: ConstraintsDto):
-        parent_expr: ArrayLengthNode = t.node
-        expr = t.constraint_builder.evaluate(t.copy_with_other_node(parent_expr.arr_expr))
+        parent_expr: ArrayLengthNode = cast(ArrayLengthNode, t.node)
+        expr = self.evaluate_with_runner(t, parent_expr.arr_expr)
+
+        if isinstance(expr, CSPParameter):
+            if expr.param_type == "String":
+                return Length(expr.value)
+
+            return expr.length_param
 
         if isinstance(expr, ArrayRef):
-            length_param = t.constraint_parameters.csp_parameters.get_helper(str(expr), CSPParamHelperType.LENGTH)
-            return length_param.value
+            return t.constraint_parameters.csp_parameters[str(expr)].length_param
         elif isinstance(expr, SeqRef):
             return Length(expr)
+
+        raise Exception(f"Unsupported expression type: {type(expr)} for {expr} in {parent_expr}")

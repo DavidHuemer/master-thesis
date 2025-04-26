@@ -1,34 +1,37 @@
-import jpype
-
-from codeExecution.runtime.codeExecution import CodeExecution
+from codeExecution.runtime.codeExecution import execute_on_test_instance
+from codeExecution.runtime.returnTypeConverter import ReturnTypeConverter
 from definitions.codeExecution.result.executionResult import ExecutionResult
-from definitions.verification.testCase import TestCase
+from definitions.consistencyTestCase import ConsistencyTestCase
+from definitions.parameters.Variables import Variables
 from helper.logs.loggingHelper import log_info
-from testGeneration.testCaseGeneration.executionExceptionBuilder import ExecutionExceptionBuilder
+from helper.parameterHelper.parameterGenerator import get_initial_parameter
+from helper.parameterHelper.parameterValueGenerator import get_parameter_value_by_java, get_parameter_value_by_python
+from testGeneration.testCaseGeneration.executionExceptionBuilder import build_exception
+from testGeneration.testCaseGeneration.javaTypeMapper import get_python_value_from_original_java
 
 
-class TestCaseExecution:
-    def __init__(self, code_execution=CodeExecution(),
-                 execution_exception_builder=ExecutionExceptionBuilder()):
-        self.code_execution = code_execution
-        self.execution_exception_builder = execution_exception_builder
+def execute_method(test_instance, variables: Variables, consistency_test_case: ConsistencyTestCase) -> ExecutionResult:
+    method_call_parameters = variables.method_call_parameters
 
-    def execute_method(self, test_instance, test_case: TestCase, consistency_test_case) -> ExecutionResult:
-        result = self.get_original_result(test_instance, test_case, consistency_test_case)
-        if isinstance(result, ExecutionResult):
-            return result
+    method_call_dict = {parameter.name: parameter.get_state().parameter_value.java_value
+                        for parameter in method_call_parameters.get_parameter_list()}
 
-        if isinstance(result, jpype.JArray):
-            # noinspection PyTypeChecker
-            result = list(result)
+    method_call_dict_copy = method_call_dict.copy()
+    real_parameters = list(method_call_dict_copy.values())
+    exception = None
+    try:
+        result = execute_on_test_instance(test_instance, parameters=real_parameters,
+                                          consistency_test_case=consistency_test_case)
 
-        return ExecutionResult(result=result, parameters=test_case.parameters)
+        result_parameter = ReturnTypeConverter.get_return_parameter(result, consistency_test_case)
+        variables.special_parameters.result_parameter = result_parameter
+    except Exception as e:
+        log_info(f"Error while executing java method: {e}")
+        result = None
+        exception = build_exception(e)
 
-    def get_original_result(self, test_instance, test_case, consistency_test_case):
-        try:
-            return self.code_execution.execute(test_instance, test_case=test_case,
-                                               consistency_test_case=consistency_test_case)
-        except Exception as e:
-            log_info(f"Error while executing java method: {e}")
-            exception = self.execution_exception_builder.build_exception(e)
-            return ExecutionResult(result=None, parameters=test_case.parameters, exception=exception)
+    for key in method_call_dict:
+        new_value = get_parameter_value_by_java(method_call_dict_copy[key])
+        method_call_parameters[key].update_new(new_value)
+
+    return ExecutionResult(result=result, exception=exception)

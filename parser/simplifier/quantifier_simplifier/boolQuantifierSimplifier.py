@@ -61,13 +61,10 @@ class BoolQuantifierSimplifier(BaseNodeHandler[SimplificationDto]):
         type_declarations = rule.children[0]
         return self.quantifier_simplifier.get_type_declarations(type_declarations)
 
-    @staticmethod
-    def get_range(core_expr: JMLParser.JMLParser.RULE_bool_quantifier_core_expression, t: SimplificationDto):
-        return t.evaluate_with_other_node(core_expr.ranges)
+    def get_range(self, core_expr: JMLParser.JMLParser.RULE_bool_quantifier_core_expression, t: SimplificationDto):
+        return self.evaluate_with_runner(t, core_expr.ranges)
 
-    @staticmethod
-    def get_expression(rule: JMLParser.JMLParser.Bool_quantifier_core_expressionContext, t: SimplificationDto):
+    def get_expression(self, rule: JMLParser.JMLParser.Bool_quantifier_core_expressionContext, t: SimplificationDto):
         if not isinstance(rule.expr, JMLParser.JMLParser.ExpressionContext):
             raise Exception("BoolQuantifierSimplifier: Bool quantifier core expression does not have an expression")
-
-        return t.evaluate_with_other_node(rule.expr)
+        return self.evaluate_with_runner(t, rule.expr)

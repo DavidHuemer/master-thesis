@@ -2,7 +2,7 @@ public class SetZero {
 
 	/**
 	 * Returns a new array where the elements of the array a from index iBegin to
-	 * index iEnd are set to zero.
+	 * index iEnd are set to zero. The original array is not modified.
 	 * 
 	 * @param a      The array to modify
 	 * @param iBegin The index of the first element to set to zero

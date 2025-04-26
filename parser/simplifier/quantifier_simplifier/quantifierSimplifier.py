@@ -23,3 +23,10 @@ class QuantifierSimplifier(BaseNodeHandler[SimplificationDto]):
             return self.numeric_quantifier_simplifier.handle(t)
 
         raise Exception("QuantifierSimplifier: Rule is not a quantified expression")
+
+    def set_runner(self, runner):
+        super().set_runner(runner)
+        self.bool_quantifier_simplifier.set_runner(runner)
+        self.numeric_quantifier_simplifier.set_runner(runner)
+
+
